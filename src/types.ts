@@ -1,11 +1,8 @@
-export interface PluginTypes {
+export interface AuthjsPluginConfig {
   /**
    * Enable or disable plugin
-   * @default false
+   *
+   * @default true
    */
-  enabled?: boolean
-}
-
-export interface NewCollectionTypes {
-  title: string
+  enabled?: boolean;
 }

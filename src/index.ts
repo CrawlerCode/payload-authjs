@@ -1,2 +1,2 @@
-export { samplePlugin } from './plugin'
-export type { PluginTypes } from './types'
+export { authjsPlugin } from "./plugin";
+export type { AuthjsPluginConfig } from "./types";

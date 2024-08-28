@@ -1,26 +1,41 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "paths": {
+      "payload/generated-types": [
+        "./src/payload-types.ts"
+      ],
+      "@payload-config": [
+        "./src/payload.config.ts"
+      ],
+      "@/*": ["./src/*"],
+    },
+    "baseUrl": ".",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
     "allowJs": true,
-    "strict": false,
-    "esModuleInterop": true,
     "skipLibCheck": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "jsx": "react",
-    "paths": {
-      "payload/generated-types": [
-        "./src/payload-types.ts"
-      ]
-    }
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "target": "ES2017"
   },
   "include": [
-    "src"
+    "src",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

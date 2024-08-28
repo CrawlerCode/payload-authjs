@@ -5,10 +5,11 @@
       "dom.iterable",
       "esnext"
     ],
-    "target": "es5",
+    "target": "ESNext",
     "outDir": "./dist",
     "allowJs": true,
-    "module": "commonjs",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "sourceMap": true,
     "jsx": "react",
     "esModuleInterop": true,
