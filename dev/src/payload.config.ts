@@ -3,6 +3,8 @@ import path from "path";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 import { fileURLToPath } from "url";
+import { authjsPlugin } from "../../src/index";
+import { authConfig } from "./auth.config";
 import Examples from "./payload/collections/examples";
 import Users from "./payload/collections/users";
 
@@ -16,7 +18,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Examples],
+  collections: [Examples, Users],
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
@@ -27,5 +29,5 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [authjsPlugin({ authjsConfig: authConfig })],
 });

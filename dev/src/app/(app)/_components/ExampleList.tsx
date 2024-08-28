@@ -1,13 +1,22 @@
 import config from "@payload-config";
 import { getPayloadHMR } from "@payloadcms/next/utilities";
+import { getPayloadUser } from "../../../../../src";
 
 const payload = await getPayloadHMR({ config });
 
 const ExampleList = async () => {
+  const payloadUser = await getPayloadUser();
+  if (!payloadUser) {
+    return <p>Sign in to see examples</p>;
+  }
+
   let examples;
   try {
     examples = await payload.find({
       collection: "examples",
+      // Use the current user's access level
+      overrideAccess: false,
+      user: payloadUser,
     });
   } catch (error: any) {
     return <p>Failed to load examples: {error.message}</p>;

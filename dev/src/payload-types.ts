@@ -58,17 +58,36 @@ export interface Example {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  roles?: string[];
+  id: string;
+  email: string;
+  name?: string | null;
+  image?: string | null;
+  emailVerified?: string | null;
+  accounts?:
+    | {
+        id?: string | null;
+        provider: string;
+        providerAccountId: string;
+        type: string;
+      }[]
+    | null;
+  sessions?:
+    | {
+        id?: string | null;
+        sessionToken: string;
+        expires: string;
+      }[]
+    | null;
+  verificationTokens?:
+    | {
+        id?: string | null;
+        token: string;
+        expires: string;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -78,7 +97,7 @@ export interface PayloadPreference {
   id: number;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:

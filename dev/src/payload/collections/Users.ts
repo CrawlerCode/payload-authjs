@@ -1,14 +1,23 @@
-import type { CollectionConfig } from 'payload';
+import type { CollectionConfig } from "payload";
 
 const Users: CollectionConfig = {
-  slug: 'users',
-  auth: true,
+  slug: "users",
   admin: {
-    useAsTitle: 'email',
+    useAsTitle: "name",
   },
   fields: [
-    // Email added by default
-    // Add more fields as needed
+    {
+      name: "roles",
+      type: "json",
+      typescriptSchema: [
+        () => ({
+          type: "array",
+          items: {
+            type: "string",
+          },
+        }),
+      ],
+    },
   ],
 };
 
