@@ -5,7 +5,7 @@ import {
   AdapterUser,
   VerificationToken as AdapterVerificationToken,
 } from "next-auth/adapters";
-import { Payload, SanitizedConfig } from "payload";
+import { CollectionSlug, Payload, SanitizedConfig } from "payload";
 import { Session, User, VerificationToken } from "./types";
 
 export interface PayloadAdapterOptions {
@@ -25,7 +25,7 @@ export interface PayloadAdapterOptions {
    *
    * @default "users"
    */
-  userCollectionSlug?: string;
+  userCollectionSlug?: CollectionSlug;
 }
 /**
  * Auth.js Database Adapter for Payload CMS

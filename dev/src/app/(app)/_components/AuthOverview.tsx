@@ -1,11 +1,12 @@
 import { auth } from "@/auth";
+import { DataFromCollectionSlug } from "payload";
 import { getPayloadUser } from "../../../../../src";
 import { SignInButton } from "./SignInButton";
 import { SignOutButton } from "./SignOutButton";
 
 const AuthOverview = async () => {
   const session = await auth();
-  const payloadUser = await getPayloadUser();
+  const payloadUser = await getPayloadUser<DataFromCollectionSlug<"users">>();
 
   return (
     <div>
