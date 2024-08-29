@@ -24,13 +24,13 @@ export const authConfig: NextAuthConfig = {
     github({
       allowDangerousEmailAccountLinking: true,
       profile(profile) {
-        profile.roles = [];
+        profile.roles = ["user"]; // Extend the profile
         return {
           id: profile.id.toString(),
           name: profile.name,
           email: profile.email,
           image: profile.avatar_url,
-          roles: profile.roles as string[],
+          roles: ["user"], // Extend the user
         };
       },
     }),
@@ -41,7 +41,7 @@ export const authConfig: NextAuthConfig = {
         if (tokens.access_token) {
           let decodedToken = jwt.decode(tokens.access_token);
           if (decodedToken && typeof decodedToken !== "string") {
-            profile.roles = decodedToken.resource_access?.[process.env.AUTH_KEYCLOAK_ID!]?.roles;
+            profile.roles = decodedToken.resource_access?.[process.env.AUTH_KEYCLOAK_ID!]?.roles; // Extend the profile
           }
         }
         return {
@@ -49,7 +49,7 @@ export const authConfig: NextAuthConfig = {
           name: profile.name,
           email: profile.email,
           image: profile.picture,
-          roles: profile.roles ?? [],
+          roles: profile.roles ?? [], // Extend the user
         };
       },
     }),

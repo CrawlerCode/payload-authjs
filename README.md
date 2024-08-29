@@ -2,17 +2,19 @@
 
 A [Payload CMS 3 (beta)](https://payloadcms.com) plugin for integrating [Auth.js 5 (beta)](https://authjs.dev).
 
-### Installation
+> ⚠ This plugin is in beta and under construction.
+> Payload CMS 3 and Auth.js 5 are also in beta. Use at your own risk.
 
-Install the plugin using any JavaScript package manager like Yarn, NPM, or PNPM:
-  
+## Installation
+
+Install the plugin using any JavaScript package manager like PNPM, NPM, or Yarn:
+
+
 ```bash
 pnpm i payload-authjs
 ```
 
-### Basic Usage
-
-Install the `authjsPlugin` in your Payload configuration file:
+Add the `authjsPlugin` in your Payload configuration file:
 
 ```ts
 // payload.config.ts
@@ -44,11 +46,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth(
 );
 ```
 
-And that's it! Now you can sign-in via Auth.js and you are automatically authenticated in Payload. Nice 🎉
+> ⚠ Make sure you define your `authConfig` in a separate file than where you use the `withPayload` function to avoid circular dependencies.
 
-### Advanced Usage
+**And that's it! Now you can sign-in via Auth.js and you are automatically authenticated in Payload CMS. Nice 🎉**
 
-If you want to customize the users collection, you can create a collection with the slug `users` and add the fields you need.
+## Customizing
+
+You don't need to create a collection for users. This plugin automatically creates a collection with the slug `users`.
+
+But if you want to customize the users collection, you can create a collection with the slug `users` and add the fields you need. 
 
 ```ts
 // users.ts
@@ -67,6 +73,27 @@ const Users: CollectionConfig = {
 export default Users;
 ```
 
+Next, you need to extend the user object returned by your Auth.js provider. You can do this like this example:
+
+```ts
+const authConfig: NextAuthConfig = {
+  providers: [
+    github({
+      profile(profile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.name,
+          email: profile.email,
+          image: profile.avatar_url,
+          roles: ["user"], // <-- Extend the user object with a custom field
+        };
+      },
+    }),
+  ],
+  ...
+};
+```
+
 ⚠ Keep in mind that Auth.js doesn't update the user after the first sign-in. If you want to update the user on every sign-in, you can use the `updateUserOnSignIn` option in the `withPayload` function:
 
 ```ts
@@ -77,3 +104,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth(
     updateUserOnSignIn: true, // <-- Update the user on every sign-in
   }),
 );
+```
+
+Now you could access your custom field, e.g. in the access control operations:
+
+```ts
+const Examples: CollectionConfig = {
+  slug: "examples",
+  access: {
+    read: ({ req: { user } }) => {
+      return user?.roles?.includes("user") ?? false; // <-- Check if the user has the role "user"
+    },
+  },
+  fields: [
+    ...
+  ],
+};
+```
+
+### Utility functions
+
+This plugin also exports utility functions get the current payload user
+
+```tsx
+// ServerComponentExample.tsx
+const ServerComponentExample = async () => {
+  const payloadUser = await getPayloadUser<DataFromCollectionSlug<"users">>();
+
+  return (
+    <div>
+      <h3>Payload CMS User</h3>
+      <div>
+        {JSON.stringify(payloadUser)}
+      </div>
+    </div>
+  );
+};
+```

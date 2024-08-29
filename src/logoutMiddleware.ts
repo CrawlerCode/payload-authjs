@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Middleware to log out the user if they log out in the admin ui
+ * TODO: Fix me
+ */
 export function logoutMiddleware(req: NextRequest) {
   if (req.nextUrl.pathname !== "/admin/logout") return;
 
