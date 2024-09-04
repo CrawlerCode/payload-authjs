@@ -1,11 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 /**
  * Middleware to log out the user if they log out in the admin ui
  * TODO: Fix me
  */
-export function logoutMiddleware(req: NextRequest) {
-  if (req.nextUrl.pathname !== "/admin/logout") return;
+export function logoutMiddleware(req: NextRequest): NextResponse {
+  if (req.nextUrl.pathname !== "/admin/logout") return NextResponse.next();
 
   const response = NextResponse.redirect(new URL("/", req.url));
   response.cookies.set("__Secure-authjs.session-token", "", {

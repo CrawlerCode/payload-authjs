@@ -1,5 +1,7 @@
-import { NextAuthConfig } from "next-auth";
-import { PayloadAdapter, PayloadAdapterOptions } from "./PayloadAdapter";
+/* eslint-disable no-param-reassign */
+import type { NextAuthConfig } from "next-auth";
+import type { PayloadAdapterOptions } from "./PayloadAdapter";
+import { PayloadAdapter } from "./PayloadAdapter";
 
 export interface WithPayloadOptions extends PayloadAdapterOptions {
   /**
@@ -23,7 +25,7 @@ export interface WithPayloadOptions extends PayloadAdapterOptions {
 export function withPayload(
   authjsConfig: NextAuthConfig,
   { updateUserOnSignIn, ...options }: WithPayloadOptions,
-) {
+): NextAuthConfig {
   authjsConfig = { ...authjsConfig };
 
   // Set default session strategy to "jwt"
@@ -42,7 +44,10 @@ export function withPayload(
    */
   if (updateUserOnSignIn === true) {
     const { signIn, ...callbacks } = authjsConfig.callbacks ?? {};
-    async function updateUserOnSignInWrapper(params: Parameters<NonNullable<typeof signIn>>[0]) {
+    // eslint-disable-next-line no-inner-declarations
+    async function updateUserOnSignInWrapper(
+      params: Parameters<NonNullable<typeof signIn>>[0],
+    ): Promise<boolean> {
       // Call the original signIn callback
       if ((await signIn?.(params)) === false) {
         return false;
@@ -51,11 +56,12 @@ export function withPayload(
       try {
         if (params.user.id && params.profile) {
           await authjsConfig.adapter?.updateUser?.({
-            ...params.profile,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ...(params.profile as any),
             id: params.user.id,
-          } as any);
+          });
         }
-      } catch (e) {
+      } catch {
         // If user signed in the first time, the user is not found in the database and an error is thrown
       }
       return true;

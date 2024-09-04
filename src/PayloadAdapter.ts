@@ -1,12 +1,13 @@
+// eslint-disable-next-line import/no-unresolved
 import { getPayloadHMR } from "@payloadcms/next/utilities";
-import {
+import type {
   Adapter,
   AdapterSession,
   AdapterUser,
   VerificationToken as AdapterVerificationToken,
 } from "next-auth/adapters";
-import { CollectionSlug, Payload, SanitizedConfig } from "payload";
-import { Session, User, VerificationToken } from "./types";
+import type { CollectionSlug, Payload, SanitizedConfig } from "payload";
+import type { Session, User, VerificationToken } from "./types";
 
 export interface PayloadAdapterOptions {
   /**
@@ -38,6 +39,7 @@ export function PayloadAdapter({
 }: PayloadAdapterOptions): Adapter {
   // Get the Payload instance
   if (!payload && payloadConfig) {
+    // eslint-disable-next-line no-param-reassign
     payload = getPayloadHMR({ config: payloadConfig });
   }
   if (!payload) {
@@ -47,7 +49,7 @@ export function PayloadAdapter({
   }
 
   return {
-    //#region User management
+    // #region User management
     async createUser(profile) {
       /* console.log("[PayloadAdapter] Creating user", profile); */
 
@@ -88,7 +90,7 @@ export function PayloadAdapter({
 
       return payloadUser ? toAdapterUser(payloadUser) : null;
     },
-    async getUserByAccount({ provider, providerAccountId }) {
+    async getUserByAccount({ providerAccountId }) {
       const payloadUser = (
         await (
           await payload
@@ -115,6 +117,7 @@ export function PayloadAdapter({
       ).update({
         collection: userCollectionSlug,
         id: user.id,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data: user as any,
       })) as unknown as User | undefined;
 
@@ -190,8 +193,8 @@ export function PayloadAdapter({
         },
       })) as User;
     },
-    //#endregion
-    //#region Database session management
+    // #endregion
+    // #region Database session management
     async createSession(session) {
       /* console.log(`[PayloadAdapter] Creating session for user '${session.userId}'`, session); */
 
@@ -233,7 +236,7 @@ export function PayloadAdapter({
       ).docs.at(0) as User | undefined;
       if (!payloadUser) return null;
 
-      const session = payloadUser.sessions?.find(session => session.sessionToken === sessionToken);
+      const session = payloadUser.sessions?.find(s => s.sessionToken === sessionToken);
       if (!session) return null;
 
       return {
@@ -304,8 +307,8 @@ export function PayloadAdapter({
         },
       })) as User;
     },
-    //#endregion
-    //#region Verification tokens
+    // #endregion
+    // #region Verification tokens
     async createVerificationToken({ identifier: email, ...token }) {
       /* console.log(`[PayloadAdapter] Creating verification token for email '${email}'`, token); */
 
@@ -372,7 +375,7 @@ export function PayloadAdapter({
 
       return verificationToken ? toAdapterVerificationToken(payloadUser, verificationToken) : null;
     },
-    //#endregion
+    // #endregion
   };
 }
 

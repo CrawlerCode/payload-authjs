@@ -1,5 +1,5 @@
-import { NextAuthConfig } from "next-auth";
-import { CollectionSlug } from "payload";
+import type { NextAuthConfig } from "next-auth";
+import type { CollectionSlug } from "payload";
 
 export interface AuthjsPluginConfig {
   /**
@@ -36,6 +36,7 @@ export interface User {
   accounts?: Account[] | null;
   sessions?: Session[] | null;
   verificationTokens?: VerificationToken[] | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -44,6 +45,7 @@ export interface Account {
   provider: string;
   providerAccountId: string;
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -51,6 +53,7 @@ export interface Session {
   id?: string | null;
   sessionToken: string;
   expires: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 

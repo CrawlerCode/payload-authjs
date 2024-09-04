@@ -1,14 +1,14 @@
-import { Field, type CollectionConfig } from "payload";
+import type { CollectionConfig, Field } from "payload";
 import { AuthjsAuthStrategy } from "./AuthjsAuthStrategy";
-import { AuthjsPluginConfig } from "./types";
+import type { AuthjsPluginConfig } from "./types";
 
 export const generateUsersCollection = (
   collections: CollectionConfig[],
   pluginOptions: AuthjsPluginConfig,
-) => {
+): void => {
   // Get or create users collection
   const userCollectionSlug = pluginOptions.userCollectionSlug || "users";
-  let collection = collections?.find(collection => collection.slug === userCollectionSlug);
+  let collection = collections?.find(c => c.slug === userCollectionSlug);
   if (!collection) {
     collection = {
       slug: userCollectionSlug,
@@ -32,7 +32,7 @@ export const generateUsersCollection = (
     name: "email",
     type: "email",
     required: true,
-    //unique: true,
+    // unique: true,
   });
   createOrPatchField(collection.fields, {
     name: "name",
@@ -113,12 +113,10 @@ export const generateUsersCollection = (
     disableLocalStrategy: true,
     strategies: [AuthjsAuthStrategy(userCollectionSlug, pluginOptions)],
   };
-
-  return collection;
 };
 
-function createOrPatchField(fields: Field[], field: Field) {
-  let existingField = fields.find(
+function createOrPatchField(fields: Field[], field: Field): void {
+  const existingField = fields.find(
     collectionField =>
       "name" in collectionField && "name" in field && collectionField.name === field.name,
   );
@@ -127,6 +125,7 @@ function createOrPatchField(fields: Field[], field: Field) {
   } else {
     if ("fields" in field && "fields" in existingField) {
       field.fields.forEach(subField => createOrPatchField(existingField.fields, subField));
+      // eslint-disable-next-line no-param-reassign
       field.fields = existingField.fields;
     }
     Object.assign(existingField, field);

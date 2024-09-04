@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
-import { CollectionSlug } from "payload";
-import { User } from "./types";
+import type { CollectionSlug } from "payload";
+import type { User } from "./types";
 
-type Options = {
+interface Options {
   /**
    * The URL of the server
    *
@@ -15,15 +15,16 @@ type Options = {
    * @default "users"
    */
   userCollectionSlug?: CollectionSlug;
-};
+}
 
 /**
  * Get the user payload from the server (only works on the server side)
  */
 export const getPayloadUser = async <T extends object = User>({
+  // eslint-disable-next-line no-process-env
   serverUrl = process.env.NEXT_PUBLIC_SERVER_URL,
   userCollectionSlug = "users",
-}: Options = {}) => {
+}: Options = {}): Promise<T | null> => {
   if (serverUrl === undefined) {
     throw new Error(
       "getPayloadUser requires a server URL to be provided, either as an option or in the 'NEXT_PUBLIC_SERVER_URL' environment variable",
@@ -40,7 +41,7 @@ export const getPayloadUser = async <T extends object = User>({
 
   const { user }: { user: T } = await meUserReq.json();
 
-  if (!meUserReq.ok || !user) return;
+  if (!meUserReq.ok || !user) return null;
 
   return user;
 };

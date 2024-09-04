@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
-import { AuthStrategy } from "payload";
-import { AuthjsPluginConfig } from "./types";
+import type { AuthStrategy } from "payload";
+import type { AuthjsPluginConfig } from "./types";
 import { withPayload } from "./withPayload";
 
 /**
@@ -14,47 +14,42 @@ export function AuthjsAuthStrategy(
   return {
     name: "authjs",
     authenticate: async ({ payload }) => {
-      try {
-        // Get session from authjs
-        const { auth } = NextAuth(
-          withPayload(pluginOptions.authjsConfig, {
-            payload,
-            userCollectionSlug: collectionSlug,
-          }),
-        );
-        const session = await auth();
+      // Get session from authjs
+      const { auth } = NextAuth(
+        withPayload(pluginOptions.authjsConfig, {
+          payload,
+          userCollectionSlug: collectionSlug,
+        }),
+      );
+      const session = await auth();
 
-        // If no session, return null user
-        if (!session?.user) return { user: null };
+      // If no session, return null user
+      if (!session?.user) return { user: null };
 
-        // Find user in database
-        let payloadUser = (
-          await payload.find({
-            collection: collectionSlug,
-            where: session.user.id
-              ? // Find user by id if it exists
-                { id: { equals: session.user.id } }
-              : // Otherwise find user by email
-                {
-                  email: {
-                    equals: session.user.email,
-                  },
+      // Find user in database
+      const payloadUser = (
+        await payload.find({
+          collection: collectionSlug,
+          where: session.user.id
+            ? // Find user by id if it exists
+              { id: { equals: session.user.id } }
+            : // Otherwise find user by email
+              {
+                email: {
+                  equals: session.user.email,
                 },
-          })
-        ).docs.at(0);
-        if (!payloadUser) return { user: null };
+              },
+        })
+      ).docs.at(0);
+      if (!payloadUser) return { user: null };
 
-        // Return user to payload cms
-        return {
-          user: {
-            collection: collectionSlug,
-            ...payloadUser,
-          },
-        };
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
+      // Return user to payload cms
+      return {
+        user: {
+          collection: collectionSlug,
+          ...payloadUser,
+        },
+      };
     },
   };
 }
