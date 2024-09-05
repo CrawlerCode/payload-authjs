@@ -247,3 +247,12 @@ dev/generated-schema.graphql
 dist
 
 dev/src/uploads
+
+
+
+.nx/cache
+.nx/workspace-data
+
+# Next.js
+.next
+out
