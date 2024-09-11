@@ -1,5 +1,11 @@
 # Payload CMS plugin for Auth.js
 
+<a href="https://github.com/CrawlerCode/payload-authjs/actions/workflows/ci.yml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/CrawlerCode/payload-authjs/ci.yml?style=flat-square&logo=github"></a>
+<a href="https://www.npmjs.com/package/payload-authjs"><img alt="NPM Version" src="https://img.shields.io/npm/v/payload-authjs?style=flat-square"></a>
+<a href="https://github.com/CrawlerCode/payload-authjs/blob/main/LICENSE"><img alt="NPM License" src="https://img.shields.io/npm/l/payload-authjs?style=flat-square"></a>
+<a href="https://www.npmjs.com/package/payload-authjs"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/payload-authjs?style=flat-square"></a>
+
+
 A [Payload CMS 3 (beta)](https://payloadcms.com) plugin for integrating [Auth.js 5 (beta)](https://authjs.dev).
 
 > ⚠ This plugin is in beta and under construction.
@@ -124,7 +130,7 @@ const Examples: CollectionConfig = {
 
 ### Utility functions
 
-This plugin also exports utility functions get the current payload user
+This plugin also export a utility function to get the current payload user
 
 ```tsx
 // ServerComponentExample.tsx
