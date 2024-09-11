@@ -50,15 +50,15 @@ export function PayloadAdapter({
 
   return {
     // #region User management
-    async createUser(profile) {
-      /* console.log("[PayloadAdapter] Creating user", profile); */
+    async createUser(user) {
+      /* console.log("[PayloadAdapter] Creating user", user); */
 
       const payloadUser = (await (
         await payload
       ).create({
         collection: userCollectionSlug,
         data: {
-          ...profile,
+          ...user,
         },
       })) as User;
 
@@ -324,17 +324,29 @@ export function PayloadAdapter({
           },
         })
       ).docs.at(0) as User | undefined;
-      if (!payloadUser) return null;
 
-      payloadUser = (await (
-        await payload
-      ).update({
-        collection: userCollectionSlug,
-        id: payloadUser.id,
-        data: {
-          verificationTokens: [...(payloadUser.verificationTokens || []), token],
-        },
-      })) as User;
+      if (!payloadUser) {
+        payloadUser = (await (
+          await payload
+        ).create({
+          collection: userCollectionSlug,
+          data: {
+            id: crypto.randomUUID(),
+            email,
+            verificationTokens: [token],
+          },
+        })) as User;
+      } else {
+        payloadUser = (await (
+          await payload
+        ).update({
+          collection: userCollectionSlug,
+          id: payloadUser.id,
+          data: {
+            verificationTokens: [...(payloadUser.verificationTokens || []), token],
+          },
+        })) as User;
+      }
 
       return {
         identifier: email,
