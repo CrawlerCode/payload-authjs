@@ -1,3 +1,10 @@
+## 0.2.1 (2024-09-11)
+
+
+### 🩹 Fixes
+
+- **payload-adapter:** Allow user registration when using magic link ([#2](https://github.com/CrawlerCode/payload-authjs/pull/2))
+
 ## 0.2.0 (2024-09-05)
 
 
