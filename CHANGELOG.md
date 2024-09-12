@@ -1,3 +1,14 @@
+## 0.3.0 (2024-09-12)
+
+
+### 🚀 Features
+
+- Add sign in with auth.js button to admin login page ([c24eb72](https://github.com/CrawlerCode/payload-authjs/commit/c24eb72))
+
+### 🩹 Fixes
+
+- **middleware:** Middleware implementation ([47911bf](https://github.com/CrawlerCode/payload-authjs/commit/47911bf))
+
 ## 0.2.1 (2024-09-11)
 
 
