@@ -3,7 +3,6 @@ import { NextAuthConfig, Profile } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import github from "next-auth/providers/github";
 import keycloak from "next-auth/providers/keycloak";
-import nodemailer from "next-auth/providers/nodemailer";
 
 declare module "next-auth/jwt" {
   interface JWT extends Pick<Profile, "roles"> {
@@ -52,10 +51,6 @@ export const authConfig: NextAuthConfig = {
           roles: profile.roles ?? [], // Extend the user
         };
       },
-    }),
-    nodemailer({
-      server: process.env.EMAIL_SERVER,
-      from: process.env.EMAIL_FROM,
     }),
   ],
   /* session: {

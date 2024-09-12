@@ -54,7 +54,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth(
 
 > ⚠ Make sure you define your `authConfig` in a separate file than where you use the `withPayload` function to avoid circular dependencies.
 
+Create a new `middleware` or wrap your existing middleware, e.g. the [Auth.js middleware](https://authjs.dev/getting-started/session-management/protecting):
+
+##### Create a new middleware
+
+```ts
+// middleware.ts
+export { default } from "payload-authjs/middleware";
+```
+
+##### Wrap your existing middleware
+
+```ts
+// middleware.ts
+import NextAuth from "next-auth";
+import middleware from "payload-authjs/middleware";
+import { authConfig } from "./auth.config";
+
+const { auth } = NextAuth(authConfig);
+
+export default middleware(auth);
+```
+
 **And that's it! Now you can sign-in via Auth.js and you are automatically authenticated in Payload CMS. Nice 🎉**
+
+---
 
 ## Customizing
 
