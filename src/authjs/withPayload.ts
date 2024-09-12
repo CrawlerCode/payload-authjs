@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import type { NextAuthConfig } from "next-auth";
-import type { PayloadAdapterOptions } from "./PayloadAdapter";
-import { PayloadAdapter } from "./PayloadAdapter";
+import { PayloadAdapter, type PayloadAdapterOptions } from "./PayloadAdapter";
 
 export interface WithPayloadOptions extends PayloadAdapterOptions {
   /**

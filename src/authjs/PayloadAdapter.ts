@@ -7,7 +7,7 @@ import type {
   VerificationToken as AdapterVerificationToken,
 } from "next-auth/adapters";
 import type { CollectionSlug, Payload, SanitizedConfig } from "payload";
-import type { Session, User, VerificationToken } from "./types";
+import type { Session, User, VerificationToken } from "../payload/types";
 
 export interface PayloadAdapterOptions {
   /**

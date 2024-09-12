@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import type { AuthStrategy } from "payload";
-import type { AuthjsPluginConfig } from "./types";
-import { withPayload } from "./withPayload";
+import { withPayload } from "../authjs/withPayload";
+import type { AuthjsPluginConfig } from "./plugin";
 
 /**
  * Auth.js Authentication Strategy for Payload CMS

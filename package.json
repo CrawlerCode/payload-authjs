@@ -13,9 +13,9 @@
       "default": "./dist/index.js"
     },
     "./middleware": {
-      "types": "./dist/middleware.d.ts",
-      "import": "./dist/middleware.js",
-      "default": "./dist/middleware.js"
+      "types": "./dist/payload/middleware.d.ts",
+      "import": "./dist/payload/middleware.js",
+      "default": "./dist/payload/middleware.js"
     },
     "./components": {
       "types": "./dist/components/index.d.ts",

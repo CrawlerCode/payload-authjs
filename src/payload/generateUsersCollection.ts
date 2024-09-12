@@ -1,6 +1,6 @@
 import type { CollectionConfig, Field } from "payload";
 import { AuthjsAuthStrategy } from "./AuthjsAuthStrategy";
-import type { AuthjsPluginConfig } from "./types";
+import type { AuthjsPluginConfig } from "./plugin";
 
 export const generateUsersCollection = (
   collections: CollectionConfig[],
