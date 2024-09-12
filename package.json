@@ -16,6 +16,11 @@
       "types": "./dist/middleware.d.ts",
       "import": "./dist/middleware.js",
       "default": "./dist/middleware.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js",
+      "default": "./dist/components/index.js"
     }
   },
   "files": [
@@ -86,6 +91,8 @@
     "typescript": "^5.6.2"
   },
   "nx": {},
-  "dependencies": {},
+  "dependencies": {
+    "@auth/core": "^0.34.2"
+  },
   "packageManager": "pnpm@9.9.0"
 }
