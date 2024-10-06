@@ -61,6 +61,13 @@
           "authors": false
         }
       }
+    },
+    "conventionalCommits": {
+      "types": {
+        "chore": {
+          "changelog": true
+        }
+      }
     }
   },
   "nxCloudId": "66da0f239e5a57722ba2e595"
