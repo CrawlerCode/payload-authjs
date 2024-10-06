@@ -1,3 +1,15 @@
+## 0.3.1 (2024-10-06)
+
+
+### 🩹 Fixes
+
+- Replace middleware by overwriting payload logout endpoint to destroy authjs session ([82b71c8](https://github.com/CrawlerCode/payload-authjs/commit/82b71c8))
+
+### 🏡 Chore
+
+- Update dependencies ([4ad020d](https://github.com/CrawlerCode/payload-authjs/commit/4ad020d))
+- Update nx configuration for conventional commits ([7ac9c78](https://github.com/CrawlerCode/payload-authjs/commit/7ac9c78))
+
 ## 0.3.0 (2024-09-12)
 
 
