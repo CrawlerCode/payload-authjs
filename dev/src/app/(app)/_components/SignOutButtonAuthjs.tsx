@@ -1,6 +1,6 @@
 import { signOut } from "@/auth";
 
-export function SignOutButton() {
+export function SignOutButtonAuthjs() {
   return (
     <form
       action={async () => {
@@ -8,7 +8,7 @@ export function SignOutButton() {
         await signOut();
       }}
     >
-      <button type="submit">Sign Out</button>
+      <button type="submit">Sign Out (auth.js)</button>
     </form>
   );
 }

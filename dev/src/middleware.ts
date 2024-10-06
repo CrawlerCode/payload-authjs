@@ -1,25 +1,15 @@
-import NextAuth from "next-auth";
-import middleware from "../../src/payload/middleware";
+/* import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
+
+const { auth: middleware } = NextAuth(authConfig);
+export default middleware; */
+
+import { NextResponse } from "next/server";
+
+export default function middleware() {
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: ["/((?!api|admin/login|_next/static|_next/image|favicon.ico).*)"],
 };
-
-/* export default middleware; */
-
-const { auth } = NextAuth(authConfig);
-
-export default middleware(auth);
-
-/* export default middleware(
-  auth(req => {
-    // My custom logic
-  }),
-);
- */
-
-/* export default middleware((req: NextRequest) => {
-  // My custom logic
-  return NextResponse.next();
-}); */

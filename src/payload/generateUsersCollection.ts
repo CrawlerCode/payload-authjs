@@ -1,4 +1,7 @@
+import NextAuth from "next-auth";
+import { NextResponse } from "next/server";
 import type { CollectionConfig, Field } from "payload";
+import { withPayload } from "../authjs/withPayload";
 import { AuthjsAuthStrategy } from "./AuthjsAuthStrategy";
 import type { AuthjsPluginConfig } from "./plugin";
 
@@ -113,6 +116,40 @@ export const generateUsersCollection = (
     disableLocalStrategy: true,
     strategies: [AuthjsAuthStrategy(userCollectionSlug, pluginOptions)],
   };
+
+  // Add custom endpoints to users collection
+  collection.endpoints = [
+    ...(collection.endpoints || []),
+    {
+      /**
+       * Override the default logout endpoint to destroy the authjs session
+       *
+       * @see https://payloadcms.com/docs/beta/authentication/operations#logout
+       * @see https://github.com/payloadcms/payload/blob/beta/packages/next/src/routes/rest/auth/logout.ts
+       */
+      method: "post",
+      path: "/logout",
+      handler: async req => {
+        // Sign out and get cookies from authjs
+        const { signOut } = NextAuth(
+          withPayload(pluginOptions.authjsConfig, {
+            payload: req.payload,
+            userCollectionSlug,
+          }),
+        );
+        const { cookies } = await signOut({ redirect: false });
+
+        // Create response with cookies
+        const response = NextResponse.json({
+          message: req.t("authentication:logoutSuccessful"),
+        });
+        for (const cookie of cookies) {
+          response.cookies.set(cookie.name, cookie.value, cookie.options);
+        }
+        return response;
+      },
+    },
+  ];
 };
 
 function createOrPatchField(fields: Field[], field: Field): void {
