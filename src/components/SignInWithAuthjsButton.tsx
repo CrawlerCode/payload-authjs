@@ -20,13 +20,9 @@ export const SignInWithAuthjsButton = ({
       action={async () => {
         "use server";
 
-        const signInURL = createActionURL(
-          "signin",
-          "https",
-          headers(),
-          process.env,
-          authjsBasePath,
-        );
+        const signInURL = createActionURL("signin", "https", await headers(), process.env, {
+          basePath: authjsBasePath,
+        });
         signInURL.searchParams.append("callbackUrl", adminURL);
 
         redirect(signInURL.toString());

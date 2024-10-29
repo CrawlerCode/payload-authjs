@@ -31,7 +31,7 @@ export const getPayloadUser = async <T extends object = User>({
     );
   }
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const meUserReq = await fetch(`${serverUrl}/api/${userCollectionSlug}/me`, {
     headers: {
