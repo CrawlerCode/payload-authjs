@@ -66,11 +66,11 @@
     "@payloadcms/next": "3.0.0-beta.120",
     "@payloadcms/ui": "3.0.0-beta.120",
     "@swc-node/register": "~1.10.9",
-    "@swc/core": "~1.7.26",
+    "@swc/core": "~1.7.40",
     "@swc/helpers": "~0.5.13",
     "@swc/jest": "^0.2.36",
-    "@types/jest": "^29.5.12",
-    "@types/jsonwebtoken": "^9.0.6",
+    "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/react": "npm:types-react@19.0.0-rc.1",
     "@typescript-eslint/eslint-plugin": "8.3.0",
     "@typescript-eslint/parser": "8.3.0",
@@ -85,20 +85,20 @@
     "jsonwebtoken": "^9.0.2",
     "next": "15.0.2",
     "next-auth": "5.0.0-beta.25",
-    "nodemailer": "^6.9.15",
+    "nodemailer": "^6.9.16",
     "nx": "19.7.2",
     "payload": "3.0.0-beta.120",
     "prettier": "^3.3.3",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028",
     "sharp": "^0.33.5",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   },
   "nx": {},
   "dependencies": {
     "@auth/core": "^0.37.2"
   },
-  "packageManager": "pnpm@9.9.0",
+  "packageManager": "pnpm@9.12.3",
   "pnpm": {
     "overrides": {
       "@types/react": "npm:types-react@19.0.0-rc.1"
