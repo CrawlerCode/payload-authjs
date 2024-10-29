@@ -1,3 +1,14 @@
+## 0.3.2 (2024-10-29)
+
+
+### 🩹 Fixes
+
+- Migrate to next 15 ([e01d0c0](https://github.com/CrawlerCode/payload-authjs/commit/e01d0c0))
+
+### 🏡 Chore
+
+- Update dependencies ([efff4c8](https://github.com/CrawlerCode/payload-authjs/commit/efff4c8))
+
 ## 0.3.1 (2024-10-06)
 
 
