@@ -7,8 +7,9 @@ export function SignOutButtonPayload({
 }) {
   return (
     <button
-      onClick={() => {
-        fetch(`/api/${userCollectionSlug}/logout`, {
+      type="button"
+      onClick={async () => {
+        await fetch(`/api/${userCollectionSlug}/logout`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

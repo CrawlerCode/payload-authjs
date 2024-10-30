@@ -18,6 +18,7 @@ const ExampleList = async () => {
       overrideAccess: false,
       user: payloadUser,
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return <p>Failed to load examples: {error.message}</p>;
   }

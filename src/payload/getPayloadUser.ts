@@ -21,7 +21,6 @@ interface Options {
  * Get the user payload from the server (only works on the server side)
  */
 export const getPayloadUser = async <T extends object = User>({
-  // eslint-disable-next-line no-process-env
   serverUrl = process.env.NEXT_PUBLIC_SERVER_URL,
   userCollectionSlug = "users",
 }: Options = {}): Promise<T | null> => {
@@ -41,7 +40,9 @@ export const getPayloadUser = async <T extends object = User>({
 
   const { user }: { user: T } = await meUserReq.json();
 
-  if (!meUserReq.ok || !user) return null;
+  if (!meUserReq.ok || !user) {
+    return null;
+  }
 
   return user;
 };

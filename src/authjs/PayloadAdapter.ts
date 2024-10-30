@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import { getPayloadHMR } from "@payloadcms/next/utilities";
 import type {
   Adapter,
@@ -39,7 +38,6 @@ export function PayloadAdapter({
 }: PayloadAdapterOptions): Adapter {
   // Get the Payload instance
   if (!payload && payloadConfig) {
-    // eslint-disable-next-line no-param-reassign
     payload = getPayloadHMR({ config: payloadConfig });
   }
   if (!payload) {
@@ -142,8 +140,9 @@ export function PayloadAdapter({
         collection: userCollectionSlug,
         id: account.userId,
       })) as User | undefined;
-      if (!payloadUser)
+      if (!payloadUser) {
         throw new Error(`Failed to link account: User '${account.userId}' not found`);
+      }
 
       payloadUser = (await (
         await payload
@@ -175,10 +174,11 @@ export function PayloadAdapter({
           },
         })
       ).docs.at(0) as User | undefined;
-      if (!payloadUser)
+      if (!payloadUser) {
         throw new Error(
           `Failed to unlink account: User from provider '${provider}' with account ID '${providerAccountId}' not found`,
         );
+      }
 
       payloadUser = (await (
         await payload
@@ -204,8 +204,9 @@ export function PayloadAdapter({
         collection: userCollectionSlug,
         id: session.userId,
       })) as User | undefined;
-      if (!payloadUser)
+      if (!payloadUser) {
         throw new Error(`Failed to create session: User '${session.userId}' not found`);
+      }
 
       payloadUser = (await (
         await payload
@@ -234,10 +235,14 @@ export function PayloadAdapter({
           },
         })
       ).docs.at(0) as User | undefined;
-      if (!payloadUser) return null;
+      if (!payloadUser) {
+        return null;
+      }
 
       const session = payloadUser.sessions?.find(s => s.sessionToken === sessionToken);
-      if (!session) return null;
+      if (!session) {
+        return null;
+      }
 
       return {
         user: toAdapterUser(payloadUser),
@@ -259,8 +264,9 @@ export function PayloadAdapter({
           },
         })
       ).docs.at(0) as User | undefined;
-      if (!payloadUser)
+      if (!payloadUser) {
         throw new Error(`Failed to update session: Session '${session.sessionToken}' not found`);
+      }
 
       payloadUser = (await (
         await payload
@@ -294,8 +300,9 @@ export function PayloadAdapter({
           },
         })
       ).docs.at(0) as User | undefined;
-      if (!payloadUser)
+      if (!payloadUser) {
         throw new Error(`Failed to delete session: Session '${sessionToken}' not found`);
+      }
 
       payloadUser = (await (
         await payload
@@ -371,7 +378,9 @@ export function PayloadAdapter({
           },
         })
       ).docs.at(0) as User | undefined;
-      if (!payloadUser) return null;
+      if (!payloadUser) {
+        return null;
+      }
 
       const verificationToken = payloadUser.verificationTokens?.find(t => t.token === token);
 

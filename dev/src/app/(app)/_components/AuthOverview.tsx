@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { DataFromCollectionSlug } from "payload";
+import type { DataFromCollectionSlug } from "payload";
 import { getPayloadUser } from "../../../../../src";
 import { SignInButton } from "./SignInButton";
 import { SignOutButtonAuthjs } from "./SignOutButtonAuthjs";

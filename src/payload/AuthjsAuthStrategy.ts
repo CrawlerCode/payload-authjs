@@ -24,7 +24,9 @@ export function AuthjsAuthStrategy(
       const session = await auth();
 
       // If no session, return null user
-      if (!session?.user) return { user: null };
+      if (!session?.user) {
+        return { user: null };
+      }
 
       // Find user in database
       const payloadUser = (
@@ -41,7 +43,9 @@ export function AuthjsAuthStrategy(
               },
         })
       ).docs.at(0);
-      if (!payloadUser) return { user: null };
+      if (!payloadUser) {
+        return { user: null };
+      }
 
       // Return user to payload cms
       return {

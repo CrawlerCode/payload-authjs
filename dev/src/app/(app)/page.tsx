@@ -1,7 +1,7 @@
 import AuthOverview from "./_components/AuthOverview";
 import ExampleList from "./_components/ExampleList";
 
-const Page = async () => {
+const Page = () => {
   return (
     <article className="container">
       <AuthOverview />

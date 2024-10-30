@@ -162,7 +162,6 @@ function createOrPatchField(fields: Field[], field: Field): void {
   } else {
     if ("fields" in field && "fields" in existingField) {
       field.fields.forEach(subField => createOrPatchField(existingField.fields, subField));
-      // eslint-disable-next-line no-param-reassign
       field.fields = existingField.fields;
     }
     Object.assign(existingField, field);

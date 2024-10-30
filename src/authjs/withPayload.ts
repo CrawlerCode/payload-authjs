@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import type { NextAuthConfig } from "next-auth";
 import { PayloadAdapter, type PayloadAdapterOptions } from "./PayloadAdapter";
 
@@ -43,7 +42,7 @@ export function withPayload(
    */
   if (updateUserOnSignIn === true) {
     const { signIn, ...callbacks } = authjsConfig.callbacks ?? {};
-    // eslint-disable-next-line no-inner-declarations
+
     async function updateUserOnSignInWrapper(
       params: Parameters<NonNullable<typeof signIn>>[0],
     ): Promise<boolean> {

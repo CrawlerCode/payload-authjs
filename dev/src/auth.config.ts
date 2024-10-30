@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { NextAuthConfig, Profile } from "next-auth";
-import { JWT } from "next-auth/jwt";
+import type { NextAuthConfig, Profile } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import github from "next-auth/providers/github";
 import keycloak from "next-auth/providers/keycloak";
 
@@ -14,6 +14,7 @@ declare module "next-auth" {
   interface Profile {
     roles?: string[];
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface User extends Pick<JWT, "id" | "roles"> {}
 }
 
@@ -38,7 +39,7 @@ export const authConfig: NextAuthConfig = {
       profile(profile, tokens) {
         // Add roles to the profile
         if (tokens.access_token) {
-          let decodedToken = jwt.decode(tokens.access_token);
+          const decodedToken = jwt.decode(tokens.access_token);
           if (decodedToken && typeof decodedToken !== "string") {
             profile.roles = decodedToken.resource_access?.[process.env.AUTH_KEYCLOAK_ID!]?.roles; // Extend the profile
           }
@@ -57,7 +58,7 @@ export const authConfig: NextAuthConfig = {
     strategy: "jwt",
   }, */
   callbacks: {
-    jwt: async ({ token, user, profile }) => {
+    jwt: ({ token, user, profile }) => {
       // Include user id in the JWT token
       if (user) {
         token.id = user.id;
@@ -68,7 +69,7 @@ export const authConfig: NextAuthConfig = {
       }
       return token;
     },
-    session: async ({ session, user, token }) => {
+    session: ({ session, user, token }) => {
       // session strategy: "jwt"
       if (token) {
         if (token.id) {
@@ -86,7 +87,7 @@ export const authConfig: NextAuthConfig = {
       console.log("signIn auth.ts");
       return true;
     }, */
-    authorized: async ({ auth }) => {
+    authorized: ({ auth }) => {
       // Logged in users are authenticated, otherwise redirect to login page
       return !!auth;
     },

@@ -10,6 +10,7 @@ type AuthjsMiddleware = NextAuthResult["auth"] | ReturnType<NextAuthResult["auth
  * @deprecated This middleware is no longer needed and will be removed in the future
  */
 export default function middleware(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-redundant-type-constituents
   arg: NextRequest | Middleware | AuthjsMiddleware | any,
 ): Middleware | NextResponse {
   // Inline middleware
