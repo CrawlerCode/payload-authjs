@@ -1,3 +1,14 @@
+## 0.3.3 (2024-10-30)
+
+### 🩹 Fixes
+
+- Fix eslint errors ([4dcdf8f](https://github.com/CrawlerCode/payload-authjs/commit/4dcdf8f))
+
+### 🏡 Chore
+
+- Migrate to @payloadcms/eslint-config 3 beta ([7d0ec8d](https://github.com/CrawlerCode/payload-authjs/commit/7d0ec8d))
+- **dev:** Update payload files ([e4a6282](https://github.com/CrawlerCode/payload-authjs/commit/e4a6282))
+
 ## 0.3.2 (2024-10-29)
 
 
