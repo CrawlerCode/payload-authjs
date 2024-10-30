@@ -1,6 +1,6 @@
 import config from "@payload-config";
 import { getPayloadHMR } from "@payloadcms/next/utilities";
-import { getPayloadUser } from "../../../../../src";
+import { getPayloadUser } from "payload-authjs";
 
 const payload = await getPayloadHMR({ config });
 

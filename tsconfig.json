@@ -1,24 +1,19 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "target": "ESNext",
+    "declarationDir": "./dist",
     "outDir": "./dist",
+    "rootDir": "./src",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ESNext",
     "allowJs": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "jsx": "preserve",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "sourceMap": true,
-    "jsx": "react",
     "esModuleInterop": true,
     "declaration": true,
-    "declarationDir": "./dist",
     "skipLibCheck": true,
-    "strict": true,
+    "strict": true
   },
-  "include": [
-    "src/**/*",
-  ],
+  "include": ["src/**/*"]
 }

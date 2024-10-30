@@ -28,7 +28,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm exec nx run-many -t build
+      - run: pnpm exec nx build
 
       - run: pnpm exec nx report
         shell: bash

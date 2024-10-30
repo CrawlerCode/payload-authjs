@@ -1,9 +1,9 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import path from "path";
 import { buildConfig } from "payload";
+import { authjsPlugin } from "payload-authjs";
 import sharp from "sharp";
 import { fileURLToPath } from "url";
-import { authjsPlugin } from "../../src/index";
 import { authConfig } from "./auth.config";
 import Examples from "./payload/collections/examples";
 import Users from "./payload/collections/users";

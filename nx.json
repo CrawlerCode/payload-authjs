@@ -2,24 +2,14 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "dev": {
-      "outputs": [
-        "{projectRoot}/dev/.next"
-      ],
+      "outputs": ["{projectRoot}/dev/.next"],
       "cache": true
     },
     "build": {
-      "outputs": [
-        "{projectRoot}/dist"
-      ],
-      "cache": true
-    },
-    "test": {
+      "outputs": ["{projectRoot}/dist"],
       "cache": true
     },
     "lint": {
-      "cache": true
-    },
-    "dev:lint": {
       "cache": true
     },
     "lint:fix": {
@@ -32,12 +22,6 @@
       "plugin": "@nx/eslint/plugin",
       "options": {
         "targetName": "eslint:lint"
-      }
-    },
-    {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
       }
     },
     {
