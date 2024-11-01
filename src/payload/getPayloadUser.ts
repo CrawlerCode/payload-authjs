@@ -21,9 +21,11 @@ interface Options {
  * Get the user payload from the server (only works on the server side)
  */
 export const getPayloadUser = async <T extends object = User>({
-  serverUrl = process.env.NEXT_PUBLIC_SERVER_URL,
+  serverUrl,
   userCollectionSlug = "users",
 }: Options = {}): Promise<T | null> => {
+  serverUrl = serverUrl || process.env.NEXT_PUBLIC_SERVER_URL
+  
   if (serverUrl === undefined) {
     throw new Error(
       "getPayloadUser requires a server URL to be provided, either as an option or in the 'NEXT_PUBLIC_SERVER_URL' environment variable",
