@@ -1,9 +1,11 @@
 "use client";
 
+import type { CollectionSlug } from "payload";
+
 export function SignOutButtonPayload({
   userCollectionSlug = "users",
 }: {
-  userCollectionSlug?: string;
+  userCollectionSlug?: CollectionSlug;
 }) {
   return (
     <button

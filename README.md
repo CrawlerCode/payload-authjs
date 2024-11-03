@@ -137,14 +137,12 @@ This plugin also export a utility function to get the current payload user
 ```tsx
 // ServerComponentExample.tsx
 const ServerComponentExample = async () => {
-  const payloadUser = await getPayloadUser<DataFromCollectionSlug<"users">>();
+  const payloadUser = await getPayloadUser();
 
   return (
     <div>
       <h3>Payload CMS User</h3>
-      <div>
-        {JSON.stringify(payloadUser)}
-      </div>
+      <div>{JSON.stringify(payloadUser)}</div>
     </div>
   );
 };

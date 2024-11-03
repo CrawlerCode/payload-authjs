@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import type { DataFromCollectionSlug } from "payload";
 import { getPayloadUser } from "payload-authjs";
 import { SignInButton } from "./SignInButton";
 import { SignOutButtonAuthjs } from "./SignOutButtonAuthjs";
@@ -7,7 +6,7 @@ import { SignOutButtonPayload } from "./SignOutButtonPayload";
 
 const AuthOverview = async () => {
   const session = await auth();
-  const payloadUser = await getPayloadUser<DataFromCollectionSlug<"users">>();
+  const payloadUser = await getPayloadUser();
 
   return (
     <div>

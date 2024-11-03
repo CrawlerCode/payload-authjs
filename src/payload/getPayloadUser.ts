@@ -1,8 +1,7 @@
 import { cookies } from "next/headers";
-import type { CollectionSlug } from "payload";
-import type { User } from "./types";
+import type { CollectionSlug, DataFromCollectionSlug } from "payload";
 
-interface Options {
+interface Options<TSlug extends CollectionSlug> {
   /**
    * The URL of the server
    *
@@ -14,16 +13,16 @@ interface Options {
    *
    * @default "users"
    */
-  userCollectionSlug?: CollectionSlug;
+  userCollectionSlug?: TSlug;
 }
 
 /**
- * Get the user payload from the server (only works on the server side)
+ * Get the payload user from the server (only works on the server side)
  */
-export const getPayloadUser = async <T extends object = User>({
+export const getPayloadUser = async <TSlug extends CollectionSlug = "users">({
   serverUrl = process.env.NEXT_PUBLIC_SERVER_URL,
-  userCollectionSlug = "users",
-}: Options = {}): Promise<T | null> => {
+  userCollectionSlug = "users" as TSlug,
+}: Options<TSlug> = {}): Promise<DataFromCollectionSlug<TSlug> | null> => {
   const requestCookies = await cookies();
 
   if (serverUrl === undefined) {
@@ -38,7 +37,7 @@ export const getPayloadUser = async <T extends object = User>({
     },
   });
 
-  const { user }: { user: T } = await meUserReq.json();
+  const { user }: { user: DataFromCollectionSlug<TSlug> } = await meUserReq.json();
 
   if (!meUserReq.ok || !user) {
     return null;
