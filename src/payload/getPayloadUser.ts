@@ -24,17 +24,17 @@ export const getPayloadUser = async <T extends object = User>({
   serverUrl = process.env.NEXT_PUBLIC_SERVER_URL,
   userCollectionSlug = "users",
 }: Options = {}): Promise<T | null> => {
+  const requestCookies = await cookies();
+
   if (serverUrl === undefined) {
     throw new Error(
-      "getPayloadUser requires a server URL to be provided, either as an option or in the 'NEXT_PUBLIC_SERVER_URL' environment variable",
+      "getPayloadUser requires a server URL to be provided, either as an option or as the 'NEXT_PUBLIC_SERVER_URL' environment variable",
     );
   }
 
-  const cookieStore = await cookies();
-
   const meUserReq = await fetch(`${serverUrl}/api/${userCollectionSlug}/me`, {
     headers: {
-      Cookie: cookieStore.toString(),
+      Cookie: requestCookies.toString(),
     },
   });
 
