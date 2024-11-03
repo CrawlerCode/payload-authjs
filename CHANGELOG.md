@@ -1,3 +1,14 @@
+## 0.3.4 (2024-11-03)
+
+### 🩹 Fixes
+
+- **getPayloadUser:** Throw no serverURL error after cookie statement ([#5](https://github.com/CrawlerCode/payload-authjs/pull/5))
+- **getPayloadUser:** Improved type ([9866498](https://github.com/CrawlerCode/payload-authjs/commit/9866498))
+
+### 📖 Documentation
+
+- Improved docs ([9c75f76](https://github.com/CrawlerCode/payload-authjs/commit/9c75f76))
+
 ## 0.3.3 (2024-10-30)
 
 ### 🩹 Fixes
