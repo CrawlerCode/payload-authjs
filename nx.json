@@ -1,21 +1,5 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "targetDefaults": {
-    "dev": {
-      "outputs": ["{projectRoot}/dev/.next"],
-      "cache": true
-    },
-    "build": {
-      "outputs": ["{projectRoot}/dist"],
-      "cache": true
-    },
-    "lint": {
-      "cache": true
-    },
-    "lint:fix": {
-      "cache": false
-    }
-  },
   "defaultBase": "main",
   "plugins": [
     {

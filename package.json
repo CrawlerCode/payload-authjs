@@ -39,8 +39,8 @@
     "next-auth"
   ],
   "scripts": {
+    "dev": "nx --project payload-authjs-dev run dev",
     "build": "tsc",
-    "dev": "pnpm -C dev run dev",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
