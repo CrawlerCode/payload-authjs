@@ -34,6 +34,9 @@
       "types": {
         "chore": {
           "changelog": true
+        },
+        "docs": {
+          "changelog": true
         }
       }
     }
