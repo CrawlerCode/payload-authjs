@@ -124,8 +124,8 @@ export const generateUsersCollection = (
       /**
        * Override the default logout endpoint to destroy the authjs session
        *
-       * @see https://payloadcms.com/docs/beta/authentication/operations#logout
-       * @see https://github.com/payloadcms/payload/blob/beta/packages/next/src/routes/rest/auth/logout.ts
+       * @see https://payloadcms.com/docs/authentication/operations#logout
+       * @see https://github.com/payloadcms/payload/blob/main/packages/next/src/routes/rest/auth/logout.ts
        */
       method: "post",
       path: "/logout",

@@ -1,8 +1,8 @@
 import config from "@payload-config";
-import { getPayloadHMR } from "@payloadcms/next/utilities";
+import { getPayload } from "payload";
 import { getPayloadUser } from "payload-authjs";
 
-const payload = await getPayloadHMR({ config });
+const payload = await getPayload({ config });
 
 const ExampleList = async () => {
   const payloadUser = await getPayloadUser();

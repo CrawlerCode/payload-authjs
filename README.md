@@ -1,14 +1,13 @@
-# Payload CMS plugin for Auth.js
+# Payload CMS plugin for Auth.js/NextAuth
 
 <a href="https://github.com/CrawlerCode/payload-authjs/actions/workflows/ci.yml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/CrawlerCode/payload-authjs/ci.yml?style=flat-square&logo=github"></a>
 <a href="https://www.npmjs.com/package/payload-authjs"><img alt="NPM Version" src="https://img.shields.io/npm/v/payload-authjs?style=flat-square"></a>
 <a href="https://github.com/CrawlerCode/payload-authjs/blob/main/LICENSE"><img alt="NPM License" src="https://img.shields.io/npm/l/payload-authjs?style=flat-square"></a>
 <a href="https://www.npmjs.com/package/payload-authjs"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/payload-authjs?style=flat-square"></a>
 
-A [Payload CMS 3 (beta)](https://payloadcms.com) plugin for integrating [Auth.js 5 (beta)](https://authjs.dev).
+A [Payload CMS 3](https://payloadcms.com) plugin for integrating [Auth.js 5 (beta)](https://authjs.dev).
 
-> ⚠ This plugin is in beta and under construction.
-> Payload CMS 3 and Auth.js 5 are also in beta.
+> ⚠ This plugin and Auth.js is in beta and may have some bugs. Please report any issues you find.
 
 ## Installation
 

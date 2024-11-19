@@ -5,7 +5,7 @@ import type { AuthjsPluginConfig } from "./plugin";
 
 /**
  * Auth.js Authentication Strategy for Payload CMS
- * @see https://payloadcms.com/docs/beta/authentication/custom-strategies
+ * @see https://payloadcms.com/docs/authentication/custom-strategies
  */
 export function AuthjsAuthStrategy(
   collectionSlug: string,

@@ -1,11 +1,10 @@
-import { getPayloadHMR } from "@payloadcms/next/utilities";
 import type {
   Adapter,
   AdapterSession,
   AdapterUser,
   VerificationToken as AdapterVerificationToken,
 } from "next-auth/adapters";
-import type { CollectionSlug, Payload, SanitizedConfig } from "payload";
+import { type CollectionSlug, getPayload, type Payload, type SanitizedConfig } from "payload";
 import type { Session, User, VerificationToken } from "../payload/types";
 
 export interface PayloadAdapterOptions {
@@ -38,7 +37,7 @@ export function PayloadAdapter({
 }: PayloadAdapterOptions): Adapter {
   // Get the Payload instance
   if (!payload && payloadConfig) {
-    payload = getPayloadHMR({ config: payloadConfig });
+    payload = getPayload({ config: payloadConfig });
   }
   if (!payload) {
     throw new Error(
