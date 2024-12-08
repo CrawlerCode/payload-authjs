@@ -62,6 +62,8 @@ export function PayloadAdapter({
       return toAdapterUser(payloadUser);
     },
     async getUser(id) {
+      /* console.log(`[PayloadAdapter] Getting user with id '${id}'`); */
+
       const payloadUser = (await (
         await payload
       ).findByID({
@@ -72,6 +74,8 @@ export function PayloadAdapter({
       return payloadUser ? toAdapterUser(payloadUser) : null;
     },
     async getUserByEmail(email) {
+      /* console.log(`[PayloadAdapter] Getting user by email '${email}'`); */
+
       const payloadUser = (
         await (
           await payload
@@ -87,16 +91,20 @@ export function PayloadAdapter({
 
       return payloadUser ? toAdapterUser(payloadUser) : null;
     },
-    async getUserByAccount({ providerAccountId }) {
+    async getUserByAccount({ provider, providerAccountId }) {
+      /* console.log(
+        `[PayloadAdapter] Getting user by account '${providerAccountId}' from provider '${provider}'`,
+      ); */
+
       const payloadUser = (
         await (
           await payload
         ).find({
           collection: userCollectionSlug,
           where: {
-            /* "accounts.provider": {
+            "accounts.provider": {
               equals: provider,
-            }, */
+            },
             "accounts.providerAccountId": {
               equals: providerAccountId,
             },
@@ -107,7 +115,7 @@ export function PayloadAdapter({
       return payloadUser ? toAdapterUser(payloadUser) : null;
     },
     async updateUser(user) {
-      /* console.log(`[PayloadAdapter] Updating user ${user.id}`, user); */
+      /* console.log(`[PayloadAdapter] Updating user '${user.id}'`, user); */
 
       const payloadUser = (await (
         await payload
