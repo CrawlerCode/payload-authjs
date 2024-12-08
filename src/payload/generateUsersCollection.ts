@@ -5,6 +5,150 @@ import { withPayload } from "../authjs/withPayload";
 import { AuthjsAuthStrategy } from "./AuthjsAuthStrategy";
 import type { AuthjsPluginConfig } from "./plugin";
 
+const defaultUsersCollection = {
+  /**
+   * Default fields
+   */
+  fields: [
+    {
+      name: "id",
+      type: "text",
+      admin: {
+        readOnly: true,
+      },
+    },
+    {
+      name: "email",
+      type: "email",
+      required: true,
+      // unique: true,
+    },
+    {
+      name: "name",
+      type: "text",
+    },
+    {
+      name: "image",
+      type: "text",
+    },
+    {
+      name: "emailVerified",
+      type: "date",
+    },
+    {
+      name: "accounts",
+      type: "array",
+      fields: [
+        {
+          name: "id",
+          type: "text",
+          admin: {
+            disabled: true,
+          },
+        },
+        { name: "provider", type: "text", required: true },
+        { name: "providerAccountId", type: "text", required: true },
+        { name: "type", type: "text", required: true },
+      ],
+      admin: {
+        readOnly: true,
+        position: "sidebar",
+        initCollapsed: true,
+      },
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "sessions",
+      type: "array",
+      fields: [
+        {
+          name: "id",
+          type: "text",
+          admin: {
+            disabled: true,
+          },
+        },
+        { name: "sessionToken", type: "text", required: true },
+        { name: "expires", type: "date", required: true },
+      ],
+      admin: {
+        readOnly: true,
+        position: "sidebar",
+        initCollapsed: true,
+      },
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    {
+      name: "verificationTokens",
+      type: "array",
+      fields: [
+        {
+          name: "id",
+          type: "text",
+          admin: {
+            disabled: true,
+          },
+        },
+        { name: "token", type: "text", required: true },
+        { name: "expires", type: "date", required: true },
+      ],
+      admin: {
+        readOnly: true,
+        position: "sidebar",
+        initCollapsed: true,
+      },
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+  ],
+  /**
+   * Override the default access control. Only allow users to read, update and delete their own user
+   */
+  access: {
+    read: ({ req: { user } }) => {
+      if (!user) {
+        return false;
+      }
+      return {
+        id: {
+          equals: user.id,
+        },
+      };
+    },
+    readVersions: () => false,
+    create: () => false,
+    update: ({ req: { user } }) => {
+      if (!user) {
+        return false;
+      }
+      return {
+        id: {
+          equals: user.id,
+        },
+      };
+    },
+    delete: ({ req: { user } }) => {
+      if (!user) {
+        return false;
+      }
+      return {
+        id: {
+          equals: user.id,
+        },
+      };
+    },
+    unlock: () => false,
+  },
+} satisfies Partial<CollectionConfig>;
+
 export const generateUsersCollection = (
   collections: CollectionConfig[],
   pluginOptions: AuthjsPluginConfig,
@@ -24,92 +168,13 @@ export const generateUsersCollection = (
   }
 
   // Add or patch fields in users collection
-  createOrPatchField(collection.fields, {
-    name: "id",
-    type: "text",
-    admin: {
-      readOnly: true,
-    },
-  });
-  createOrPatchField(collection.fields, {
-    name: "email",
-    type: "email",
-    required: true,
-    // unique: true,
-  });
-  createOrPatchField(collection.fields, {
-    name: "name",
-    type: "text",
-  });
-  createOrPatchField(collection.fields, {
-    name: "image",
-    type: "text",
-  });
-  createOrPatchField(collection.fields, {
-    name: "emailVerified",
-    type: "date",
-  });
-  createOrPatchField(collection.fields, {
-    name: "accounts",
-    type: "array",
-    fields: [
-      {
-        name: "id",
-        type: "text",
-        admin: {
-          disabled: true,
-        },
-      },
-      { name: "provider", type: "text", required: true },
-      { name: "providerAccountId", type: "text", required: true },
-      { name: "type", type: "text", required: true },
-    ],
-    admin: {
-      readOnly: true,
-      position: "sidebar",
-      initCollapsed: true,
-    },
-  });
-  createOrPatchField(collection.fields, {
-    name: "sessions",
-    type: "array",
-    fields: [
-      {
-        name: "id",
-        type: "text",
-        admin: {
-          disabled: true,
-        },
-      },
-      { name: "sessionToken", type: "text", required: true },
-      { name: "expires", type: "date", required: true },
-    ],
-    admin: {
-      readOnly: true,
-      position: "sidebar",
-      initCollapsed: true,
-    },
-  });
-  createOrPatchField(collection.fields, {
-    name: "verificationTokens",
-    type: "array",
-    fields: [
-      {
-        name: "id",
-        type: "text",
-        admin: {
-          disabled: true,
-        },
-      },
-      { name: "token", type: "text", required: true },
-      { name: "expires", type: "date", required: true },
-    ],
-    admin: {
-      readOnly: true,
-      position: "sidebar",
-      initCollapsed: true,
-    },
-  });
+  defaultUsersCollection.fields.forEach(field => createOrPatchField(collection.fields, field));
+
+  // Override the access control
+  collection.access = {
+    ...defaultUsersCollection.access,
+    ...collection.access,
+  };
 
   // Add auth strategy to users collection
   collection.auth = {

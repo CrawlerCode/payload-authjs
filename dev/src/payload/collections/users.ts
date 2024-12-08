@@ -5,6 +5,11 @@ const Users: CollectionConfig = {
   admin: {
     useAsTitle: "name",
   },
+  access: {
+    /* admin: ({ req: { user } }) => {
+      return user?.roles?.includes("admin") ?? false;
+    }, */
+  },
   fields: [
     {
       name: "roles",
