@@ -1,3 +1,18 @@
+## 0.4.0 (2024-12-08)
+
+### 🚀 Features
+
+- Set default access control (read, update and delete own user) ([edaf753](https://github.com/CrawlerCode/payload-authjs/commit/edaf753))
+
+### 🩹 Fixes
+
+- **PayloadAdapter:** Check account provider in getUserByAccount method ([75b88c0](https://github.com/CrawlerCode/payload-authjs/commit/75b88c0))
+
+### 🏡 Chore
+
+- Migrate to payload 3 stable version ([2db3139](https://github.com/CrawlerCode/payload-authjs/commit/2db3139))
+- Update dependencies ([d7338aa](https://github.com/CrawlerCode/payload-authjs/commit/d7338aa))
+
 ## 0.3.4 (2024-11-03)
 
 ### 🩹 Fixes
