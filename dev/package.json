@@ -15,16 +15,16 @@
     "generate:importmap": "payload generate:importmap"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "3.0.0",
-    "@payloadcms/next": "3.0.0",
-    "@payloadcms/ui": "3.0.0",
+    "@payloadcms/db-postgres": "3.5.0",
+    "@payloadcms/next": "3.5.0",
+    "@payloadcms/ui": "3.5.0",
     "jsonwebtoken": "^9.0.2",
-    "next": "15.0.3",
+    "next": "15.0.4",
     "next-auth": "5.0.0-beta.25",
     "nodemailer": "^6.9.16",
-    "payload": "3.0.0",
-    "react": "19.0.0-rc-02c0e824-20241028",
-    "react-dom": "19.0.0-rc-02c0e824-20241028",
+    "payload": "3.5.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "sharp": "^0.33.5",
     "payload-authjs": "workspace:*"
   },

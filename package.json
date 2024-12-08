@@ -56,24 +56,19 @@
     "@nx/js": "20.0.6",
     "@nx/next": "20.0.6",
     "@payloadcms/eslint-config": "3.0.0",
-    "@types/react": "npm:types-react@19.0.0-rc.1",
-    "next": "15.0.3",
+    "@types/react": "19.0.1",
+    "next": "15.0.4",
     "next-auth": "5.0.0-beta.25",
     "nx": "20.0.6",
-    "payload": "3.0.0",
+    "payload": "3.5.0",
     "prettier": "^3.3.3",
-    "react": "19.0.0-rc-02c0e824-20241028",
-    "react-dom": "19.0.0-rc-02c0e824-20241028",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "typescript": "^5.6.3"
   },
   "nx": {},
   "dependencies": {
-    "@auth/core": "^0.37.2"
+    "@auth/core": "^0.37.4"
   },
-  "packageManager": "pnpm@9.12.3",
-  "pnpm": {
-    "overrides": {
-      "@types/react": "npm:types-react@19.0.0-rc.1"
-    }
-  }
+  "packageManager": "pnpm@9.12.3"
 }
