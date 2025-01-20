@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature request / Ideas
+    url: https://github.com/CrawlerCode/payload-authjs/discussions/new?category=feature-request-ideas
+    about: Share ideas for new features
+  - name: Ask a question
+    url: https://github.com/CrawlerCode/payload-authjs/discussions/new?category=q-a
+    about: Ask questions

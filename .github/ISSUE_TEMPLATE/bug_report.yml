@@ -1,0 +1,50 @@
+name: Report an issue
+description: Create a report to help us improve
+labels: ["bug"]
+body:
+  - type: input
+    attributes:
+      label: Plugin version
+      description: What version of `payload-authjs` are you using?
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Payload version
+      description: What version of `payload` are you using?
+      placeholder: 3.0.0
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Auth.js version
+      description: What version of `Auth.js`/`next-auth` are you using?
+      placeholder: 5.0.0-beta.25
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: A clear and concise description of what the bug is
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: To Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context / Screenshots
+      description: Add any other context about the problem here. If applicable, add screenshots to help explain your problem.
+      placeholder: Add other context here (e.g. screenshots, logs, etc.)
+    validations:
+      required: false
