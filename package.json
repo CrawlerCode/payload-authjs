@@ -67,8 +67,6 @@
     "typescript": "^5.7.3"
   },
   "nx": {},
-  "dependencies": {
-    "@auth/core": "^0.37.4"
-  },
+  "dependencies": {},
   "packageManager": "pnpm@9.12.3"
 }

@@ -1,31 +1,22 @@
-import { createActionURL } from "@auth/core";
 import { Button } from "@payloadcms/ui";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import React from "react";
+import NextAuth from "next-auth";
 
 /**
  * A button that redirects the user to the Auth.js sign in page
  */
-export const SignInWithAuthjsButton = ({
-  authjsBasePath,
-  adminURL,
-}: {
-  authjsBasePath: string;
-  adminURL: string;
-}) => {
+export const SignInWithAuthjsButton = ({ authjsBasePath }: { authjsBasePath?: string }) => {
   return (
     <form
       style={{ display: "flex", justifyContent: "center" }}
       action={async () => {
         "use server";
 
-        const signInURL = createActionURL("signin", "https", await headers(), process.env, {
+        const { signIn } = NextAuth({
           basePath: authjsBasePath,
+          providers: [],
         });
-        signInURL.searchParams.append("callbackUrl", adminURL);
 
-        redirect(signInURL.toString());
+        await signIn();
       }}
     >
       <Button

@@ -55,8 +55,7 @@ export const authjsPlugin =
                 {
                   path: "payload-authjs/components#SignInWithAuthjsButton",
                   serverProps: {
-                    authjsBasePath: pluginOptions.authjsConfig.basePath ?? "/api/auth",
-                    adminURL: config.routes?.admin ?? "/admin",
+                    authjsBasePath: pluginOptions.authjsConfig.basePath,
                   },
                 },
               ]
