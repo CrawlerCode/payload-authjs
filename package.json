@@ -1,72 +1,26 @@
 {
-  "name": "payload-authjs",
+  "name": "payload-authjs-monorepo",
   "version": "0.4.0",
+  "private": true,
   "type": "module",
-  "description": "A Payload CMS 3 plugin for Auth.js 5",
-  "repository": "git@github.com:CrawlerCode/payload-authjs.git",
-  "author": "crawlercode@outlook.de",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    },
-    "./middleware": {
-      "types": "./dist/payload/middleware.d.ts",
-      "import": "./dist/payload/middleware.js",
-      "default": "./dist/payload/middleware.js"
-    },
-    "./components": {
-      "types": "./dist/components/index.d.ts",
-      "import": "./dist/components/index.js",
-      "default": "./dist/components/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "payload",
-    "cms",
-    "payloadcms",
-    "plugin",
-    "typescript",
-    "react",
-    "auth.js",
-    "next-auth"
-  ],
   "scripts": {
-    "dev": "nx --project payload-authjs-dev run dev",
-    "build": "tsc",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "build": "nx run payload-authjs:build",
+    "dev": "nx run dev:dev"
   },
-  "peerDependencies": {
-    "@payloadcms/next": "^3.0.0",
-    "@payloadcms/ui": "^3.0.0",
-    "next": "^15.0.0",
-    "next-auth": "^5.0.0-beta.25",
-    "payload": "^3.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@nx/eslint": "20.0.6",
-    "@nx/js": "20.0.6",
-    "@nx/next": "20.0.6",
+    "@nx/eslint": "20.3.2",
+    "@nx/js": "20.3.2",
+    "@nx/next": "20.3.2",
+    "@nx/react": "20.3.2",
     "@payloadcms/eslint-config": "3.9.0",
-    "@types/react": "19.0.7",
-    "next": "15.1.5",
-    "next-auth": "5.0.0-beta.25",
-    "nx": "20.0.6",
-    "payload": "3.18.0",
+    "nx": "20.3.2",
     "prettier": "^3.4.2",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
     "typescript": "^5.7.3"
   },
   "nx": {},
-  "dependencies": {},
-  "packageManager": "pnpm@9.12.3"
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "pnpm@9.15.4"
 }

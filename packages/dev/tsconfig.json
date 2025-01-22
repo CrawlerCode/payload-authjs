@@ -1,0 +1,32 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "strict": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "noEmit": true,
+    "incremental": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@payload-config": ["./src/payload.config.ts"],
+      "payload/generated-types": ["./src/payload-types.ts"],
+      "@/*": ["./src/*"],
+      "payload-authjs": ["../payload-authjs/src/index.ts"],
+      "payload-authjs/components": ["../payload-authjs/src/components/index.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "dist", "build"]
+}

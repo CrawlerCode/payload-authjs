@@ -1,0 +1,20 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/payload-authjs/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "inputs": ["default", "^default"],
+      "options": {
+        "main": "packages/payload-authjs/src/index.ts",
+        "tsConfig": "packages/payload-authjs/tsconfig.lib.json",
+        "outputPath": "packages/payload-authjs/dist",
+        "rootDir": "packages/payload-authjs/src",
+        "generatePackageJson": false
+      },
+      "cache": true,
+      "dependsOn": ["^build"]
+    }
+  }
+}

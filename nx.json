@@ -5,7 +5,7 @@
     {
       "plugin": "@nx/eslint/plugin",
       "options": {
-        "targetName": "eslint:lint"
+        "targetName": "lint"
       }
     },
     {

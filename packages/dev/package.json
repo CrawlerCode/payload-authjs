@@ -1,14 +1,10 @@
 {
-  "name": "payload-authjs-dev",
+  "name": "dev",
   "description": "A test app for payload-authjs plugin",
   "version": "1.0.0",
-  "license": "MIT",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev -p 5000",
-    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start -p 5000",
     "payload": "payload",
     "generate:types": "payload generate:types",
     "generate:schema": "payload-graphql generate:schema",
@@ -19,19 +15,18 @@
     "@payloadcms/next": "3.18.0",
     "@payloadcms/ui": "3.18.0",
     "jsonwebtoken": "^9.0.2",
-    "next": "15.1.5",
+    "next": "15.1.6",
     "next-auth": "5.0.0-beta.25",
     "nodemailer": "^6.9.16",
     "payload": "3.18.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "sharp": "^0.33.5",
-    "payload-authjs": "workspace:*"
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.7",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.4.5",
-    "typescript": "^5.6.3"
+    "@types/react": "19.0.7",
+    "dotenv": "^16.4.7",
+    "typescript": "^5.7.3"
   }
 }

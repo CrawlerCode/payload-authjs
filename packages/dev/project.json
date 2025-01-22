@@ -1,0 +1,12 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/dev/src",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "options": {
+        "port": 5000
+      }
+    }
+  }
+}

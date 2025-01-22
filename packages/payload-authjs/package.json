@@ -1,0 +1,60 @@
+{
+  "name": "payload-authjs",
+  "version": "0.4.0",
+  "type": "module",
+  "description": "A Payload CMS 3 plugin for Auth.js 5",
+  "repository": "git@github.com:CrawlerCode/payload-authjs.git",
+  "author": "crawlercode@outlook.de",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./middleware": {
+      "types": "./dist/payload/middleware.d.ts",
+      "import": "./dist/payload/middleware.js",
+      "default": "./dist/payload/middleware.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js",
+      "default": "./dist/components/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "payload",
+    "cms",
+    "payloadcms",
+    "plugin",
+    "typescript",
+    "react",
+    "auth.js",
+    "next-auth"
+  ],
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "@types/react": "19.0.7",
+    "next": "15.1.5",
+    "next-auth": "5.0.0-beta.25",
+    "payload": "3.18.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "typescript": "^5.7.3"
+  },
+  "peerDependencies": {
+    "@payloadcms/next": "^3.0.0",
+    "@payloadcms/ui": "^3.0.0",
+    "next": "^15.0.0",
+    "next-auth": "^5.0.0-beta.25",
+    "payload": "^3.0.0"
+  }
+}
