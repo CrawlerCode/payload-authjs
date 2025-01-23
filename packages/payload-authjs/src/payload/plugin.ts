@@ -1,5 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
 import type { CollectionSlug, Plugin } from "payload";
+import type { SignInWithAuthjsButtonProps } from "../components/SignInWithAuthjsButton";
 import { generateUsersCollection } from "./generateUsersCollection";
 
 export interface AuthjsPluginConfig {
@@ -26,6 +27,17 @@ export interface AuthjsPluginConfig {
    * authjsPlugin({ authjsConfig: config })
    */
   authjsConfig: NextAuthConfig;
+
+  /**
+   * Customize the components that the plugin adds to the admin panel
+   */
+  components?: {
+    /**
+     * Customize the SignInButton component
+     * Or set to `false` to disable the SignInButton component
+     */
+    SignInButton?: Omit<SignInWithAuthjsButtonProps, "authjsBasePath"> | false;
+  };
 }
 
 export const authjsPlugin =
@@ -50,11 +62,13 @@ export const authjsPlugin =
         afterLogin: [
           ...(config.admin?.components?.afterLogin ?? []),
           // Add the SignInWithAuthjsButton component to the admin login page (only if the user collection is the admin user collection)
-          ...(incomingConfig.admin?.user === (pluginOptions.userCollectionSlug ?? "users")
+          ...(incomingConfig.admin?.user === (pluginOptions.userCollectionSlug ?? "users") &&
+          pluginOptions.components?.SignInButton !== false
             ? [
                 {
                   path: "payload-authjs/components#SignInWithAuthjsButton",
                   serverProps: {
+                    ...pluginOptions.components?.SignInButton,
                     authjsBasePath: pluginOptions.authjsConfig.basePath,
                   },
                 },
