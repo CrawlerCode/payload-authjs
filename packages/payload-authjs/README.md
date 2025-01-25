@@ -1,3 +1,5 @@
+<a href="https://github.com/CrawlerCode/payload-authjs"><img width="100%" src="https://raw.githubusercontent.com/CrawlerCode/payload-authjs/main/payload-authjs-banner.png" alt="payload-authjs banner" /></a>
+
 # Payload CMS plugin for Auth.js/NextAuth
 
 <a href="https://github.com/CrawlerCode/payload-authjs/actions/workflows/ci.yml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/CrawlerCode/payload-authjs/ci.yml?style=flat-square&logo=github"></a>
