@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 import type { CollectionSlug, Plugin } from "payload";
 import type { SignInWithAuthjsButtonProps } from "../components/SignInWithAuthjsButton";
-import { generateUsersCollection } from "./generateUsersCollection";
+import { generateUsersCollection } from "./collection";
 
 export interface AuthjsPluginConfig {
   /**

@@ -66,18 +66,63 @@ export const config = buildConfig({
 
 **And that's it! Now you can sign-in via Auth.js and you are automatically authenticated in Payload CMS. Nice 🎉**
 
+> You don't need to create a collection for users. This plugin automatically creates a collection with the slug `users`.
+
 ---
 
 ## Customizing
 
-You don't need to create a collection for users. This plugin automatically creates a collection with the slug `users`.
+<details>
+  <summary>Customizing the users collection</summary>
 
-But if you want to customize the users collection, you can create a collection with the slug `users` and add the fields you need.
+If you want to customize the users collection, you can create a collection with the slug `users` and add your customizations there.
 
 ```ts
 // users.ts
-import type { CollectionConfig } from "payload";
+const Users: CollectionConfig = {
+  slug: "users",
+  fields: [],
+};
+```
 
+### Customize existing fields
+
+You can customize the existing fields in the users collection by adding the field to the collection and modifying the field configuration. The fields will be merged together.
+
+```ts
+// users.ts
+const Users: CollectionConfig = {
+  slug: "users",
+  fields: [
+    {
+      name: "id",
+      type: "text",
+      label: "Identifier", // <-- Add a label to the id field
+      admin: {
+        hidden: true, // <-- Hide id field in admin panel
+      },
+    },
+    {
+      name: "accounts",
+      type: "array",
+      fields: [
+        {
+          name: "provider",
+          type: "text",
+          label: "Account Provider", // <-- Add label to provider field
+        },
+      ],
+    },
+  ],
+};
+```
+
+### Add additional fields
+
+You can also add additional fields to the users collection. For example, you could add a `roles` field to the users collection:
+
+```ts
+// users.ts
 const Users: CollectionConfig = {
   slug: "users",
   fields: [
@@ -87,8 +132,6 @@ const Users: CollectionConfig = {
     },
   ],
 };
-
-export default Users;
 ```
 
 Next, you need to extend the user object returned by your Auth.js provider. You can do this like this example:
@@ -100,7 +143,7 @@ const authConfig: NextAuthConfig = {
       profile(profile) {
         return {
           id: profile.id.toString(),
-          name: profile.name,
+          name: profile.name ?? profile.login,
           email: profile.email,
           image: profile.avatar_url,
           roles: ["user"], // <-- Extend the user object with a custom field
@@ -139,6 +182,8 @@ const Examples: CollectionConfig = {
   ],
 };
 ```
+
+</details>
 
 ### Utility functions
 

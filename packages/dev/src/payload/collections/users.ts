@@ -12,6 +12,31 @@ const Users: CollectionConfig = {
   },
   fields: [
     {
+      name: "id",
+      type: "text",
+      label: "Identifier",
+      admin: {
+        hidden: true, // Hide id field in admin panel
+      },
+    },
+    {
+      name: "accounts",
+      type: "array",
+      fields: [
+        {
+          name: "provider",
+          type: "text",
+          label: "Account Provider", // Add label to provider field
+        },
+        // Add new field to accounts
+        {
+          name: "access_token",
+          type: "text",
+        },
+      ],
+    },
+    // Add custom field
+    {
       name: "roles",
       type: "json",
       typescriptSchema: [

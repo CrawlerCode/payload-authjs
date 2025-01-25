@@ -62,25 +62,19 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  roles?: string[];
   id: string;
   email: string;
+  emailVerified?: string | null;
   name?: string | null;
   image?: string | null;
-  emailVerified?: string | null;
+  roles?: string[];
   accounts?:
     | {
         id?: string | null;
         provider: string;
         providerAccountId: string;
         type: string;
-      }[]
-    | null;
-  sessions?:
-    | {
-        id?: string | null;
-        sessionToken: string;
-        expires: string;
+        access_token?: string | null;
       }[]
     | null;
   verificationTokens?:
@@ -165,12 +159,12 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  roles?: T;
   id?: T;
   email?: T;
+  emailVerified?: T;
   name?: T;
   image?: T;
-  emailVerified?: T;
+  roles?: T;
   accounts?:
     | T
     | {
@@ -178,13 +172,7 @@ export interface UsersSelect<T extends boolean = true> {
         provider?: T;
         providerAccountId?: T;
         type?: T;
-      };
-  sessions?:
-    | T
-    | {
-        id?: T;
-        sessionToken?: T;
-        expires?: T;
+        access_token?: T;
       };
   verificationTokens?:
     | T
