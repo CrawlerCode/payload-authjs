@@ -62,14 +62,15 @@ export function PayloadAdapter({
       return toAdapterUser(payloadUser);
     },
     async getUser(id) {
-      /* console.log(`[PayloadAdapter] Getting user with id '${id}'`); */
+      /* console.log(`[PayloadAdapter] Getting user '${id}' by id`); */
 
       const payloadUser = (await (
         await payload
       ).findByID({
         collection: userCollectionSlug,
         id,
-      })) as User | undefined;
+        disableErrors: true,
+      })) as User | null;
 
       return payloadUser ? toAdapterUser(payloadUser) : null;
     },
@@ -93,7 +94,7 @@ export function PayloadAdapter({
     },
     async getUserByAccount({ provider, providerAccountId }) {
       /* console.log(
-        `[PayloadAdapter] Getting user by account '${providerAccountId}' from provider '${provider}'`,
+        `[PayloadAdapter] Getting user by account '${providerAccountId}' of provider '${provider}'`,
       ); */
 
       const payloadUser = (
@@ -122,14 +123,13 @@ export function PayloadAdapter({
       ).update({
         collection: userCollectionSlug,
         id: user.id,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data: user as any,
+        data: user,
       })) as unknown as User | undefined;
 
       return payloadUser ? toAdapterUser(payloadUser) : (null as unknown as AdapterUser);
     },
     async deleteUser(userId) {
-      /* console.log(`[PayloadAdapter] Deleting user with id '${userId}'`); */
+      /* console.log(`[PayloadAdapter] Deleting user '${userId}'`); */
 
       await (
         await payload
@@ -146,7 +146,8 @@ export function PayloadAdapter({
       ).findByID({
         collection: userCollectionSlug,
         id: account.userId,
-      })) as User | undefined;
+        disableErrors: true,
+      })) as User | null;
       if (!payloadUser) {
         throw new Error(`Failed to link account: User '${account.userId}' not found`);
       }
@@ -164,7 +165,9 @@ export function PayloadAdapter({
       return account;
     },
     async unlinkAccount({ provider, providerAccountId }) {
-      /* console.log("[PayloadAdapter] Unlinking account"); */
+      /* console.log(
+        `[PayloadAdapter] Unlinking account '${providerAccountId}' of provider '${provider}'`,
+      ); */
 
       let payloadUser = (
         await (
@@ -183,7 +186,7 @@ export function PayloadAdapter({
       ).docs.at(0) as User | undefined;
       if (!payloadUser) {
         throw new Error(
-          `Failed to unlink account: User from provider '${provider}' with account ID '${providerAccountId}' not found`,
+          `Failed to unlink account: Account '${providerAccountId}' of provider '${provider}' not found`,
         );
       }
 
@@ -210,7 +213,8 @@ export function PayloadAdapter({
       ).findByID({
         collection: userCollectionSlug,
         id: session.userId,
-      })) as User | undefined;
+        disableErrors: true,
+      })) as User | null;
       if (!payloadUser) {
         throw new Error(`Failed to create session: User '${session.userId}' not found`);
       }
