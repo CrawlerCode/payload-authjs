@@ -32,6 +32,7 @@ const ExampleList = async () => {
             <p>{JSON.stringify(example)}</p>
           </li>
         ))}
+        {examples.docs.length === 0 && <p>No examples found</p>}
       </ul>
     </div>
   );

@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { getPayloadUser } from "payload-authjs";
-import { SignInButton } from "./SignInButton";
+import { SignInButtonAuthjs } from "./SignInButtonAuthjs";
 import { SignOutButtonAuthjs } from "./SignOutButtonAuthjs";
 import { SignOutButtonPayload } from "./SignOutButtonPayload";
 
@@ -10,17 +10,13 @@ const AuthOverview = async () => {
 
   return (
     <div>
-      <h3>Auth.js</h3>
-      <p>{session?.user ? <SignOutButtonAuthjs /> : <SignInButton />}</p>
-      <div style={{ background: "gray", padding: "5px", borderRadius: "10px" }}>
-        {JSON.stringify(session?.user, null, 2)}
-      </div>
+      <h3>Auth.js Session</h3>
+      <p>{session?.user ? <SignOutButtonAuthjs /> : <SignInButtonAuthjs />}</p>
+      <pre>{JSON.stringify(session?.user, null, 2)}</pre>
       <br />
-      <h3>Payload CMS</h3>
+      <h3>Payload CMS User</h3>
       <p>{payloadUser && <SignOutButtonPayload />}</p>
-      <div style={{ background: "gray", padding: "5px", borderRadius: "10px" }}>
-        {JSON.stringify(payloadUser, null, 2)}
-      </div>
+      <pre>{JSON.stringify(payloadUser, null, 2)}</pre>
     </div>
   );
 };

@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start:dev": "next dev -p 5000",
     "payload": "payload",
     "generate:types": "payload generate:types",
     "generate:schema": "payload-graphql generate:schema",

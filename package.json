@@ -20,7 +20,8 @@
   },
   "nx": {},
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "packageManager": "pnpm@9.15.4"
 }

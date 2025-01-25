@@ -8,7 +8,7 @@ export function SignOutButtonAuthjs() {
         await signOut();
       }}
     >
-      <button type="submit">Sign Out (auth.js)</button>
+      <button type="submit">Sign Out (Auth.js)</button>
     </form>
   );
 }

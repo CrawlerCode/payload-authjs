@@ -1,0 +1,43 @@
+{
+  "name": "basic-example",
+  "version": "1.0.0",
+  "description": "A basic example of Payload CMS using payload-authjs plugin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.19.0",
+    "@payloadcms/next": "^3.19.0",
+    "@payloadcms/richtext-lexical": "^3.19.0",
+    "cross-env": "^7.0.3",
+    "graphql": "^16.10.0",
+    "next": "15.1.6",
+    "next-auth": "5.0.0-beta.25",
+    "payload": "^3.19.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "sharp": "0.32.6",
+    "payload-authjs": "workspace:*"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@types/node": "^22.10.10",
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3",
+    "eslint": "^9.19.0",
+    "eslint-config-next": "15.1.6",
+    "typescript": "5.7.3"
+  },
+  "engines": {
+    "node": "^18.20.2 || >=20.9.0"
+  }
+}

@@ -3,11 +3,11 @@ import ExampleList from "./_components/ExampleList";
 
 const Page = () => {
   return (
-    <article className="container">
+    <main>
       <AuthOverview />
       <br />
       <ExampleList />
-    </article>
+    </main>
   );
 };
 

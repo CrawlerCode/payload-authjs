@@ -1,6 +1,6 @@
 import { signIn } from "@/auth";
 
-export function SignInButton() {
+export function SignInButtonAuthjs() {
   return (
     <form
       action={async () => {
@@ -8,7 +8,7 @@ export function SignInButton() {
         await signIn();
       }}
     >
-      <button type="submit">Sign In</button>
+      <button type="submit">Sign In (Auth.js)</button>
     </form>
   );
 }
