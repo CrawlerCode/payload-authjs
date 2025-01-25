@@ -1,3 +1,23 @@
+## 0.5.0 (2025-01-25)
+
+### 🚀 Features
+
+- Allow to customize the sign in button ([#7](https://github.com/CrawlerCode/payload-authjs/pull/7))
+- Improved users collection & add better support for customization ([18810ec](https://github.com/CrawlerCode/payload-authjs/commit/18810ec))
+- **basic-example:** Add basic-example project ([76fc27a](https://github.com/CrawlerCode/payload-authjs/commit/76fc27a))
+
+### 🩹 Fixes
+
+- **PayloadAdapter:** Fix not found error on first sign in ([afd1273](https://github.com/CrawlerCode/payload-authjs/commit/afd1273))
+
+### 🏡 Chore
+
+- Add github issue template ([5038483](https://github.com/CrawlerCode/payload-authjs/commit/5038483))
+- Update dependencies ([e74b980](https://github.com/CrawlerCode/payload-authjs/commit/e74b980))
+- Move README and add symlink ([8b15168](https://github.com/CrawlerCode/payload-authjs/commit/8b15168))
+- Set minimal required payload version to 3.1.1 ([c621343](https://github.com/CrawlerCode/payload-authjs/commit/c621343))
+- Add banner ([da224a0](https://github.com/CrawlerCode/payload-authjs/commit/da224a0))
+
 ## 0.4.0 (2024-12-08)
 
 ### 🚀 Features
