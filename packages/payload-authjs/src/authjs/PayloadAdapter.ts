@@ -172,9 +172,9 @@ export function PayloadAdapter({
         ).find({
           collection: userCollectionSlug,
           where: {
-            /* "accounts.provider": {
+            "accounts.provider": {
               equals: provider,
-            }, */
+            },
             "accounts.providerAccountId": {
               equals: providerAccountId,
             },
