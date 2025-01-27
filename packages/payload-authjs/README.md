@@ -251,7 +251,23 @@ const Examples: CollectionConfig = {
 
 </details>
 
-## 🎉 Events
+## 🟦 Typescript
+
+If you are using typescript you can declare your Auth.js user type as shown in the following example:
+
+```ts
+// auth.config.ts
+import type { PayloadAuthjsUser } from "payload-authjs";
+import type { User as PayloadUser } from "payload/generated-types";
+
+declare module "next-auth" {
+  interface User extends PayloadAuthjsUser<PayloadUser> {}
+}
+```
+
+_More information about typescript can be found in the [Auth.js documentation](https://authjs.dev/getting-started/typescript?framework=next-js)._
+
+### 🎉 Events
 
 Auth.js emits some [events](https://authjs.dev/reference/nextjs#events) that you can listen to. This plugin extends the events with additional parameters like the `adapter` and `payload` instance.
 
@@ -266,7 +282,7 @@ The following events are available:
 - linkAccount
 - session
 
-## `signIn` Event
+### `signIn` Event
 
 The `signIn` event is emitted when a user successfully signs in. For example, you could use this event to update the user's name on every sign-in:
 

@@ -5,12 +5,12 @@ import type { JWT } from "next-auth/jwt";
 import github from "next-auth/providers/github";
 import keycloak from "next-auth/providers/keycloak";
 import nodemailer from "next-auth/providers/nodemailer";
+import type { PayloadAuthjsUser } from "payload-authjs";
 import type { User as PayloadUser } from "payload/generated-types";
 
 declare module "next-auth" {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface User
-    extends Partial<Omit<PayloadUser, "accounts" | "sessions" | "verificationTokens">> {}
+  interface User extends PayloadAuthjsUser<PayloadUser> {}
 }
 declare module "next-auth/jwt" {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -145,9 +145,4 @@ export const authConfig: NextAuthConfig = {
       return !!auth;
     },
   },
-  /* events: {
-    signIn: () => {
-      console.log("original events.signIn");
-    },
-  }, */
 };
