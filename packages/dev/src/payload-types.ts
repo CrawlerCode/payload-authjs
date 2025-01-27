@@ -67,6 +67,9 @@ export interface User {
   emailVerified?: string | null;
   name?: string | null;
   image?: string | null;
+  additionalUserDatabaseField: string;
+  additionalUserVirtualField?: string | null;
+  locale?: string | null;
   roles?: string[];
   accounts?:
     | {
@@ -75,6 +78,8 @@ export interface User {
         providerAccountId: string;
         type: string;
         access_token?: string | null;
+        additionalAccountDatabaseField: string;
+        createdAt: string;
       }[]
     | null;
   verificationTokens?:
@@ -82,6 +87,7 @@ export interface User {
         id?: string | null;
         token: string;
         expires: string;
+        createdAt: string;
       }[]
     | null;
   updatedAt: string;
@@ -164,6 +170,9 @@ export interface UsersSelect<T extends boolean = true> {
   emailVerified?: T;
   name?: T;
   image?: T;
+  additionalUserDatabaseField?: T;
+  additionalUserVirtualField?: T;
+  locale?: T;
   roles?: T;
   accounts?:
     | T
@@ -173,6 +182,8 @@ export interface UsersSelect<T extends boolean = true> {
         providerAccountId?: T;
         type?: T;
         access_token?: T;
+        additionalAccountDatabaseField?: T;
+        createdAt?: T;
       };
   verificationTokens?:
     | T
@@ -180,6 +191,7 @@ export interface UsersSelect<T extends boolean = true> {
         id?: T;
         token?: T;
         expires?: T;
+        createdAt?: T;
       };
   updatedAt?: T;
   createdAt?: T;

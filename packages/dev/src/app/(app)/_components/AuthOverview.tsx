@@ -12,7 +12,7 @@ const AuthOverview = async () => {
     <div>
       <h3>Auth.js Session</h3>
       <p>{session?.user ? <SignOutButtonAuthjs /> : <SignInButtonAuthjs />}</p>
-      <pre>{JSON.stringify(session?.user, null, 2)}</pre>
+      <pre>{JSON.stringify(session ?? undefined, null, 2)}</pre>
       <br />
       <h3>Payload CMS User</h3>
       <p>{payloadUser && <SignOutButtonPayload />}</p>

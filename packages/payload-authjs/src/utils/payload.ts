@@ -1,5 +1,5 @@
 import { deepCopyObjectSimple, deepMerge, type Field } from "payload";
-import { fieldAffectsData } from "payload/shared";
+import { fieldAffectsData, fieldIsVirtual } from "payload/shared";
 
 /**
  * Merge fields deeply
@@ -78,6 +78,9 @@ export const mergeFields = ({
 
 /**
  * Find a field by name in a list of fields (including subfields and tabs)
+ *
+ * @param fields The fields list
+ * @param name The field name
  */
 const findField = (fields: Field[], name: string): Field | undefined => {
   for (const field of fields) {
@@ -97,4 +100,28 @@ const findField = (fields: Field[], name: string): Field | undefined => {
     }
   }
   return undefined;
+};
+
+/**
+ * Get all virtual fields from a list of fields (including subfields and tabs)
+ *
+ * @param fields The fields list
+ * @returns The virtual fields
+ */
+export const getAllVirtualFields = (fields: Field[]): Field[] => {
+  return fields.reduce((acc, field) => {
+    if ("fields" in field && !fieldAffectsData(field)) {
+      // Get virtual fields from subfields if field not affecting data (e.g. row)
+      acc.push(...getAllVirtualFields(field.fields));
+    } else if (field.type === "tabs") {
+      // For each tab, get the virtual fields
+      for (const tab of field.tabs) {
+        acc.push(...getAllVirtualFields(tab.fields));
+      }
+    } else if (fieldIsVirtual(field)) {
+      // Add virtual field
+      acc.push(field);
+    }
+    return acc;
+  }, [] as Field[]);
 };

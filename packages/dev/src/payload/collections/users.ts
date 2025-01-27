@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { createdAtField } from "../fields/createdAt";
 
 const Users: CollectionConfig = {
   slug: "users",
@@ -33,12 +34,50 @@ const Users: CollectionConfig = {
           name: "access_token",
           type: "text",
         },
+        {
+          name: "additionalAccountDatabaseField",
+          type: "text",
+          required: true,
+        },
+        createdAtField,
       ],
+    },
+    /* {
+      name: "sessions",
+      type: "array",
+      fields: [createdAtField],
+    }, */
+    {
+      name: "verificationTokens",
+      type: "array",
+      fields: [createdAtField],
     },
     // Add custom field
     {
+      name: "additionalUserDatabaseField",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "additionalUserVirtualField",
+      type: "text",
+      virtual: true,
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: "locale",
+      type: "text",
+    },
+    /**
+     * Add roles field
+     * This field will not be stored in the database
+     */
+    {
       name: "roles",
       type: "json",
+      virtual: true,
       typescriptSchema: [
         () => ({
           type: "array",
@@ -47,6 +86,9 @@ const Users: CollectionConfig = {
           },
         }),
       ],
+      admin: {
+        hidden: true,
+      },
     },
   ],
 };

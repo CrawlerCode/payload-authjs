@@ -11,7 +11,7 @@ A [Payload CMS 3](https://payloadcms.com) plugin for integrating [Auth.js 5 (bet
 
 > ⚠ This plugin and Auth.js is in beta and may have some bugs. Please report any issues you find.
 
-## Installation
+# ⚙️ Installation / Setup
 
 Install the plugin using any JavaScript package manager like PNPM, NPM, or Yarn:
 
@@ -19,7 +19,7 @@ Install the plugin using any JavaScript package manager like PNPM, NPM, or Yarn:
 pnpm i payload-authjs
 ```
 
-Fist of all, setup Auth.js like you would do in a Next.js application. You can follow the [Auth.js documentation](https://authjs.dev/getting-started/installation?framework=Next.js).
+Fist of all, setup Auth.js like you would do in a Next.js application. You can follow the [Auth.js guide](https://authjs.dev/getting-started/installation?framework=Next.js).
 
 > ⚠ Make sure you define your config in a separate file (e.g. `auth.config.ts`) than where you create the NextAuth instance (e.g. `auth.ts`) to avoid circular dependencies. ⚠
 
@@ -72,10 +72,7 @@ export const config = buildConfig({
 
 ---
 
-## Customizing
-
-<details>
-  <summary>Customizing the users collection</summary>
+# 🛠️ Advanced usage / Customization
 
 If you want to customize the users collection, you can create a collection with the slug `users` and add your customizations there.
 
@@ -87,9 +84,12 @@ const Users: CollectionConfig = {
 };
 ```
 
-### Customize existing fields
+## ✏️ Customize existing fields
 
-You can customize the existing fields in the users collection by adding the field to the collection and modifying the field configuration. The fields will be merged together.
+<details>
+  <summary>Click to expand</summary>
+
+You can customize the existing fields in the users collection by adding the field to the collection and modifying the field. The fields will be merged together.
 
 ```ts
 // users.ts
@@ -119,36 +119,56 @@ const Users: CollectionConfig = {
 };
 ```
 
-### Add additional fields
+</details>
 
-You can also add additional fields to the users collection. For example, you could add a `roles` field to the users collection:
+## ✨ Add additional fields
+
+You can also add additional fields to the users collection.
+
+<details>
+  <summary>Click to expand</summary>
+
+There are 2 ways to add additional fields. It depends on the data you want to store and your [Auth.js session strategy](https://authjs.dev/concepts/session-strategies) (`session.strategy`).
+
+### 1. Database fields (jwt session & database session)
+
+If you want to store additional data in the database, you can add a new field to the users collection and extend your Auth.js provider to include the new field in the user.
+
+For example, you could add a `locale` field to the users collection:
 
 ```ts
 // users.ts
 const Users: CollectionConfig = {
   slug: "users",
   fields: [
+    // Add custom field for 'locale'
     {
-      name: "roles",
-      type: "json",
+      name: "locale",
+      type: "text",
     },
   ],
 };
 ```
 
-Next, you need to extend the user object returned by your Auth.js provider. You can do this like this example:
+Next, you need to extend the user object returned by your Auth.js provider. You can do this as shown in this example:
 
 ```ts
+// auth.config.ts
 const authConfig: NextAuthConfig = {
   providers: [
-    github({
+    keycloak({
+      /**
+       * Add additional fields to the user on first sign in
+       */
       profile(profile) {
         return {
-          id: profile.id.toString(),
-          name: profile.name ?? profile.login,
+          // Default fields from keycloak provider
+          id: profile.sub,
+          name: profile.name,
           email: profile.email,
-          image: profile.avatar_url,
-          roles: ["user"], // <-- Extend the user object with a custom field
+          image: profile.picture,
+          // Custom fields
+          locale: profile.locale, // <-- Add your custom field (e.g. get locale from the profile)
         };
       },
     }),
@@ -157,19 +177,63 @@ const authConfig: NextAuthConfig = {
 };
 ```
 
-⚠ Keep in mind that Auth.js doesn't update the user after the first sign-in. If you want to update the user on every sign-in, you can use the `updateUserOnSignIn` option in the `withPayload` function:
+⚠ Keep in mind that Auth.js doesn't update the user after the first sign-in.
+
+### 2. Virtual fields (jwt session only)
+
+If you are using the Auth.js `jwt` session strategy (it's the default), you can use a [virtual field](https://payloadcms.com/docs/fields/overview#virtual-fields) to add additional data that should not be stored in the database.
+This plugin extract the virtual fields from your Auth.js jwt session and adds them to the user object.
+
+For example, you could add a `roles` field to the users collection:
 
 ```ts
-// auth.ts
-export const { handlers, signIn, signOut, auth } = NextAuth(
-  withPayload(authConfig, {
-    payloadConfig,
-    updateUserOnSignIn: true, // <-- Update the user on every sign-in
-  }),
-);
+// users.ts
+const Users: CollectionConfig = {
+  slug: "users",
+  fields: [
+    // Add custom field for 'roles'
+    {
+      name: "roles",
+      type: "json",
+      virtual: true, // <-- Make the field virtual
+      admin: {
+        hidden: true,
+      },
+    },
+  ],
+};
 ```
 
-Now you could access your custom field, e.g. in the access control operations:
+Next, you need to extend your Auth.js session with your field. You can do this as shown in this example:
+
+```ts
+// auth.config.ts
+const authConfig: NextAuthConfig = {
+  callbacks: {
+    jwt: ({ token, trigger }) => {
+      if (trigger === "signIn" || trigger === "signUp") {
+        token.roles = ["example-role"]; // <-- Add your virtual field to the token
+      }
+      return token;
+    },
+    session: ({ session, token }) => {
+      if (token) {
+        session.user.roles = token.roles; // <-- Forward the virtual field from the token to the session
+      }
+      return session;
+    },
+  },
+  ...
+};
+```
+
+At this point, you can implement your own logic to extend the session. E.g. extract from profile, fetch from a server, or something else.
+
+_More information about extending your session can be found in the [Auth.js documentation](https://authjs.dev/guides/extending-the-session)._
+
+### Use custom fields
+
+Now you could access your custom field, e.g. in the access control operations or somewhere else:
 
 ```ts
 const Examples: CollectionConfig = {
@@ -187,9 +251,9 @@ const Examples: CollectionConfig = {
 
 </details>
 
-### Utility functions
+## 📐 Utility functions
 
-This plugin also export a utility function to get the current payload user
+This plugin also export a utility function to get the current payload user in the server-side:
 
 ```tsx
 // ServerComponentExample.tsx

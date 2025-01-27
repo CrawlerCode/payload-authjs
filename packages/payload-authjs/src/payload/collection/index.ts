@@ -9,6 +9,7 @@ import { accountsField } from "./fields/accounts";
 import { generalFields } from "./fields/general";
 import { sessionsField } from "./fields/session";
 import { verificationTokensField } from "./fields/verificationTokens";
+import { meHook } from "./hooks/me";
 
 export const generateUsersCollection = (
   collections: CollectionConfig[],
@@ -87,7 +88,14 @@ export const generateUsersCollection = (
   // Add auth strategy to users collection
   collection.auth = {
     disableLocalStrategy: true,
-    strategies: [AuthjsAuthStrategy(userCollectionSlug, pluginOptions)],
+    strategies: [AuthjsAuthStrategy(collection, pluginOptions)],
+  };
+
+  // Add hooks to users collection
+  const _meHook = meHook(collection, pluginOptions);
+  collection.hooks = {
+    ...collection.hooks,
+    me: [...(collection.hooks?.me || []), ...(_meHook ? [_meHook] : [])],
   };
 
   // Add custom endpoints to users collection
