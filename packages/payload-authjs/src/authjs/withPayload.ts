@@ -1,13 +1,63 @@
 import type { NextAuthConfig } from "next-auth";
+import type { Adapter } from "next-auth/adapters";
+import type { Payload } from "payload";
+import { deepCopyObjectSimple, getPayload } from "payload";
 import { PayloadAdapter, type PayloadAdapterOptions } from "./PayloadAdapter";
+
+type CustomEvent<T extends keyof NonNullable<NextAuthConfig["events"]>> = (
+  message: {
+    /**
+     * The Auth.js database adapter
+     */
+    adapter: Adapter;
+    /**
+     * The payload instance
+     */
+    payload?: Payload;
+  } & Parameters<NonNullable<NonNullable<NextAuthConfig["events"]>[T]>>[0],
+) => void | PromiseLike<void>;
 
 export interface WithPayloadOptions extends PayloadAdapterOptions {
   /**
    * Update the user after every sign in
    *
+   * @deprecated updateUserOnSignIn is deprecated and will be removed in the future. Use events.signIn instead
+   *
    * @default false
    */
   updateUserOnSignIn?: boolean;
+  /**
+   * Auth.js events
+   * All events from authjs will be forwarded and enriched with additional parameters like the adapter and the payload instance
+   *
+   * @see https://authjs.dev/reference/nextjs#events
+   */
+  events?: {
+    /**
+     * Sign in event
+     */
+    signIn?: CustomEvent<"signIn">;
+    /**
+     * Sign out event
+     */
+    signOut?: CustomEvent<"signOut">;
+    /**
+     * Create user event
+     */
+    createUser?: CustomEvent<"createUser">;
+    /**
+     * Update user event
+     */
+    updateUser?: CustomEvent<"updateUser">;
+    /**
+     * Link account event
+     */
+    linkAccount?: CustomEvent<"linkAccount">;
+    /**
+     * Session event
+     */
+    session?: CustomEvent<"session">;
+  };
 }
 
 /**
@@ -22,7 +72,7 @@ export interface WithPayloadOptions extends PayloadAdapterOptions {
  */
 export function withPayload(
   authjsConfig: NextAuthConfig,
-  { updateUserOnSignIn, ...options }: WithPayloadOptions,
+  { updateUserOnSignIn, events, ...options }: WithPayloadOptions,
 ): NextAuthConfig {
   authjsConfig = { ...authjsConfig };
 
@@ -70,6 +120,33 @@ export function withPayload(
       signIn: signIn?.name !== "updateUserOnSignInWrapper" ? updateUserOnSignInWrapper : signIn,
     };
   }
+
+  // Forward all events from authjs and enrich them with additional parameters
+  const originalEvents = deepCopyObjectSimple(authjsConfig.events ?? {});
+  authjsConfig.events = Object.entries(events ?? {}).reduce((result, [key, customEvent]) => {
+    const originalEvent = result[key as keyof typeof result];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    result[key as keyof typeof result] = async (message: any) => {
+      // Call the original event
+      await originalEvent?.(message);
+
+      // Call the custom event
+      await customEvent?.({
+        ...message,
+        // Add the adapter to the event
+        adapter: authjsConfig.adapter!,
+        // Add payload to the event
+        payload: options.payload
+          ? await options.payload
+          : options.payloadConfig
+            ? await getPayload({ config: options.payloadConfig })
+            : undefined,
+      });
+    };
+
+    return result;
+  }, originalEvents);
 
   return authjsConfig;
 }

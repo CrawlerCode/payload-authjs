@@ -177,7 +177,7 @@ const authConfig: NextAuthConfig = {
 };
 ```
 
-⚠ Keep in mind that Auth.js doesn't update the user after the first sign-in.
+> ⚠ Keep in mind that Auth.js doesn't update the user after the first sign-in. If you want to update the user on every sign-in, you can use the `signIn` event. (See [Events](#events))
 
 ### 2. Virtual fields (jwt session only)
 
@@ -250,6 +250,48 @@ const Examples: CollectionConfig = {
 ```
 
 </details>
+
+## 🎉 Events
+
+Auth.js emits some [events](https://authjs.dev/reference/nextjs#events) that you can listen to. This plugin extends the events with additional parameters like the `adapter` and `payload` instance.
+
+_More information about the events can be found in the [Auth.js documentation](https://authjs.dev/reference/nextjs#events)._
+
+The following events are available:
+
+- signIn
+- signOut
+- createUser
+- updateUser
+- linkAccount
+- session
+
+## `signIn` Event
+
+The `signIn` event is emitted when a user successfully signs in. For example, you could use this event to update the user's name on every sign-in:
+
+```ts
+// auth.ts
+export const { handlers, signIn, signOut, auth } = NextAuth(
+  withPayload(authConfig, {
+    payloadConfig,
+    events: {
+      /**
+       * Update user 'name' on every sign in
+       */
+      signIn: async ({ adapter, user, profile }) => {
+        if (!user.id || !profile) {
+          return;
+        }
+        await adapter.updateUser!({
+          id: user.id,
+          name: profile.name ?? (profile.login as string | undefined),
+        });
+      },
+    },
+  }),
+);
+```
 
 ## 📐 Utility functions
 

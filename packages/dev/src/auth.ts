@@ -4,8 +4,24 @@ import { withPayload } from "payload-authjs";
 import { authConfig } from "./auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth(
-  withPayload(authConfig, {
+  withPayload(authConfig as any, {
     payloadConfig,
-    updateUserOnSignIn: true,
-  }),
+    events: {
+      /**
+       * Update user on every sign in
+       */
+      signIn: async ({ adapter, payload, user, profile }) => {
+        payload?.logger.info("signIn event");
+        if (!user.id || !profile) {
+          return;
+        }
+        await adapter.updateUser!({
+          id: user.id,
+          name: profile.name ?? (profile.login as string | undefined),
+          image: profile.avatar_url as string | undefined,
+          additionalUserDatabaseField: `Create by updateUserOnSignIn at ${new Date().toISOString()}`,
+        });
+      },
+    },
+  }) as any,
 );
