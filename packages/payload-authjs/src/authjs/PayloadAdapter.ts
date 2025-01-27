@@ -1,11 +1,13 @@
 import type {
   Adapter,
+  AdapterAccount,
   AdapterSession,
   AdapterUser,
   VerificationToken as AdapterVerificationToken,
 } from "next-auth/adapters";
 import { type CollectionSlug, getPayload, type Payload, type SanitizedConfig } from "payload";
-import type { Session, User, VerificationToken } from "../payload/types";
+import type { Account, Session, User, VerificationToken } from "../payload/types";
+import { isDate } from "../utils/authjs";
 
 export interface PayloadAdapterOptions {
   /**
@@ -28,6 +30,7 @@ export interface PayloadAdapterOptions {
 }
 /**
  * Auth.js Database Adapter for Payload CMS
+ *
  * @see https://authjs.dev/guides/creating-a-database-adapter
  */
 export function PayloadAdapter({
@@ -162,7 +165,11 @@ export function PayloadAdapter({
         } satisfies Partial<User>,
       })) as User;
 
-      return account;
+      const createdAccount = payloadUser.accounts?.find(
+        a => a.provider === account.provider && a.providerAccountId === account.providerAccountId,
+      );
+
+      return createdAccount ? toAdapterAccount(createdAccount) : account;
     },
     async unlinkAccount({ provider, providerAccountId }) {
       /* console.log(
@@ -198,7 +205,7 @@ export function PayloadAdapter({
         data: {
           accounts: payloadUser.accounts?.filter(
             account =>
-              account.provider !== provider || account.providerAccountId !== providerAccountId,
+              !(account.provider === provider && account.providerAccountId === providerAccountId),
           ),
         },
       })) as User;
@@ -229,7 +236,11 @@ export function PayloadAdapter({
         },
       })) as User;
 
-      return session;
+      const createdSession = payloadUser.sessions?.find(
+        s => s.sessionToken === session.sessionToken,
+      );
+
+      return createdSession ? toAdapterSession(payloadUser, createdSession) : session;
     },
     async getSessionAndUser(sessionToken) {
       /* console.log(`[PayloadAdapter] Getting session and user by session token '${sessionToken}'`); */
@@ -294,6 +305,7 @@ export function PayloadAdapter({
       const updatedSession = payloadUser.sessions?.find(
         s => s.sessionToken === session.sessionToken,
       );
+
       return updatedSession ? toAdapterSession(payloadUser, updatedSession) : null;
     },
     async deleteSession(sessionToken) {
@@ -366,10 +378,14 @@ export function PayloadAdapter({
         })) as User;
       }
 
-      return {
-        identifier: email,
-        ...token,
-      };
+      const createdToken = payloadUser.verificationTokens?.find(t => t.token === token.token);
+
+      return createdToken
+        ? toAdapterVerificationToken(payloadUser.email, createdToken)
+        : {
+            identifier: email,
+            ...token,
+          };
     },
     async useVerificationToken({ identifier: email, token }) {
       /* console.log(`[PayloadAdapter] Using verification token for email '${email}'`, token); */
@@ -405,37 +421,62 @@ export function PayloadAdapter({
         },
       })) as User;
 
-      return verificationToken ? toAdapterVerificationToken(payloadUser, verificationToken) : null;
+      return verificationToken
+        ? toAdapterVerificationToken(payloadUser.email, verificationToken)
+        : null;
     },
     // #endregion
   };
 }
 
 function toAdapterUser(user: User): AdapterUser {
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    image: user.image,
-    emailVerified: user.emailVerified ? new Date(user.emailVerified) : null,
-  };
+  return transformObject(user, ["accounts", "sessions", "verificationTokens"]);
+}
+
+function toAdapterAccount(account: Account): AdapterAccount {
+  return transformObject(account);
 }
 
 function toAdapterSession(user: User, session: Session): AdapterSession {
   return {
+    ...transformObject<Session, Omit<AdapterSession, "userId">>(session),
     userId: user.id,
-    sessionToken: session.sessionToken,
-    expires: new Date(session.expires),
   };
 }
 
 function toAdapterVerificationToken(
-  user: User,
+  email: string,
   token: VerificationToken,
 ): AdapterVerificationToken {
   return {
-    identifier: user.email,
-    token: token.token,
-    expires: new Date(token.expires),
+    identifier: email,
+    ...transformObject<VerificationToken, Omit<AdapterVerificationToken, "identifier">>(token),
   };
+}
+
+/**
+ * Transform an object to an object that can be used by the adapter
+ *
+ * @param object Object to transform
+ * @param exclude List of keys to remove from the object
+ * @returns The transformed object
+ *
+ * @see https://authjs.dev/guides/creating-a-database-adapter#official-adapter-guidelines
+ */
+function transformObject<T extends Record<string, unknown>, AdapterObject extends object>(
+  object: T,
+  exclude?: (keyof T)[],
+): AdapterObject {
+  const adapterObject: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(object)) {
+    if (exclude?.includes(key)) {
+      continue;
+    }
+    if (isDate(value)) {
+      adapterObject[key] = new Date(value);
+    } else {
+      adapterObject[key] = value;
+    }
+  }
+  return adapterObject as AdapterObject;
 }
