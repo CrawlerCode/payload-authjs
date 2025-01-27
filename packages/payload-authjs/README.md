@@ -1,4 +1,4 @@
-<a href="https://github.com/CrawlerCode/payload-authjs"><img width="100%" src="https://raw.githubusercontent.com/CrawlerCode/payload-authjs/main/payload-authjs-banner.png" alt="payload-authjs banner" /></a>
+<a href="https://github.com/CrawlerCode/payload-authjs"><img width="100%" src="https://repository-images.githubusercontent.com/848986894/dbf478be-1b3b-44b8-9ff8-2f1bb30a41f8" alt="payload-authjs banner" /></a>
 
 # Payload CMS plugin for Auth.js/NextAuth
 
