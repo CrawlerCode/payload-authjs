@@ -1,3 +1,19 @@
+## 0.6.0 (2025-01-27)
+
+### 🚀 Features
+
+- Add support for virtual fields (jwt session strategy) ([d20f863](https://github.com/CrawlerCode/payload-authjs/commit/d20f863))
+- Add PayloadAuthjsUser helper type for authjs module declaration ([c7e8f08](https://github.com/CrawlerCode/payload-authjs/commit/c7e8f08))
+- **withPayload:** Add custom evens to withPayload function ([89e749c](https://github.com/CrawlerCode/payload-authjs/commit/89e749c))
+
+### 🩹 Fixes
+
+- **PayloadAdapter:** Improve data transformation and forward additional fields ([9052f38](https://github.com/CrawlerCode/payload-authjs/commit/9052f38))
+
+### 🏡 Chore
+
+- Replace banner ([d354a51](https://github.com/CrawlerCode/payload-authjs/commit/d354a51))
+
 ## 0.5.0 (2025-01-25)
 
 ### 🚀 Features
