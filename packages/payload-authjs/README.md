@@ -182,7 +182,7 @@ const authConfig: NextAuthConfig = {
 ### 2. Virtual fields (jwt session only)
 
 If you are using the Auth.js `jwt` session strategy (it's the default), you can use a [virtual field](https://payloadcms.com/docs/fields/overview#virtual-fields) to add additional data that should not be stored in the database.
-This plugin extract the virtual fields from your Auth.js jwt session and adds them to the user object.
+This plugin extracts the virtual fields from your Auth.js jwt session and adds them to the user object.
 
 For example, you could add a `roles` field to the users collection:
 
@@ -267,7 +267,7 @@ declare module "next-auth" {
 
 _More information about typescript can be found in the [Auth.js documentation](https://authjs.dev/getting-started/typescript?framework=next-js)._
 
-### 🎉 Events
+## 🎉 Events
 
 Auth.js emits some [events](https://authjs.dev/reference/nextjs#events) that you can listen to. This plugin extends the events with additional parameters like the `adapter` and `payload` instance.
 
@@ -311,7 +311,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth(
 
 ## 📐 Utility functions
 
-This plugin also export a utility function to get the current payload user in the server-side:
+This plugin also exports a utility function to get the current payload user in the server-side:
 
 ```tsx
 // ServerComponentExample.tsx
