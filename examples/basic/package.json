@@ -15,22 +15,22 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.19.0",
-    "@payloadcms/next": "^3.19.0",
-    "@payloadcms/richtext-lexical": "^3.19.0",
+    "@payloadcms/db-postgres": "^3.21.0",
+    "@payloadcms/next": "^3.21.0",
+    "@payloadcms/richtext-lexical": "^3.21.0",
     "cross-env": "^7.0.3",
     "graphql": "^16.10.0",
     "next": "15.1.6",
     "next-auth": "5.0.0-beta.25",
-    "payload": "^3.19.0",
+    "payload": "^3.21.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "sharp": "0.32.6",
+    "sharp": "0.33.5",
     "payload-authjs": "workspace:*"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
-    "@types/node": "^22.10.10",
+    "@types/node": "^22.13.1",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
     "eslint": "^9.19.0",

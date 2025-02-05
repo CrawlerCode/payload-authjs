@@ -12,21 +12,21 @@
     "generate:importmap": "payload generate:importmap"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "3.18.0",
-    "@payloadcms/next": "3.18.0",
-    "@payloadcms/ui": "3.18.0",
+    "@payloadcms/db-postgres": "3.21.0",
+    "@payloadcms/next": "3.21.0",
+    "@payloadcms/ui": "3.21.0",
     "jsonwebtoken": "^9.0.2",
     "next": "15.1.6",
     "next-auth": "5.0.0-beta.25",
-    "nodemailer": "^6.9.16",
-    "payload": "3.18.0",
+    "nodemailer": "^6.10.0",
+    "payload": "3.21.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.7",
-    "@types/react": "19.0.7",
+    "@types/jsonwebtoken": "^9.0.8",
+    "@types/react": "19.0.8",
     "dotenv": "^16.4.7",
     "typescript": "^5.7.3"
   }

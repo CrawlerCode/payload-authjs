@@ -42,10 +42,10 @@
   "scripts": {},
   "dependencies": {},
   "devDependencies": {
-    "@types/react": "19.0.7",
-    "next": "15.1.5",
+    "@types/react": "19.0.8",
+    "next": "15.1.6",
     "next-auth": "5.0.0-beta.25",
-    "payload": "3.18.0",
+    "payload": "3.21.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "typescript": "^5.7.3"

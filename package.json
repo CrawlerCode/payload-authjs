@@ -7,14 +7,13 @@
     "build": "nx run payload-authjs:build",
     "dev": "nx run dev:dev"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@nx/eslint": "20.3.2",
-    "@nx/js": "20.3.2",
-    "@nx/next": "20.3.2",
-    "@nx/react": "20.3.2",
+    "@nx/eslint": "20.4.0",
+    "@nx/js": "20.4.0",
+    "@nx/next": "20.4.0",
+    "@nx/react": "20.4.0",
     "@payloadcms/eslint-config": "3.9.0",
-    "nx": "20.3.2",
+    "nx": "20.4.0",
     "prettier": "^3.4.2",
     "typescript": "^5.7.3"
   },
@@ -23,5 +22,13 @@
     "packages/*",
     "examples/*"
   ],
-  "packageManager": "pnpm@9.15.4"
+  "packageManager": "pnpm@10.2.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "esbuild",
+      "nx",
+      "sharp"
+    ]
+  }
 }
