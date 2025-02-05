@@ -1,3 +1,17 @@
+## 0.6.1 (2025-02-05)
+
+### 🩹 Fixes
+
+- Fix findField function for subfields ([#13](https://github.com/CrawlerCode/payload-authjs/pull/13))
+
+### 📖 Documentation
+
+- Fix events header ([cce4e4c](https://github.com/CrawlerCode/payload-authjs/commit/cce4e4c))
+
+### 🏡 Chore
+
+- **deps:** Update npm dependencies ([804f3f3](https://github.com/CrawlerCode/payload-authjs/commit/804f3f3))
+
 ## 0.6.0 (2025-01-27)
 
 ### 🚀 Features
