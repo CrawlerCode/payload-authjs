@@ -13,6 +13,11 @@ const Users: CollectionConfig = {
   },
   fields: [
     {
+      name: "name",
+      type: "text",
+      label: "Username", // Add label to name field
+    },
+    {
       name: "id",
       type: "text",
       label: "Identifier",

@@ -86,7 +86,10 @@ const findField = (fields: Field[], name: string): Field | undefined => {
   for (const field of fields) {
     if ("fields" in field && !fieldAffectsData(field)) {
       // Find in subfields if field not affecting data (e.g. row)
-      return findField(field.fields, name);
+      const found = findField(field.fields, name);
+      if (found) {
+        return found;
+      }
     } else if (field.type === "tabs") {
       // For each tab, find the field
       for (const tab of field.tabs) {
