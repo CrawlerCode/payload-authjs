@@ -83,10 +83,12 @@ export const authConfig: NextAuthConfig = {
   ],
   session: {
     strategy: "jwt",
+    //maxAge: 60 * 2 + 30, // 2.5 minutes
+    //updateAge: 60, // 1 minute
   },
   callbacks: {
     jwt: ({ token, user, account, trigger }) => {
-      //console.log("callbacks.jwt", token, user, account);
+      //console.log("callbacks.jwt", trigger, token, user, account);
 
       /**
        * For jwt session strategy, we need to forward additional fields to the token

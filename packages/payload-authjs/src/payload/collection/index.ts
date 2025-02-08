@@ -10,6 +10,7 @@ import { generalFields } from "./fields/general";
 import { sessionsField } from "./fields/session";
 import { verificationTokensField } from "./fields/verificationTokens";
 import { meHook } from "./hooks/me";
+import { refreshHook } from "./hooks/refresh";
 
 export const generateUsersCollection = (
   collections: CollectionConfig[],
@@ -93,9 +94,11 @@ export const generateUsersCollection = (
 
   // Add hooks to users collection
   const _meHook = meHook(collection, pluginOptions);
+  const _refreshHook = refreshHook(collection, pluginOptions);
   collection.hooks = {
     ...collection.hooks,
     me: [...(collection.hooks?.me || []), ...(_meHook ? [_meHook] : [])],
+    refresh: [...(collection.hooks?.refresh || []), ...(_refreshHook ? [_refreshHook] : [])],
   };
 
   // Add custom endpoints to users collection

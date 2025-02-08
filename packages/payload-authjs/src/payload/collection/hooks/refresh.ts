@@ -1,29 +1,24 @@
 import NextAuth from "next-auth";
-import type { CollectionConfig, CollectionMeHook } from "payload";
+import { CollectionConfig, Forbidden, type CollectionRefreshHook } from "payload";
 import { withPayload } from "../../../authjs/withPayload";
 import type { AuthjsPluginConfig } from "../../plugin";
 import { getAllVirtualFields } from "../../utils/getAllVirtualFields";
 import { getUserAttributes } from "../../utils/getUserAttributes";
 
 /**
- * Add me hook to override the me endpoint to include virtual fields
+ * Add refresh hook to override the refresh endpoint to refresh the session with authjs
  *
- * @see https://payloadcms.com/docs/hooks/collections#me
- * @see https://github.com/payloadcms/payload/blob/main/packages/payload/src/auth/operations/me.ts
+ * @see https://payloadcms.com/docs/hooks/collections#refresh
+ * @see https://github.com/payloadcms/payload/blob/main/packages/payload/src/auth/operations/refresh.ts
  */
-export const meHook: (
+export const refreshHook: (
   collection: CollectionConfig,
   pluginOptions: AuthjsPluginConfig,
-) => CollectionMeHook | undefined = (collection, pluginOptions) => {
+) => CollectionRefreshHook | undefined = (collection, pluginOptions) => {
   // Get all virtual fields
   const virtualFields = getAllVirtualFields(collection.fields);
 
-  // If no virtual fields exist, no need to override the me endpoint
-  if (virtualFields.length === 0) {
-    return undefined;
-  }
-
-  // Return the me hook
+  // Return the refresh hook
   return async ({ args: { req }, user }) => {
     // Get session from authjs
     const { auth } = NextAuth(
@@ -32,11 +27,11 @@ export const meHook: (
         userCollectionSlug: pluginOptions.userCollectionSlug,
       }),
     );
-    const session = await auth();
+    let session = await auth();
 
-    // If no session, return
+    // If no session user, throw forbidden
     if (!session?.user) {
-      return undefined;
+      throw new Forbidden(req.t);
     }
 
     // Get user virtual fields
@@ -45,6 +40,9 @@ export const meHook: (
     // Return user to payload cms
     return {
       exp: Math.floor(new Date(session.expires).getTime() / 1000),
+      setCookie: undefined,
+      refreshedToken: undefined as unknown as string,
+      strategy: user._strategy,
       user: {
         ...user,
         ...virtualSessionFields,

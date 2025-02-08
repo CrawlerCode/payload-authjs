@@ -17,7 +17,7 @@ export function AuthjsAuthStrategy(
   const virtualFields = getAllVirtualFields(collection.fields);
 
   return {
-    name: "authjs",
+    name: "Auth.js",
     authenticate: async ({ payload }) => {
       // Get session from authjs
       const { auth } = NextAuth(
@@ -62,6 +62,7 @@ export function AuthjsAuthStrategy(
       // Return user to payload cms
       return {
         user: {
+          _strategy: "Auth.js",
           collection: collection.slug,
           ...payloadUser,
           ...virtualSessionFields,
