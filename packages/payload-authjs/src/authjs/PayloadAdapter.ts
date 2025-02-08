@@ -48,37 +48,39 @@ export function PayloadAdapter({
     );
   }
 
+  // Create a logger
+  const logger = (async () =>
+    (await payload).logger.child({ name: "payload-authjs (PayloadAdapter)" }))();
+
   return {
     // #region User management
     async createUser(user) {
-      /* console.log("[PayloadAdapter] Creating user", user); */
+      (await logger).debug({ userId: user.id, user }, `Creating user '${user.id}'`);
 
       const payloadUser = (await (
         await payload
       ).create({
         collection: userCollectionSlug,
-        data: {
-          ...user,
-        },
+        data: user,
       })) as User;
 
       return toAdapterUser(payloadUser);
     },
-    async getUser(id) {
-      /* console.log(`[PayloadAdapter] Getting user '${id}' by id`); */
+    async getUser(userId) {
+      (await logger).debug({ userId }, `Getting user by id '${userId}'`);
 
       const payloadUser = (await (
         await payload
       ).findByID({
         collection: userCollectionSlug,
-        id,
+        id: userId,
         disableErrors: true,
       })) as User | null;
 
       return payloadUser ? toAdapterUser(payloadUser) : null;
     },
     async getUserByEmail(email) {
-      /* console.log(`[PayloadAdapter] Getting user by email '${email}'`); */
+      (await logger).debug({ email }, `Getting user by email '${email}'`);
 
       const payloadUser = (
         await (
@@ -96,9 +98,10 @@ export function PayloadAdapter({
       return payloadUser ? toAdapterUser(payloadUser) : null;
     },
     async getUserByAccount({ provider, providerAccountId }) {
-      /* console.log(
-        `[PayloadAdapter] Getting user by account '${providerAccountId}' of provider '${provider}'`,
-      ); */
+      (await logger).debug(
+        { provider, providerAccountId },
+        `Getting user by account '${providerAccountId}' of provider '${provider}'`,
+      );
 
       const payloadUser = (
         await (
@@ -119,7 +122,7 @@ export function PayloadAdapter({
       return payloadUser ? toAdapterUser(payloadUser) : null;
     },
     async updateUser(user) {
-      /* console.log(`[PayloadAdapter] Updating user '${user.id}'`, user); */
+      (await logger).debug({ userId: user.id, user }, `Updating user '${user.id}'`);
 
       const payloadUser = (await (
         await payload
@@ -132,7 +135,7 @@ export function PayloadAdapter({
       return payloadUser ? toAdapterUser(payloadUser) : (null as unknown as AdapterUser);
     },
     async deleteUser(userId) {
-      /* console.log(`[PayloadAdapter] Deleting user '${userId}'`); */
+      (await logger).debug({ userId }, `Deleting user '${userId}'`);
 
       await (
         await payload
@@ -142,7 +145,13 @@ export function PayloadAdapter({
       });
     },
     async linkAccount(account) {
-      /* console.log(`[PayloadAdapter] Linking account for user '${account.userId}'`, account); */
+      (await logger).debug(
+        {
+          userId: account.userId,
+          account,
+        },
+        `Linking account for user '${account.userId}'`,
+      );
 
       let payloadUser = (await (
         await payload
@@ -172,9 +181,13 @@ export function PayloadAdapter({
       return createdAccount ? toAdapterAccount(createdAccount) : account;
     },
     async unlinkAccount({ provider, providerAccountId }) {
-      /* console.log(
-        `[PayloadAdapter] Unlinking account '${providerAccountId}' of provider '${provider}'`,
-      ); */
+      (await logger).debug(
+        {
+          provider,
+          providerAccountId,
+        },
+        `Unlinking account '${providerAccountId}' of provider '${provider}'`,
+      );
 
       let payloadUser = (
         await (
@@ -213,7 +226,10 @@ export function PayloadAdapter({
     // #endregion
     // #region Database session management
     async createSession(session) {
-      /* console.log(`[PayloadAdapter] Creating session for user '${session.userId}'`, session); */
+      (await logger).debug(
+        { userId: session.userId, session },
+        `Creating session for user '${session.userId}'`,
+      );
 
       let payloadUser = (await (
         await payload
@@ -243,7 +259,12 @@ export function PayloadAdapter({
       return createdSession ? toAdapterSession(payloadUser, createdSession) : session;
     },
     async getSessionAndUser(sessionToken) {
-      /* console.log(`[PayloadAdapter] Getting session and user by session token '${sessionToken}'`); */
+      (await logger).debug(
+        {
+          sessionToken,
+        },
+        `Getting session and user by session token '${sessionToken}'`,
+      );
 
       const payloadUser = (
         await (
@@ -272,7 +293,10 @@ export function PayloadAdapter({
       };
     },
     async updateSession(session) {
-      /* console.log(`[PayloadAdapter] Updating session '${session.sessionToken}'`, session); */
+      (await logger).debug(
+        { userId: session.userId, session },
+        `Updating session '${session.sessionToken}'`,
+      );
 
       let payloadUser = (
         await (
@@ -309,7 +333,7 @@ export function PayloadAdapter({
       return updatedSession ? toAdapterSession(payloadUser, updatedSession) : null;
     },
     async deleteSession(sessionToken) {
-      /* console.log(`[PayloadAdapter] Deleting session with token '${sessionToken}'`); */
+      (await logger).debug({ sessionToken }, `Deleting session with token '${sessionToken}'`);
 
       let payloadUser = (
         await (
@@ -340,7 +364,7 @@ export function PayloadAdapter({
     // #endregion
     // #region Verification tokens
     async createVerificationToken({ identifier: email, ...token }) {
-      /* console.log(`[PayloadAdapter] Creating verification token for email '${email}'`, token); */
+      (await logger).debug({ email, token }, `Creating verification token for email '${email}'`);
 
       let payloadUser = (
         await (
@@ -388,7 +412,7 @@ export function PayloadAdapter({
           };
     },
     async useVerificationToken({ identifier: email, token }) {
-      /* console.log(`[PayloadAdapter] Using verification token for email '${email}'`, token); */
+      (await logger).debug({ email, token }, `Using verification token for email '${email}'`);
 
       let payloadUser = (
         await (
