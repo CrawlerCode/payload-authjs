@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
+    "allowJs": true,
     "strict": true,
     "esModuleInterop": true,
     "jsx": "preserve",
