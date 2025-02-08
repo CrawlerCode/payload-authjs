@@ -6,8 +6,8 @@ import type {
   VerificationToken as AdapterVerificationToken,
 } from "next-auth/adapters";
 import { type CollectionSlug, getPayload, type Payload, type SanitizedConfig } from "payload";
-import type { Account, Session, User, VerificationToken } from "../payload/types";
-import { isDate } from "../utils/authjs";
+import type { Account, Session, User, VerificationToken } from "./types";
+import { transformObject } from "./utils/transformObject";
 
 export interface PayloadAdapterOptions {
   /**
@@ -452,31 +452,4 @@ function toAdapterVerificationToken(
     identifier: email,
     ...transformObject<VerificationToken, Omit<AdapterVerificationToken, "identifier">>(token),
   };
-}
-
-/**
- * Transform an object to an object that can be used by the adapter
- *
- * @param object Object to transform
- * @param exclude List of keys to remove from the object
- * @returns The transformed object
- *
- * @see https://authjs.dev/guides/creating-a-database-adapter#official-adapter-guidelines
- */
-function transformObject<T extends Record<string, unknown>, AdapterObject extends object>(
-  object: T,
-  exclude?: (keyof T)[],
-): AdapterObject {
-  const adapterObject: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(object)) {
-    if (exclude?.includes(key)) {
-      continue;
-    }
-    if (isDate(value)) {
-      adapterObject[key] = new Date(value);
-    } else {
-      adapterObject[key] = value;
-    }
-  }
-  return adapterObject as AdapterObject;
 }

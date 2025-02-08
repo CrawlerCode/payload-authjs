@@ -1,8 +1,8 @@
 import type { CollectionConfig, TabsField } from "payload";
-import { isEmailProviderAvailable, isSessionStrategyDatabase } from "../../utils/authjs";
-import { mergeFields } from "../../utils/payload";
+import { isEmailProviderAvailable, isSessionStrategyDatabase } from "../../authjs/utils/config";
 import { AuthjsAuthStrategy } from "../AuthjsAuthStrategy";
 import type { AuthjsPluginConfig } from "../plugin";
+import { mergeFields } from "../utils/mergeFields";
 import { defaultAccess } from "./access";
 import { logoutEndpoint } from "./endpoints/logout";
 import { accountsField } from "./fields/accounts";

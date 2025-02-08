@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
 import type { CollectionConfig, CollectionMeHook } from "payload";
 import { withPayload } from "../../../authjs/withPayload";
-import { getUserAttributes } from "../../../utils/authjs";
-import { getAllVirtualFields } from "../../../utils/payload";
 import type { AuthjsPluginConfig } from "../../plugin";
+import { getAllVirtualFields } from "../../utils/getAllVirtualFields";
+import { getUserAttributes } from "../../utils/getUserAttributes";
 
 /**
  * Add me hook to override the me endpoint to include virtual fields
