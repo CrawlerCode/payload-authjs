@@ -26,6 +26,18 @@ const Users: CollectionConfig = {
       },
     },
     {
+      type: "tabs",
+      tabs: [
+        {
+          label: () => "User Accounts", // Change tab label
+          custom: {
+            originalTabLabel: "Accounts",
+          },
+          fields: [],
+        },
+      ],
+    },
+    {
       name: "accounts",
       type: "array",
       fields: [

@@ -1,5 +1,5 @@
-import { deepCopyObjectSimple, deepMerge, type Field } from "payload";
-import { fieldAffectsData, fieldIsVirtual } from "payload/shared";
+import { deepCopyObjectSimple, deepMerge, NamedTab, Tab, type Field } from "payload";
+import { fieldAffectsData, fieldIsVirtual, tabHasName } from "payload/shared";
 
 /**
  * Merge fields deeply
@@ -20,12 +20,12 @@ export const mergeFields = ({
   patchFields: Field[];
 }) => {
   let fields = deepCopyObjectSimple(baseFields);
-  const toHandleFields = patchFields;
+  const toHandleFields = deepCopyObjectSimple(patchFields);
 
   for (let i = 0; i < toHandleFields.length; i++) {
     const field = toHandleFields[i];
     if (fieldAffectsData(field)) {
-      const existingField = findField(fields, field.name);
+      const existingField = findFieldByName(fields, field.name);
       if (existingField) {
         // Check if field type matches
         if (field.type !== existingField.type) {
@@ -44,8 +44,7 @@ export const mergeFields = ({
           });
           existingField.fields = [...result.mergedFields, ...result.restFields];
         } else {
-          // Merge the field
-          // Existing field has always priority
+          // Merge the field (existing field has always priority)
           Object.assign(existingField, deepMerge<Field>(field, existingField));
         }
 
@@ -67,9 +66,52 @@ export const mergeFields = ({
         toHandleFields.splice(i, 1);
         i--;
       }
-    } else {
-      // Field type not allowed (e.g. tabs)
-      throw new Error(`Field type '${field.type}' is not allowed inside '${path}'`);
+    } else if (field.type === "tabs") {
+      // Merge tabs if tabs field exists
+      const tabsField = fields.find(f => f.type === "tabs");
+      if (tabsField) {
+        for (let t = 0; t < field.tabs.length; t++) {
+          const tab = field.tabs[i];
+          const tabType = tabHasName(tab) ? "named" : "unnamed";
+          const existingTab = findTabField(
+            tabsField.tabs,
+            tabType,
+            // If tab is named, use the name
+            tabType === "named"
+              ? (tab as NamedTab).name
+              : // If tab has custom originalTabLabel, search by that
+                tab.custom?.originalTabLabel
+                ? tab.custom.originalTabLabel
+                : // Otherwise, search by label (if it's a string)
+                  typeof tab.label === "string"
+                  ? tab.label
+                  : "",
+          );
+          if (existingTab) {
+            // Merge the tab (existing tab has always priority)
+            const result = mergeFields({
+              path: tabType ? `${path}.${(tab as NamedTab).name}` : path,
+              baseFields: existingTab.fields,
+              patchFields: tab.fields,
+            });
+            existingTab.fields = [...result.mergedFields, ...result.restFields];
+            const { fields: _, ...restTab } = tab;
+            if (tab.custom?.originalTabLabel && tab.label) delete existingTab.label;
+            Object.assign(existingTab, deepMerge<Tab>(restTab, existingTab));
+
+            // Remove tab
+            field.tabs.splice(t, 1);
+            t--;
+          }
+        }
+
+        // Add the rest tabs
+        tabsField.tabs.push(...field.tabs);
+
+        // Remove from toHandleFields / mark as done
+        toHandleFields.splice(i, 1);
+        i--;
+      }
     }
   }
 
@@ -82,18 +124,18 @@ export const mergeFields = ({
  * @param fields The fields list
  * @param name The field name
  */
-const findField = (fields: Field[], name: string): Field | undefined => {
+const findFieldByName = (fields: Field[], name: string): Field | undefined => {
   for (const field of fields) {
     if ("fields" in field && !fieldAffectsData(field)) {
       // Find in subfields if field not affecting data (e.g. row)
-      const found = findField(field.fields, name);
+      const found = findFieldByName(field.fields, name);
       if (found) {
         return found;
       }
     } else if (field.type === "tabs") {
       // For each tab, find the field
       for (const tab of field.tabs) {
-        const found = findField(tab.fields, name);
+        const found = findFieldByName(tab.fields, name);
         if (found) {
           return found;
         }
@@ -103,6 +145,28 @@ const findField = (fields: Field[], name: string): Field | undefined => {
     }
   }
   return undefined;
+};
+
+/**
+ * Find a tab field by name or label in a list of tabs
+ *
+ * @param tabs The tabs list
+ * @param type The tab type (named or unnamed)
+ * @param nameOrLabel The tab name or label
+ */
+const findTabField = (
+  tabs: Tab[],
+  type: "unnamed" | "named",
+  nameOrLabel: string,
+): Tab | undefined => {
+  for (const tab of tabs) {
+    if (
+      (type === "unnamed" && !tabHasName(tab) && tab.label === nameOrLabel) ||
+      (type === "named" && tabHasName(tab) && tab.name === nameOrLabel)
+    ) {
+      return tab;
+    }
+  }
 };
 
 /**
