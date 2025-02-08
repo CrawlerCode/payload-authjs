@@ -26,7 +26,10 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: {
-      baseDir: path.resolve(dirname),
+      baseDir: path.resolve(dirname, "payload", "components"),
+    },
+    components: {
+      beforeDashboard: ["/Greeting"],
     },
   },
   collections: [Users, Examples],
