@@ -1,3 +1,10 @@
+## 0.7.1 (2025-02-09)
+
+### 🩹 Fixes
+
+- Register me hook always to provider expires timestamp ([#12](https://github.com/CrawlerCode/payload-authjs/pull/12))
+- **PayloadSessionProvider:** Fix broken PayloadSessionProvider ([67df23d](https://github.com/CrawlerCode/payload-authjs/commit/67df23d))
+
 ## 0.7.0 (2025-02-09)
 
 ### 🚀 Features
