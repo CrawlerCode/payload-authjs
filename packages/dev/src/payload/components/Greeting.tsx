@@ -1,7 +1,7 @@
 "use client";
 
 import { Banner, useAuth } from "@payloadcms/ui";
-import { User } from "payload/generated-types";
+import { type User } from "payload/generated-types";
 
 /**
  * Greeting banner that displays the current user
@@ -9,7 +9,9 @@ import { User } from "payload/generated-types";
 const Greeting = () => {
   const { user } = useAuth<User>();
 
-  if (!user) return null;
+  if (!user) {
+    return null;
+  }
 
   return (
     <Banner type="success">

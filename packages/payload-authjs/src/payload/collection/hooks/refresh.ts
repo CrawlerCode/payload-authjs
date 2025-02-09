@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { CollectionConfig, Forbidden, type CollectionRefreshHook } from "payload";
+import { type CollectionConfig, type CollectionRefreshHook, Forbidden } from "payload";
 import { withPayload } from "../../../authjs/withPayload";
 import type { AuthjsPluginConfig } from "../../plugin";
 import { getAllVirtualFields } from "../../utils/getAllVirtualFields";
@@ -27,7 +27,7 @@ export const refreshHook: (
         userCollectionSlug: pluginOptions.userCollectionSlug,
       }),
     );
-    let session = await auth();
+    const session = await auth();
 
     // If no session user, throw forbidden
     if (!session?.user) {

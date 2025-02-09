@@ -2,17 +2,14 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "ESNext",
+    "moduleResolution": "bundler",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": true,
-    "strict": true,
-    "esModuleInterop": true,
     "jsx": "preserve",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "noEmit": true,
     "incremental": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
     "isolatedModules": true,
     "plugins": [
       {
@@ -28,6 +25,6 @@
       "payload-authjs/client": ["../payload-authjs/src/client.ts"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "postcss.config.mjs"],
   "exclude": ["node_modules", "dist", "build"]
 }

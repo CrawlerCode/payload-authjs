@@ -1,4 +1,4 @@
-import { deepCopyObjectSimple, deepMerge, NamedTab, Tab, type Field } from "payload";
+import { deepCopyObjectSimple, deepMerge, type Field, type NamedTab, type Tab } from "payload";
 import { fieldAffectsData, tabHasName } from "payload/shared";
 
 /**
@@ -96,7 +96,9 @@ export const mergeFields = ({
             });
             existingTab.fields = [...result.mergedFields, ...result.restFields];
             const { fields: _, ...restTab } = tab;
-            if (tab.custom?.originalTabLabel && tab.label) delete existingTab.label;
+            if (tab.custom?.originalTabLabel && tab.label) {
+              delete existingTab.label;
+            }
             Object.assign(existingTab, deepMerge<Tab>(restTab, existingTab));
 
             // Remove tab

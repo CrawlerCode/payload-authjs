@@ -10,8 +10,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth(
       /**
        * Update user on every sign in
        */
-      signIn: async ({ adapter, payload, user, profile }) => {
-        payload?.logger.info("signIn event");
+      signIn: async ({ adapter, user, profile }) => {
         if (!user.id || !profile) {
           return;
         }

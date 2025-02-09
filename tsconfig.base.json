@@ -2,18 +2,19 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
+    "baseUrl": ".",
+    "target": "ESNext",
+    "moduleResolution": "nodenext",
+    "module": "ESNext",
+    "lib": ["ESNext"],
+    "strict": true,
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "lib": ["dom", "ESNext"],
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "baseUrl": "."
+    "skipDefaultLibCheck": true
   },
   "exclude": ["node_modules", "tmp"]
 }

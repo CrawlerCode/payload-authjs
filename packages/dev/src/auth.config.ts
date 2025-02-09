@@ -36,7 +36,7 @@ export const authConfig: NextAuthConfig = {
           // Default fields (@see https://github.com/nextauthjs/next-auth/blob/main/packages/core/src/providers/github.ts#L176)
           id: profile.id.toString(),
           name: profile.name ?? profile.login,
-          email: profile.email!,
+          email: profile.email,
           image: profile.avatar_url,
           // Custom fields
           additionalUserDatabaseField: `Create by github provider profile callback at ${new Date().toISOString()}`,

@@ -10,7 +10,7 @@ import { SignInOrOutButtons } from "../components/auth/SignInOrOutButtons";
 import ExampleList from "../components/ExampleList";
 import { Tabs } from "../components/general/Tabs";
 
-const Page = async () => {
+const Page = () => {
   return (
     <main className="container mt-5">
       <SignInOrOutButtons />

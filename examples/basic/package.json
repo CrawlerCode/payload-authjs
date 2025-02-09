@@ -23,18 +23,20 @@
     "next": "15.1.6",
     "next-auth": "5.0.0-beta.25",
     "payload": "^3.21.0",
+    "payload-authjs": "workspace:*",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "sharp": "0.33.5",
-    "payload-authjs": "workspace:*"
+    "sharp": "0.33.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
+    "@next/eslint-plugin-next": "^15.1.6",
     "@types/node": "^22.13.1",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
-    "eslint": "^9.19.0",
+    "eslint": "^9.20.0",
     "eslint-config-next": "15.1.6",
+    "eslint-plugin-react-hooks": "^5.1.0",
     "typescript": "5.7.3"
   },
   "engines": {

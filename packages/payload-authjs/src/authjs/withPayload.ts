@@ -135,7 +135,7 @@ export function withPayload(
       await customEvent?.({
         ...message,
         // Add the adapter to the event
-        adapter: authjsConfig.adapter!,
+        adapter: authjsConfig.adapter,
         // Add payload to the event
         payload: options.payload
           ? await options.payload

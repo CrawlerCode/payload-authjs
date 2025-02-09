@@ -10,11 +10,12 @@ export const defaultESLintIgnores = [
   "**/jest.config.js",
   "**/eslint.config.js",
   "**/payload-types.ts",
-  "dev/src/app/(payload)/",
+  "packages/dev/src/app/(payload)/",
   "**/dist/",
   "**/build/",
   "**/node_modules/",
   "**/temp/",
+  "examples/",
 ];
 
 export default [
@@ -31,7 +32,6 @@ export default [
       "perfectionist/sort-jsx-props": "off",
     },
   },
-  // TODO: Bring in '@payloadcms/eslint-plugin' for 'payload/proper-payload-logger-usage' rule
   {
     ignores: defaultESLintIgnores,
   },
