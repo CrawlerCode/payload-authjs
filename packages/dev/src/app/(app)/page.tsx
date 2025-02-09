@@ -1,4 +1,5 @@
-import { PayloadSessionProvider } from "payload-authjs";
+import { getPayloadSession } from "payload-authjs";
+import { PayloadSessionProvider } from "payload-authjs/client";
 import { AuthjsProviders } from "../components/auth/authjs/AuthjsProviders";
 import { AuthjsSessionClient } from "../components/auth/authjs/AuthjsSessionClient";
 import { AuthjsSessionServer } from "../components/auth/authjs/AuthjsSessionServer";
@@ -10,7 +11,7 @@ import { SignInOrOutButtons } from "../components/auth/SignInOrOutButtons";
 import ExampleList from "../components/ExampleList";
 import { Tabs } from "../components/general/Tabs";
 
-const Page = () => {
+const Page = async () => {
   return (
     <main className="container mt-5">
       <SignInOrOutButtons />
@@ -24,7 +25,7 @@ const Page = () => {
           {
             label: "Payload [usePayloadSession] (client)",
             content: (
-              <PayloadSessionProvider>
+              <PayloadSessionProvider session={await getPayloadSession()}>
                 <PayloadSessionClientWithUsePayloadSession />
               </PayloadSessionProvider>
             ),

@@ -110,17 +110,20 @@ const ServerComponentExample = async () => {
 
 Instead of using the [`useSession`](https://authjs.dev/getting-started/session-management/get-session?framework=next-js-client) hook of Auth.js, you can use the `usePayloadSession` hook to get the current session in the client-side code:
 
-Before you can use the `usePayloadSession` hook, you need to wrap your app with the `PayloadSessionProvider` on the server-side:
+Before you can use the `usePayloadSession` hook, you need to wrap your app with the `PayloadSessionProvider`:
 
 ```tsx
 // layout.tsx
-import { PayloadSessionProvider } from "payload-authjs";
+import { PayloadSessionProvider } from "payload-authjs/client";
+import { getPayloadSession } from "payload-authjs";
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Layout: React.FC<{ children: React.ReactNode }> = async ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <PayloadSessionProvider>{children}</PayloadSessionProvider>
+        <PayloadSessionProvider session={await getPayloadSession()}>
+          {children}
+        </PayloadSessionProvider>
       </body>
     </html>
   );
@@ -128,6 +131,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 export default Layout;
 ```
+
+> ℹ️ Passing the session to the `PayloadSessionProvider` is optional, but it can be useful to avoid loading states.
 
 You are now ready to use the `usePayloadSession` hook in your client-side code:
 

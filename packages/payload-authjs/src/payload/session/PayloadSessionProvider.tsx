@@ -1,10 +1,14 @@
 "use client";
 
 import type { CollectionSlug, DataFromCollectionSlug } from "payload";
-import { createContext, type ReactNode, useState } from "react";
+import { createContext, type ReactNode, useCallback, useEffect, useState } from "react";
 import type { PayloadSession } from "./getPayloadSession";
 
 export interface SessionContext<TSlug extends CollectionSlug> {
+  /**
+   * The status of the session
+   */
+  status: "loading" | "authenticated" | "unauthenticated";
   /**
    * The session
    */
@@ -13,11 +17,17 @@ export interface SessionContext<TSlug extends CollectionSlug> {
    * Function to refresh the session
    */
   refresh: () => Promise<PayloadSession<TSlug> | null>;
+  /**
+   * Function to refetch the session from the server
+   */
+  refetch: () => Promise<PayloadSession<TSlug> | null>;
 }
 
 export const Context = createContext<SessionContext<never>>({
+  status: "loading",
   session: null,
   refresh: () => new Promise(resolve => resolve(null)),
+  refetch: () => new Promise(resolve => resolve(null)),
 });
 
 interface Props<TSlug extends CollectionSlug> {
@@ -28,9 +38,11 @@ interface Props<TSlug extends CollectionSlug> {
    */
   userCollectionSlug?: TSlug;
   /**
-   * The session (if available)
+   * The session from the server
+   *
+   * @default null
    */
-  session: PayloadSession<TSlug> | null;
+  session?: PayloadSession<TSlug> | null;
   /**
    * The children to render
    */
@@ -38,14 +50,49 @@ interface Props<TSlug extends CollectionSlug> {
 }
 
 /**
- * PayloadSessionProvider (client-side) that provides the session to the context provider
+ * PayloadSessionProvider that provides the session to the context provider
  */
 export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
   userCollectionSlug = "users" as TSlug,
-  session,
+  session = null,
   children,
 }: Props<TSlug>) => {
+  const [isLoading, setIsLoading] = useState(!session);
   const [localSession, setLocalSession] = useState<PayloadSession<TSlug> | null>(session);
+
+  /**
+   * Function to fetch the session
+   */
+  const fetchSession = useCallback(async () => {
+    // Fetch the session from the server
+    const response = await fetch(`/api/${userCollectionSlug}/me`);
+    const result: { user: DataFromCollectionSlug<TSlug>; exp: number } = await response.json();
+
+    // Set loading to false
+    setIsLoading(false);
+
+    // If the response is not ok or the user is not present, return null
+    if (!response.ok || !result.user) {
+      return null;
+    }
+
+    // Update the local session
+    const localSession = {
+      user: result.user,
+      expires: new Date(result.exp * 1000).toISOString(),
+    };
+    setLocalSession(localSession);
+
+    // Return the session
+    return localSession;
+  }, [userCollectionSlug]);
+
+  /**
+   * On mount, fetch the session
+   */
+  useEffect(() => {
+    void fetchSession();
+  }, [fetchSession]);
 
   /**
    * Function to refresh the session
@@ -76,8 +123,10 @@ export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
   return (
     <Context
       value={{
+        status: isLoading ? "loading" : localSession ? "authenticated" : "unauthenticated",
         session: localSession,
         refresh,
+        refetch: fetchSession,
       }}
     >
       {children}
