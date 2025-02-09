@@ -18,7 +18,11 @@ declare module "next-auth/jwt" {
     extends Partial<
       Pick<
         PayloadUser,
-        "id" | "additionalUserDatabaseField" | "additionalUserVirtualField" | "roles"
+        | "id"
+        | "additionalUserDatabaseField"
+        | "additionalUserVirtualField"
+        | "roles"
+        | "currentAccount"
       >
     > {}
 }
@@ -121,6 +125,21 @@ export const authConfig: NextAuthConfig = {
         token.roles = [...new Set(roles)];
       }
 
+      /**
+       * Add current account to the token
+       */
+      if (account) {
+        token.currentAccount = {
+          provider: account.provider,
+          providerAccountId: account.providerAccountId,
+          access_token: account.access_token,
+          refresh_token: account.refresh_token,
+          expires_at: account.expires_at
+            ? new Date(account.expires_at * 1000).toISOString()
+            : undefined,
+        };
+      }
+
       return token;
     },
     session: ({ session, token }) => {
@@ -138,6 +157,8 @@ export const authConfig: NextAuthConfig = {
         session.user.additionalUserVirtualField = token.additionalUserVirtualField;
 
         session.user.roles = token.roles;
+
+        session.user.currentAccount = token.currentAccount;
       }
 
       return session;

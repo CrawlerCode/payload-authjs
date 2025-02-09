@@ -33,7 +33,53 @@ const Users: CollectionConfig = {
           custom: {
             originalTabLabel: "Accounts",
           },
-          fields: [],
+          fields: [
+            /**
+             * Add currentAccount field
+             * This field is virtual and will not be stored in the database
+             */
+            {
+              name: "currentAccount",
+              type: "group",
+              label: "Current Account",
+              virtual: true,
+              admin: {
+                hidden: true,
+              },
+              fields: [
+                {
+                  type: "row",
+                  fields: [
+                    {
+                      name: "provider",
+                      type: "text",
+                    },
+                    {
+                      name: "providerAccountId",
+                      type: "text",
+                    },
+                  ],
+                },
+                {
+                  type: "row",
+                  fields: [
+                    {
+                      name: "access_token",
+                      type: "text",
+                    },
+                    {
+                      name: "refresh_token",
+                      type: "text",
+                    },
+                    {
+                      name: "expires_at",
+                      type: "date",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -46,11 +92,12 @@ const Users: CollectionConfig = {
           type: "text",
           label: "Account Provider", // Add label to provider field
         },
-        // Add new field to accounts
+        // Add access_token field
         {
           name: "access_token",
           type: "text",
         },
+        // Add custom field
         {
           name: "additionalAccountDatabaseField",
           type: "text",
@@ -69,12 +116,13 @@ const Users: CollectionConfig = {
       type: "array",
       fields: [createdAtField],
     },
-    // Add custom field
+    // Add custom database fields
     {
       name: "additionalUserDatabaseField",
       type: "text",
       required: true,
     },
+    // Add custom virtual field
     {
       name: "additionalUserVirtualField",
       type: "text",
@@ -83,18 +131,24 @@ const Users: CollectionConfig = {
         hidden: true,
       },
     },
+    /**
+     * Add locale field
+     */
     {
       name: "locale",
       type: "text",
     },
     /**
      * Add roles field
-     * This field will not be stored in the database
+     * This field is virtual and will not be stored in the database
      */
     {
       name: "roles",
       type: "json",
       virtual: true,
+      admin: {
+        hidden: true,
+      },
       typescriptSchema: [
         () => ({
           type: "array",
@@ -103,9 +157,6 @@ const Users: CollectionConfig = {
           },
         }),
       ],
-      admin: {
-        hidden: true,
-      },
     },
   ],
 };

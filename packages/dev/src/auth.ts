@@ -4,7 +4,7 @@ import { withPayload } from "payload-authjs";
 import { authConfig } from "./auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth(
-  withPayload(authConfig as any, {
+  withPayload(authConfig, {
     payloadConfig,
     events: {
       /**
@@ -18,9 +18,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth(
           id: user.id,
           name: profile.name ?? (profile.login as string | undefined),
           image: profile.avatar_url as string | undefined,
-          additionalUserDatabaseField: `Create by updateUserOnSignIn at ${new Date().toISOString()}`,
+          additionalUserDatabaseField: `Create by signIn event at ${new Date().toISOString()}`,
         });
       },
     },
-  }) as any,
+  }),
 );

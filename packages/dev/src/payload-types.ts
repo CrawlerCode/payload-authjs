@@ -82,6 +82,13 @@ export interface User {
         createdAt: string;
       }[]
     | null;
+  currentAccount?: {
+    provider?: string | null;
+    providerAccountId?: string | null;
+    access_token?: string | null;
+    refresh_token?: string | null;
+    expires_at?: string | null;
+  };
   verificationTokens?:
     | {
         id?: string | null;
@@ -184,6 +191,15 @@ export interface UsersSelect<T extends boolean = true> {
         access_token?: T;
         additionalAccountDatabaseField?: T;
         createdAt?: T;
+      };
+  currentAccount?:
+    | T
+    | {
+        provider?: T;
+        providerAccountId?: T;
+        access_token?: T;
+        refresh_token?: T;
+        expires_at?: T;
       };
   verificationTokens?:
     | T
