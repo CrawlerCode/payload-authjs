@@ -18,6 +18,8 @@ interface Options<TSlug extends CollectionSlug> {
 
 /**
  * Get the payload user from the server (only works on the server side)
+ *
+ * @deprecated Use `getPayloadSession` instead
  */
 export const getPayloadUser = async <TSlug extends CollectionSlug = "users">({
   serverUrl = process.env.NEXT_PUBLIC_SERVER_URL,

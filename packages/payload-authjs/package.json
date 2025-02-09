@@ -15,6 +15,11 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js",
+      "default": "./dist/client.js"
+    },
     "./middleware": {
       "types": "./dist/payload/middleware.d.ts",
       "import": "./dist/payload/middleware.js",

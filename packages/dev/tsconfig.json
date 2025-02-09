@@ -24,7 +24,8 @@
       "payload/generated-types": ["./src/payload-types.ts"],
       "@/*": ["./src/*"],
       "payload-authjs": ["../payload-authjs/src/index.ts"],
-      "payload-authjs/components": ["../payload-authjs/src/components/index.ts"]
+      "payload-authjs/components": ["../payload-authjs/src/components/index.ts"],
+      "payload-authjs/client": ["../payload-authjs/src/client.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
