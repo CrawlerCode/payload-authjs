@@ -1,3 +1,29 @@
+## 0.7.0 (2025-02-09)
+
+### 🚀 Features
+
+- Allow custom tabs field in users collection ([#14](https://github.com/CrawlerCode/payload-authjs/pull/14))
+- Add getPayloadSession & usePayloadSession ([146eebe](https://github.com/CrawlerCode/payload-authjs/commit/146eebe))
+- **AuthjsAuthStrategy:** Log a warning if user not found in the database but has an valid authjs session ([1999a20](https://github.com/CrawlerCode/payload-authjs/commit/1999a20))
+- **PayloadAdapter:** Added payload logger and log debug messages ([957f589](https://github.com/CrawlerCode/payload-authjs/commit/957f589))
+
+### 🩹 Fixes
+
+- Override payload refresh operation & fix session expiration ([#12](https://github.com/CrawlerCode/payload-authjs/pull/12))
+
+### 📖 Documentation
+
+- Add "Getting the payload session" section & improved some other wordings ([f911249](https://github.com/CrawlerCode/payload-authjs/commit/f911249))
+
+### 🏡 Chore
+
+- Fix eslint & typescript errors ([d9c5895](https://github.com/CrawlerCode/payload-authjs/commit/d9c5895))
+- **dev:** Change nextjs port to 5000 ([0115f0e](https://github.com/CrawlerCode/payload-authjs/commit/0115f0e))
+- **dev:** Allow js files (for import map) ([3b4b16b](https://github.com/CrawlerCode/payload-authjs/commit/3b4b16b))
+- **dev:** Add greeting component to admin dashboard ([becc12a](https://github.com/CrawlerCode/payload-authjs/commit/becc12a))
+- **dev:** Added all different options to get the session & add tailwind ([57637ab](https://github.com/CrawlerCode/payload-authjs/commit/57637ab))
+- **dev:** Add currentAccount field ([3f1711d](https://github.com/CrawlerCode/payload-authjs/commit/3f1711d))
+
 ## 0.6.1 (2025-02-05)
 
 ### 🩹 Fixes
