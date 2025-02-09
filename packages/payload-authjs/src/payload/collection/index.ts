@@ -93,12 +93,10 @@ export const generateUsersCollection = (
   };
 
   // Add hooks to users collection
-  const _meHook = meHook(collection, pluginOptions);
-  const _refreshHook = refreshHook(collection, pluginOptions);
   collection.hooks = {
     ...collection.hooks,
-    me: [...(collection.hooks?.me || []), ...(_meHook ? [_meHook] : [])],
-    refresh: [...(collection.hooks?.refresh || []), ...(_refreshHook ? [_refreshHook] : [])],
+    me: [...(collection.hooks?.me || []), meHook(collection, pluginOptions)],
+    refresh: [...(collection.hooks?.refresh || []), refreshHook(collection, pluginOptions)],
   };
 
   // Add custom endpoints to users collection

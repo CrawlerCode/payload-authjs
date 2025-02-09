@@ -6,7 +6,7 @@ import { getAllVirtualFields } from "../../utils/getAllVirtualFields";
 import { getUserAttributes } from "../../utils/getUserAttributes";
 
 /**
- * Add me hook to override the me endpoint to include virtual fields
+ * Add me hook to override the me endpoint to include 'exp' and virtual fields
  *
  * @see https://payloadcms.com/docs/hooks/collections#me
  * @see https://github.com/payloadcms/payload/blob/main/packages/payload/src/auth/operations/me.ts
@@ -14,14 +14,9 @@ import { getUserAttributes } from "../../utils/getUserAttributes";
 export const meHook: (
   collection: CollectionConfig,
   pluginOptions: AuthjsPluginConfig,
-) => CollectionMeHook | undefined = (collection, pluginOptions) => {
+) => CollectionMeHook = (collection, pluginOptions) => {
   // Get all virtual fields
   const virtualFields = getAllVirtualFields(collection.fields);
-
-  // If no virtual fields exist, no need to override the me endpoint
-  if (virtualFields.length === 0) {
-    return undefined;
-  }
 
   // Return the me hook
   return async ({ args: { req }, user }) => {

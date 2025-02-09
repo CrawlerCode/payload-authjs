@@ -14,7 +14,7 @@ import { getUserAttributes } from "../../utils/getUserAttributes";
 export const refreshHook: (
   collection: CollectionConfig,
   pluginOptions: AuthjsPluginConfig,
-) => CollectionRefreshHook | undefined = (collection, pluginOptions) => {
+) => CollectionRefreshHook = (collection, pluginOptions) => {
   // Get all virtual fields
   const virtualFields = getAllVirtualFields(collection.fields);
 
