@@ -1,21 +1,21 @@
 import { auth } from "@/auth";
-import { getPayloadUser } from "payload-authjs";
+import { getPayloadSession } from "payload-authjs";
 import { SignInButton } from "./_components/SignInButton";
 import { SignOutButton } from "./_components/SignOutButton";
 
 const Page = async () => {
-  const session = await auth();
-  const payloadUser = await getPayloadUser();
+  const authjsSession = await auth();
+  const payloadSession = await getPayloadSession();
 
   return (
     <main>
-      {payloadUser ? <SignOutButton /> : <SignInButton />}
+      {payloadSession ? <SignOutButton /> : <SignInButton />}
       <br />
       <h3>Auth.js Session</h3>
-      <pre>{JSON.stringify(session?.user, null, 2)}</pre>
+      <pre>{JSON.stringify(authjsSession, null, 2)}</pre>
       <br />
-      <h3>Payload CMS User</h3>
-      <pre>{JSON.stringify(payloadUser, null, 2)}</pre>
+      <h3>Payload CMS Session</h3>
+      <pre>{JSON.stringify(payloadSession, null, 2)}</pre>
     </main>
   );
 };

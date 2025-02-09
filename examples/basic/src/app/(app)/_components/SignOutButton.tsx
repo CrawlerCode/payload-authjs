@@ -16,9 +16,8 @@ export function SignOutButton({
           headers: {
             "Content-Type": "application/json",
           },
-        }).then(() => {
-          window.location.reload();
         });
+        window.location.reload();
       }}
     >
       Sign Out
