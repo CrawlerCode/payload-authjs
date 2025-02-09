@@ -49,7 +49,12 @@ export function AuthjsAuthStrategy(
         })
       ).docs.at(0);
 
+      // If user does not exist in the database, log a warning and return null user
       if (!payloadUser) {
+        payload.logger.warn(
+          { name: "payload-authjs (AuthjsAuthStrategy)", session },
+          `User '${session.user.id ?? session.user.email}' has a valid Auth.js session but does not exist in the payload database.`,
+        );
         return { user: null };
       }
 
