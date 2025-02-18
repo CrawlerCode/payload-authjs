@@ -27,6 +27,9 @@ export const accountsField: Field = {
   ],
   admin: {
     initCollapsed: true,
+    components: {
+      RowLabel: "payload-authjs/components#AccountRowLabel",
+    },
   },
   access: {
     create: () => false,
