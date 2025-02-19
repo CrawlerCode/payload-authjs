@@ -6,7 +6,7 @@ import baseConfig from "../../.prettierrc.json" assert { type: "json" };
 const config = {
   ...baseConfig,
   plugins: ["prettier-plugin-tailwindcss"],
-  tailwindStylesheet: "./src/app/(app)/globals.scss",
+  tailwindStylesheet: "./src/app/(app)/globals.css",
 };
 
 export default config;
