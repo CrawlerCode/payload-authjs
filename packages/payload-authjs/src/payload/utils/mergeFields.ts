@@ -36,13 +36,15 @@ export const mergeFields = ({
 
         // Merge subfields if both have subfields
         if ("fields" in field && "fields" in existingField) {
-          // Merge subfields
+          // Merge the field and subfields (existing field has always priority)
           const result = mergeFields({
             path: `${path}.${field.name}`,
             baseFields: existingField.fields,
             patchFields: field.fields,
           });
           existingField.fields = [...result.mergedFields, ...result.restFields];
+          const { fields: _, ...restField } = field;
+          Object.assign(existingField, deepMerge<Field>(restField, existingField));
         } else {
           // Merge the field (existing field has always priority)
           Object.assign(existingField, deepMerge<Field>(field, existingField));
