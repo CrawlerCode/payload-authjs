@@ -80,9 +80,9 @@ export const authConfig: NextAuthConfig = {
     nodemailer({
       server: process.env.EMAIL_SERVER,
       from: process.env.EMAIL_FROM,
-      /* sendVerificationRequest: ({ url }) => {
+      sendVerificationRequest: ({ url }) => {
         console.log("nodemailer:", url);
-      }, */
+      },
     }),
   ],
   session: {

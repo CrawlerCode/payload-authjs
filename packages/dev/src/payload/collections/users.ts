@@ -120,7 +120,6 @@ const Users: CollectionConfig = {
     {
       name: "additionalUserDatabaseField",
       type: "text",
-      required: true,
     },
     // Add custom virtual field
     {

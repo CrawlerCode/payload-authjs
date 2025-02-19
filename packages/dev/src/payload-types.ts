@@ -64,6 +64,7 @@ export interface Config {
   auth: {
     users: UserAuthOperations;
   };
+  blocks: {};
   collections: {
     users: User;
     examples: Example;
@@ -121,7 +122,7 @@ export interface User {
   emailVerified?: string | null;
   name?: string | null;
   image?: string | null;
-  additionalUserDatabaseField: string;
+  additionalUserDatabaseField?: string | null;
   additionalUserVirtualField?: string | null;
   locale?: string | null;
   roles?: string[];
