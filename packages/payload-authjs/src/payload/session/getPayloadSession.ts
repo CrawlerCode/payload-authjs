@@ -1,5 +1,6 @@
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import type { CollectionSlug, DataFromCollectionSlug } from "payload";
+import { cache } from "react";
 
 interface Options<TSlug extends CollectionSlug> {
   /**
@@ -16,33 +17,44 @@ export interface PayloadSession<TSlug extends CollectionSlug> {
 }
 
 /**
- * Get the payload session from the server side
+ * Get the payload session from the server-side
+ *
+ * This function is cached to de-duplicate requests:
+ * - using React 'cache' function to memorize within the same request (@see https://react.dev/reference/react/cache)
+ * - and using Next.js 'data cache' to cache across multiple requests (@see https://nextjs.org/docs/app/building-your-application/caching#data-cache)
+ *
+ * You can manually invalidate the cache by calling `revalidateTag("payload-session")`
  */
-export const getPayloadSession = async <TSlug extends CollectionSlug = "users">({
-  userCollectionSlug = "users" as TSlug,
-}: Options<TSlug> = {}): Promise<PayloadSession<TSlug> | null> => {
-  // Get the server URL
-  const serverUrl = await getServerUrl();
+export const getPayloadSession = cache(
+  async <TSlug extends CollectionSlug = "users">({
+    userCollectionSlug = "users" as TSlug,
+  }: Options<TSlug> = {}): Promise<PayloadSession<TSlug> | null> => {
+    // Get the server URL
+    const serverUrl = await getServerUrl();
 
-  // Fetch the session from the server
-  const response = await fetch(`${serverUrl}/api/${userCollectionSlug}/me`, {
-    headers: {
-      Cookie: (await cookies()).toString(),
-    },
-  });
-  const result: { user: DataFromCollectionSlug<TSlug>; exp: number } = await response.json();
+    // Fetch the session from the server
+    const response = await fetch(`${serverUrl}/api/${userCollectionSlug}/me`, {
+      headers: await headers(),
+      cache: "force-cache",
+      next: {
+        tags: ["payload-session"],
+      },
+    });
+    const result: { user: DataFromCollectionSlug<TSlug> | null; exp: number } =
+      await response.json();
 
-  // If the response is not ok or the user is not present, return null
-  if (!response.ok || !result.user) {
-    return null;
-  }
+    // If the response is not ok or the user is not present, return null
+    if (!response.ok || !result.user) {
+      return null;
+    }
 
-  // Return the session
-  return {
-    user: result.user,
-    expires: new Date(result.exp * 1000).toISOString(),
-  };
-};
+    // Return the session
+    return {
+      user: result.user,
+      expires: new Date(result.exp * 1000).toISOString(),
+    };
+  },
+);
 
 /**
  * Get the server URL from the environment variables or the request headers
