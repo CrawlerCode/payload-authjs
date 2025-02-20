@@ -1,9 +1,10 @@
 "use client";
 
 import { useRowLabel } from "@payloadcms/ui";
+import type { FC } from "react";
 import type { Account } from "../authjs/types";
 
-export const AccountRowLabel = () => {
+export const AccountRowLabel: FC = () => {
   const { data: account } = useRowLabel<Account>();
 
   return (
