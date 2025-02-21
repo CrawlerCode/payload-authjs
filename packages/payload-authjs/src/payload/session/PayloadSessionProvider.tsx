@@ -65,35 +65,50 @@ export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
   /**
    * Function to fetch the session
    */
-  const fetchSession = useCallback(async () => {
-    // Fetch the session from the server
-    const response = await fetch(`/api/${userCollectionSlug}/me`);
-    const result: { user: DataFromCollectionSlug<TSlug>; exp: number } = await response.json();
+  const fetchSession = useCallback(
+    async ({ signal }: { signal?: AbortSignal } = {}) => {
+      // Fetch the session from the server
+      const response = await fetch(`/api/${userCollectionSlug}/me`, {
+        signal,
+      });
+      const result: { user: DataFromCollectionSlug<TSlug> | null; exp: number } =
+        await response.json();
 
-    // Set loading to false
-    setIsLoading(false);
+      // Set loading to false
+      setIsLoading(false);
 
-    // If the response is not ok or the user is not present, return null
-    if (!response.ok || !result.user) {
-      return null;
-    }
+      // If the response is not ok or the user is not present, return null
+      if (!response.ok || !result.user) {
+        return null;
+      }
 
-    // Update the local session
-    const localSession = {
-      user: result.user,
-      expires: new Date(result.exp * 1000).toISOString(),
-    };
-    setLocalSession(localSession);
+      // Update the local session
+      const localSession = {
+        user: result.user,
+        expires: new Date(result.exp * 1000).toISOString(),
+      };
+      setLocalSession(localSession);
 
-    // Return the session
-    return localSession;
-  }, [userCollectionSlug]);
+      // Return the session
+      return localSession;
+    },
+    [userCollectionSlug],
+  );
 
   /**
    * On mount, fetch the session
    */
   useEffect(() => {
-    void fetchSession();
+    const abortController = new AbortController();
+
+    void fetchSession({
+      signal: abortController.signal,
+    });
+
+    // Abort the fetch on unmount
+    return () => {
+      abortController.abort();
+    };
   }, [fetchSession]);
 
   /**
@@ -104,7 +119,8 @@ export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
     const response = await fetch(`/api/${userCollectionSlug}/refresh-token`, {
       method: "POST",
     });
-    const result: { user: DataFromCollectionSlug<TSlug>; exp: number } = await response.json();
+    const result: { user: DataFromCollectionSlug<TSlug> | null; exp: number } =
+      await response.json();
 
     // If the response is not ok or the user is not present, return null
     if (!response.ok || !result.user) {
