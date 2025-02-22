@@ -1,0 +1,6 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "examples/multiple-auth-collections/src",
+  "projectType": "application",
+  "targets": {}
+}
