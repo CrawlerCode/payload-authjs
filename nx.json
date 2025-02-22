@@ -37,6 +37,11 @@
         },
         "docs": {
           "changelog": true
+        },
+        "examples": {
+          "changelog": {
+            "title": "📓 Examples"
+          }
         }
       }
     }
