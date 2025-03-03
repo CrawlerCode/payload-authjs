@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import type { Endpoint } from "payload";
 import { withPayload } from "../../../authjs/withPayload";
 import type { AuthjsPluginConfig } from "../../plugin";
+import { getRequestCollection } from "../../utils/getRequestCollection";
 
 /**
  * Override the default logout endpoint to destroy the authjs session
@@ -29,6 +30,18 @@ export const logoutEndpoint: (pluginOptions: AuthjsPluginConfig) => Endpoint = p
     });
     for (const cookie of cookies) {
       response.cookies.set(cookie.name, cookie.value, cookie.options);
+    }
+
+    // Execute afterLogout hooks
+    const { config: collection } = getRequestCollection(req);
+    if (collection.hooks?.afterLogout?.length) {
+      for (const hook of collection.hooks.afterLogout) {
+        await hook({
+          collection,
+          context: req.context,
+          req,
+        });
+      }
     }
 
     return response;

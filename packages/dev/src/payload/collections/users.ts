@@ -158,6 +158,13 @@ const Users: CollectionConfig = {
       ],
     },
   ],
+  /* hooks: {
+    afterLogout: [
+      ({ req }) => {
+        console.log("User logged out", req.user?.id);
+      },
+    ],
+  }, */
 };
 
 export default Users;
