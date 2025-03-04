@@ -9,9 +9,9 @@ export const PayloadSessionClientWithUseAuth = () => {
 
   return (
     <>
-      <div className="mb-2 flex flex-col items-start gap-2">
+      <div className="mb-2 flex gap-1">
         <Badge variant={user ? "green" : "red"}>
-          status: {user ? "authenticated" : "unauthenticated"}
+          Status: {user ? "authenticated" : "unauthenticated"}
         </Badge>
       </div>
       <pre className="overflow-auto rounded-lg bg-gray-100 p-4">

@@ -71,8 +71,12 @@ export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
       const response = await fetch(`/api/${userCollectionSlug}/me`, {
         signal,
       });
-      const result: { user: DataFromCollectionSlug<TSlug> | null; exp: number } =
-        await response.json();
+      const result: {
+        user: DataFromCollectionSlug<TSlug> | null;
+        exp: number;
+        collection?: CollectionSlug;
+        strategy?: string;
+      } = await response.json();
 
       // Set loading to false
       setIsLoading(false);
@@ -86,6 +90,8 @@ export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
       const localSession = {
         user: result.user,
         expires: new Date(result.exp * 1000).toISOString(),
+        collection: result.collection,
+        strategy: result.strategy,
       };
       setLocalSession(localSession);
 

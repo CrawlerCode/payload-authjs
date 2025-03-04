@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import type { CollectionSlug, DataFromCollectionSlug } from "payload";
 import { cache } from "react";
+import type { AUTHJS_STRATEGY_NAME } from "../AuthjsAuthStrategy";
 
 interface Options<TSlug extends CollectionSlug> {
   /**
@@ -14,6 +15,8 @@ interface Options<TSlug extends CollectionSlug> {
 export interface PayloadSession<TSlug extends CollectionSlug> {
   user: DataFromCollectionSlug<TSlug>;
   expires: string;
+  collection?: CollectionSlug;
+  strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
 }
 
 /**
@@ -40,8 +43,12 @@ export const getPayloadSession = cache(
         tags: ["payload-session"],
       },
     });
-    const result: { user: DataFromCollectionSlug<TSlug> | null; exp: number } =
-      await response.json();
+    const result: {
+      user: DataFromCollectionSlug<TSlug> | null;
+      exp: number;
+      collection?: CollectionSlug;
+      strategy?: string;
+    } = await response.json();
 
     // If the response is not ok or the user is not present, return null
     if (!response.ok || !result.user) {
@@ -52,6 +59,8 @@ export const getPayloadSession = cache(
     return {
       user: result.user,
       expires: new Date(result.exp * 1000).toISOString(),
+      collection: result.collection,
+      strategy: result.strategy,
     };
   },
 );
