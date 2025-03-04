@@ -5,6 +5,8 @@ import type { AuthjsPluginConfig } from "./plugin";
 import { getAllVirtualFields } from "./utils/getAllVirtualFields";
 import { getUserAttributes } from "./utils/getUserAttributes";
 
+export const AUTHJS_STRATEGY_NAME = "Auth.js";
+
 /**
  * Auth.js Authentication Strategy for Payload CMS
  * @see https://payloadcms.com/docs/authentication/custom-strategies
@@ -17,7 +19,7 @@ export function AuthjsAuthStrategy(
   const virtualFields = getAllVirtualFields(collection.fields);
 
   return {
-    name: "Auth.js",
+    name: AUTHJS_STRATEGY_NAME,
     authenticate: async ({ payload }) => {
       // Get session from authjs
       const { auth } = NextAuth(
@@ -67,7 +69,7 @@ export function AuthjsAuthStrategy(
       // Return user to payload cms
       return {
         user: {
-          _strategy: "Auth.js",
+          _strategy: AUTHJS_STRATEGY_NAME,
           collection: collection.slug,
           ...payloadUser,
           ...virtualSessionFields,

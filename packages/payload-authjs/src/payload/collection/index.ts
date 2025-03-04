@@ -38,6 +38,7 @@ export const generateUsersCollection = (
         name: "id",
         type: "text",
         required: true,
+        defaultValue: () => crypto.randomUUID(),
         access: {
           create: () => false,
           update: () => false,
@@ -87,9 +88,13 @@ export const generateUsersCollection = (
   };
 
   // Add auth strategy to users collection
+  const { strategies: authStrategies, ...authOptions } =
+    typeof collection.auth === "object" ? collection.auth : {};
   collection.auth = {
-    disableLocalStrategy: true,
-    strategies: [AuthjsAuthStrategy(collection, pluginOptions)],
+    ...authOptions,
+    strategies: [AuthjsAuthStrategy(collection, pluginOptions), ...(authStrategies ?? [])],
+    // Disable local strategy if not explicitly enabled
+    ...(collection.custom?.enableLocalStrategy === true ? {} : { disableLocalStrategy: true }),
   };
 
   // Add hooks to users collection

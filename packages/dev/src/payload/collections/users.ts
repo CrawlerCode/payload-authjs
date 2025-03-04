@@ -11,6 +11,12 @@ const Users: CollectionConfig = {
       return user?.roles?.includes("admin") ?? false;
     }, */
   },
+  auth: {
+    useAPIKey: true,
+  },
+  custom: {
+    enableLocalStrategy: true,
+  },
   fields: [
     {
       name: "name",

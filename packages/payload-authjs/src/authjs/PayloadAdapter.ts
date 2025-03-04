@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import type {
   Adapter,
   AdapterAccount,
@@ -5,7 +6,13 @@ import type {
   AdapterUser,
   VerificationToken as AdapterVerificationToken,
 } from "next-auth/adapters";
-import { type CollectionSlug, getPayload, type Payload, type SanitizedConfig } from "payload";
+import {
+  type CollectionSlug,
+  getPayload,
+  type Payload,
+  type RequiredDataFromCollectionSlug,
+  type SanitizedConfig,
+} from "payload";
 import type { Account, Session, User, VerificationToken } from "./types";
 import { transformObject } from "./utils/transformObject";
 
@@ -57,12 +64,25 @@ export function PayloadAdapter({
     async createUser(user) {
       (await logger).debug({ userId: user.id, user }, `Creating user '${user.id}'`);
 
-      const payloadUser = (await (
-        await payload
-      ).create({
-        collection: userCollectionSlug,
-        data: user,
-      })) as User;
+      let payloadUser: User;
+      if (
+        (await payload).collections[userCollectionSlug]?.config.custom.enableLocalStrategy ===
+          true &&
+        !(user as User).password
+      ) {
+        // If the local strategy is enabled and the user does not have a password, bypass the password check
+        payloadUser = (await createUserAndBypassPasswordCheck(payload, {
+          collection: userCollectionSlug,
+          data: user,
+        })) as User;
+      } else {
+        payloadUser = (await (
+          await payload
+        ).create({
+          collection: userCollectionSlug,
+          data: user,
+        })) as User;
+      }
 
       return toAdapterUser(payloadUser);
     },
@@ -380,16 +400,29 @@ export function PayloadAdapter({
       ).docs.at(0) as User | undefined;
 
       if (!payloadUser) {
-        payloadUser = (await (
-          await payload
-        ).create({
-          collection: userCollectionSlug,
-          data: {
-            id: crypto.randomUUID(),
-            email,
-            verificationTokens: [token],
-          },
-        })) as User;
+        const user = {
+          id: crypto.randomUUID(),
+          email,
+          verificationTokens: [token],
+        };
+
+        if (
+          (await payload).collections[userCollectionSlug]?.config.custom.enableLocalStrategy ===
+          true
+        ) {
+          // If the local strategy is enabled, bypass the password check
+          payloadUser = (await createUserAndBypassPasswordCheck(payload, {
+            collection: userCollectionSlug,
+            data: user,
+          })) as User;
+        } else {
+          payloadUser = (await (
+            await payload
+          ).create({
+            collection: userCollectionSlug,
+            data: user,
+          })) as User;
+        }
       } else {
         payloadUser = (await (
           await payload
@@ -477,3 +510,46 @@ function toAdapterVerificationToken(
     ...transformObject<VerificationToken, Omit<AdapterVerificationToken, "identifier">>(token),
   };
 }
+
+/**
+ * Create a user and bypass the password check
+ * This is because payload requires a password to be set when creating a user
+ *
+ * @see https://github.com/payloadcms/payload/blob/main/packages/payload/src/collections/operations/create.ts#L254
+ * @see https://github.com/payloadcms/payload/blob/main/packages/payload/src/auth/strategies/local/generatePasswordSaltHash.ts
+ */
+const createUserAndBypassPasswordCheck = async (
+  payload: Payload | Promise<Payload>,
+  {
+    collection,
+    data,
+  }: {
+    collection: CollectionSlug;
+    data: RequiredDataFromCollectionSlug<CollectionSlug>;
+  },
+) => {
+  // Generate a random password
+  data.password = crypto.randomBytes(32).toString("hex");
+
+  // Create the user
+  const user = await (
+    await payload
+  ).create({
+    collection,
+    data,
+  });
+
+  // Remove the salt and hash after the user was created
+  await (
+    await payload
+  ).update({
+    collection,
+    id: user.id,
+    data: {
+      salt: null,
+      hash: null,
+    },
+  });
+
+  return user;
+};
