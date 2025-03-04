@@ -73,7 +73,7 @@ export const mergeFields = ({
       const tabsField = fields.find(f => f.type === "tabs");
       if (tabsField) {
         for (let t = 0; t < field.tabs.length; t++) {
-          const tab = field.tabs[i];
+          const tab = field.tabs[t];
           const tabType = tabHasName(tab) ? "named" : "unnamed";
           const existingTab = findTabField(
             tabsField.tabs,
