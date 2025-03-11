@@ -167,7 +167,7 @@ If you want to access the current user in the Payload admin panel e.g. in a cust
 "use client";
 
 import { Banner, useAuth } from "@payloadcms/ui";
-import { type User } from "payload/generated-types";
+import type { User } from "@/payload-types";
 
 export const CustomAdminComponent = () => {
   const { user } = useAuth<User>();
@@ -411,7 +411,7 @@ If you are using typescript you can declare your Auth.js user type as shown in t
 ```ts
 // auth.config.ts
 import type { PayloadAuthjsUser } from "payload-authjs";
-import type { User as PayloadUser } from "payload/generated-types";
+import type { User as PayloadUser } from "@/payload-types";
 
 declare module "next-auth" {
   interface User extends PayloadAuthjsUser<PayloadUser> {}

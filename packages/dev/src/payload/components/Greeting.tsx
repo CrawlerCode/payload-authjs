@@ -1,7 +1,7 @@
 "use client";
 
+import type { User } from "@/payload-types";
 import { Banner, useAuth } from "@payloadcms/ui";
-import { type User } from "payload/generated-types";
 
 /**
  * Greeting banner that displays the current user

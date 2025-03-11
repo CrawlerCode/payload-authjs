@@ -6,7 +6,7 @@ import github from "next-auth/providers/github";
 import keycloak from "next-auth/providers/keycloak";
 import nodemailer from "next-auth/providers/nodemailer";
 import type { PayloadAuthjsUser } from "payload-authjs";
-import type { User as PayloadUser } from "payload/generated-types";
+import type { User as PayloadUser } from "./payload-types";
 
 declare module "next-auth" {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type

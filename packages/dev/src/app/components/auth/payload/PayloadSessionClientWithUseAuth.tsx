@@ -1,7 +1,7 @@
 "use client";
 
+import type { User } from "@/payload-types";
 import { useAuth } from "@payloadcms/ui";
-import { type User } from "payload/generated-types";
 import Badge from "../../general/Badge";
 
 export const PayloadSessionClientWithUseAuth = () => {

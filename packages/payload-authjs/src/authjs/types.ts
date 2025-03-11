@@ -41,7 +41,7 @@ export interface VerificationToken {
  *
  * @example
  * import type { PayloadAuthjsUser } from "payload-authjs";
- * import type { User as PayloadUser } from "payload/generated-types";
+ * import type { User as PayloadUser } from "@/payload-types";
  *
  * declare module "next-auth" {
  *   interface User extends PayloadAuthjsUser<PayloadUser> {}
