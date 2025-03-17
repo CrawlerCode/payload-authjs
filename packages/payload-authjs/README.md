@@ -33,6 +33,7 @@ First of all, this plugin only integrates Auth.js into Payload CMS by getting th
 
 ```ts
 // auth.config.ts
+import type { NextAuthConfig } from "next-auth";
 import github from "next-auth/providers/github";
 
 export const authConfig: NextAuthConfig = {

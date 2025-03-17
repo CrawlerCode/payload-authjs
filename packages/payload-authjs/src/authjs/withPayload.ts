@@ -66,7 +66,7 @@ export interface WithPayloadOptions extends PayloadAdapterOptions {
  * @example
  * import { config } from "./auth.config";
  *
- * export const { handlers, signIn, signOut, auth } = NextAuth(() =>
+ * export const { handlers, signIn, signOut, auth } = NextAuth(
  *   withPayload(config, { payloadConfig }),
  * );
  */
