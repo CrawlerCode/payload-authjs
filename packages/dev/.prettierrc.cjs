@@ -1,4 +1,4 @@
-import baseConfig from "../../.prettierrc.json" assert { type: "json" };
+const baseConfig = require("../../.prettierrc.json");
 
 /**
  * @type {import("prettier").Config}
@@ -9,4 +9,4 @@ const config = {
   tailwindStylesheet: "./src/app/(app)/globals.css",
 };
 
-export default config;
+module.exports = config;

@@ -8,4 +8,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNx(withPayload(nextConfig));
+export default withNx(
+  withPayload(nextConfig, {
+    devBundleServerPackages: false,
+  }),
+);

@@ -20,7 +20,7 @@
     "@payloadcms/richtext-lexical": "^3.24.0",
     "cross-env": "^7.0.3",
     "graphql": "^16.10.0",
-    "next": "15.1.7",
+    "next": "15.2.4",
     "next-auth": "5.0.0-beta.25",
     "payload": "^3.24.0",
     "payload-authjs": "workspace:*",
@@ -29,14 +29,14 @@
     "sharp": "0.33.5"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
-    "@next/eslint-plugin-next": "^15.1.6",
-    "@types/node": "^22.13.5",
-    "@types/react": "19.0.10",
+    "@eslint/eslintrc": "^3.3.1",
+    "@next/eslint-plugin-next": "^15.2.4",
+    "@types/node": "^22.13.13",
+    "@types/react": "19.0.12",
     "@types/react-dom": "19.0.4",
-    "eslint": "^9.20.0",
-    "eslint-config-next": "15.1.6",
-    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint": "^9.23.0",
+    "eslint-config-next": "15.2.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "typescript": "5.7.3"
   },
   "engines": {
