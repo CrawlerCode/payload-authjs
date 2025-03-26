@@ -67,7 +67,11 @@ export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
    */
   const fetchSession = useCallback(
     async ({ signal }: { signal?: AbortSignal } = {}) => {
-      // Fetch the session from the server
+      /**
+       * Fetch the session from the server
+       *
+       * @see https://payloadcms.com/docs/rest-api/overview#auth-operations
+       */
       const response = await fetch(`/api/${userCollectionSlug}/me`, {
         signal,
       });
@@ -75,6 +79,11 @@ export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
         user: DataFromCollectionSlug<TSlug> | null;
         exp: number;
         collection?: CollectionSlug;
+        /**
+         * @deprecated Use user._strategy instead
+         *
+         * @see https://github.com/payloadcms/payload/pull/11701
+         */
         strategy?: string;
       } = await response.json();
 
@@ -91,7 +100,7 @@ export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
         user: result.user,
         expires: new Date(result.exp * 1000).toISOString(),
         collection: result.collection,
-        strategy: result.strategy,
+        strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
       };
       setLocalSession(localSession);
 
@@ -121,12 +130,23 @@ export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
    * Function to refresh the session
    */
   const refresh = async () => {
-    // Refresh the session on the server
+    /**
+     * Refresh the session on the server
+     *
+     * @see https://payloadcms.com/docs/rest-api/overview#auth-operations
+     */
     const response = await fetch(`/api/${userCollectionSlug}/refresh-token`, {
       method: "POST",
     });
-    const result: { user: DataFromCollectionSlug<TSlug> | null; exp: number } =
-      await response.json();
+    const result: {
+      user: DataFromCollectionSlug<TSlug> | null;
+      exp: number /**
+       * @deprecated Use user._strategy instead
+       *
+       * @see https://github.com/payloadcms/payload/pull/11701
+       */;
+      strategy?: string;
+    } = await response.json();
 
     // If the response is not ok or the user is not present, return null
     if (!response.ok || !result.user) {
@@ -137,6 +157,8 @@ export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
     const localSession = {
       user: result.user,
       expires: new Date(result.exp * 1000).toISOString(),
+      collection: result.user.collection ?? userCollectionSlug,
+      strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
     };
     setLocalSession(localSession);
 

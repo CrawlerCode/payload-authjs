@@ -13,7 +13,10 @@ interface Options<TSlug extends CollectionSlug> {
 }
 
 export interface PayloadSession<TSlug extends CollectionSlug> {
-  user: DataFromCollectionSlug<TSlug>;
+  user: {
+    collection?: CollectionSlug;
+    _strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
+  } & DataFromCollectionSlug<TSlug>;
   expires: string;
   collection?: CollectionSlug;
   strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
@@ -47,6 +50,11 @@ export const getPayloadSession = cache(
       user: DataFromCollectionSlug<TSlug> | null;
       exp: number;
       collection?: CollectionSlug;
+      /**
+       * @deprecated Use user._strategy instead
+       *
+       * @see https://github.com/payloadcms/payload/pull/11701
+       */
       strategy?: string;
     } = await response.json();
 
@@ -60,7 +68,7 @@ export const getPayloadSession = cache(
       user: result.user,
       expires: new Date(result.exp * 1000).toISOString(),
       collection: result.collection,
-      strategy: result.strategy,
+      strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
     };
   },
 );
