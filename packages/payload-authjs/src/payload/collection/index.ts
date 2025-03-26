@@ -5,6 +5,7 @@ import type { AuthjsPluginConfig } from "../plugin";
 import { mergeFields } from "../utils/mergeFields";
 import { defaultAccess } from "./access";
 import { logoutEndpoint } from "./endpoints/logout";
+import { refreshEndpoint } from "./endpoints/refresh";
 import { accountsField } from "./fields/accounts";
 import { generalFields } from "./fields/general";
 import { sessionsField } from "./fields/session";
@@ -109,5 +110,7 @@ export const generateUsersCollection = (
     ...(collection.endpoints || []),
     // Add the logout endpoint
     logoutEndpoint(pluginOptions),
+    // Add the refresh endpoint
+    refreshEndpoint(pluginOptions),
   ];
 };
