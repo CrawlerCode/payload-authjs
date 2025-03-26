@@ -3,11 +3,6 @@
   "sourceRoot": "packages/dev/src",
   "projectType": "application",
   "targets": {
-    "dev": {
-      "options": {
-        "port": 5000
-      }
-    },
     "start": {
       "options": {
         "port": 5000

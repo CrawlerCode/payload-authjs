@@ -5,7 +5,7 @@ import { authjsPlugin } from "payload-authjs";
 import { build as buildLogger } from "pino-pretty";
 import sharp from "sharp";
 import { fileURLToPath } from "url";
-import { authConfig } from "./auth.config";
+import { nodeAuthConfig } from "./auth/node.config";
 import Examples from "./payload/collections/examples";
 import Users from "./payload/collections/users";
 
@@ -42,6 +42,15 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || "",
     },
   }),
+  email: ({ payload }) => ({
+    name: "logger",
+    defaultFromName: "Payload Auth.js",
+    defaultFromAddress: "payload-authjs@example.com",
+    sendEmail: args => {
+      payload.logger.info(args, "Sending email");
+      return Promise.resolve();
+    },
+  }),
   sharp,
-  plugins: [authjsPlugin({ authjsConfig: authConfig })],
+  plugins: [authjsPlugin({ authjsConfig: nodeAuthConfig })],
 });

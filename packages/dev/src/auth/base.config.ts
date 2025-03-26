@@ -2,11 +2,8 @@ import jwt from "jsonwebtoken";
 import type { NextAuthConfig } from "next-auth";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { JWT } from "next-auth/jwt";
-import github from "next-auth/providers/github";
-import keycloak from "next-auth/providers/keycloak";
-import nodemailer from "next-auth/providers/nodemailer";
 import type { PayloadAuthjsUser } from "payload-authjs";
-import type { User as PayloadUser } from "./payload-types";
+import type { User as PayloadUser } from "../payload-types";
 
 declare module "next-auth" {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -27,68 +24,16 @@ declare module "next-auth/jwt" {
     > {}
 }
 
+export const SESSION_STRATEGY: NonNullable<NonNullable<NextAuthConfig["session"]>["strategy"]> =
+  "jwt";
+
 export const authConfig: NextAuthConfig = {
   theme: { logo: "https://authjs.dev/img/logo-sm.png" },
-  providers: [
-    github({
-      allowDangerousEmailAccountLinking: true,
-      /**
-       * Add additional fields to the user on first sign in
-       */
-      profile(profile) {
-        return {
-          // Default fields (@see https://github.com/nextauthjs/next-auth/blob/main/packages/core/src/providers/github.ts#L176)
-          id: profile.id.toString(),
-          name: profile.name ?? profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-          // Custom fields
-          additionalUserDatabaseField: `Create by github provider profile callback at ${new Date().toISOString()}`,
-        };
-      },
-      account(tokens) {
-        return {
-          ...tokens,
-          additionalAccountDatabaseField: `Create by github provider profile callback at ${new Date().toISOString()}`,
-        };
-      },
-    }),
-    keycloak({
-      allowDangerousEmailAccountLinking: true,
-      /**
-       * Add additional fields to the user on first sign in
-       */
-      profile(profile) {
-        return {
-          // Default fields
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
-          // Custom fields
-          locale: profile.locale,
-          additionalUserDatabaseField: `Create by keycloak provider profile callback at ${new Date().toISOString()}`,
-        };
-      },
-      account(tokens) {
-        return {
-          ...tokens,
-          additionalAccountDatabaseField: `Create by keycloak provider profile callback at ${new Date().toISOString()}`,
-        };
-      },
-    }),
-    nodemailer({
-      server: process.env.EMAIL_SERVER,
-      from: process.env.EMAIL_FROM,
-      sendVerificationRequest: ({ url }) => {
-        console.log("nodemailer:", url);
-      },
-    }),
-  ],
+  providers: [],
   session: {
-    strategy: "jwt",
-    //maxAge: 60 * 2 + 30, // 2.5 minutes
-    //updateAge: 60, // 1 minute
+    strategy: SESSION_STRATEGY,
+    maxAge: 60 * 15, // 15 minutes
+    updateAge: 60, // 1 minute
   },
   callbacks: {
     jwt: ({ token, user, account, trigger }) => {
@@ -164,8 +109,17 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
     authorized: ({ auth }) => {
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth;
+      // User is authenticated
+      if (!auth?.user) {
+        return false;
+      }
+
+      // Session in not expired
+      if (new Date() >= new Date(auth.expires)) {
+        return false;
+      }
+
+      return true;
     },
   },
 };

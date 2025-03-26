@@ -1,4 +1,5 @@
-import type { CollectionConfig } from "payload";
+import { SESSION_STRATEGY } from "@/auth/base.config";
+import type { CollectionConfig, Field } from "payload";
 import { createdAtField } from "../fields/createdAt";
 
 const Users: CollectionConfig = {
@@ -98,11 +99,6 @@ const Users: CollectionConfig = {
           type: "text",
           label: "Account Provider", // Add label to provider field
         },
-        // Add access_token field
-        {
-          name: "access_token",
-          type: "text",
-        },
         // Add custom field
         {
           name: "additionalAccountDatabaseField",
@@ -112,11 +108,15 @@ const Users: CollectionConfig = {
         createdAtField,
       ],
     },
-    /* {
-      name: "sessions",
-      type: "array",
-      fields: [createdAtField],
-    }, */
+    ...(SESSION_STRATEGY === "database"
+      ? [
+          {
+            name: "sessions",
+            type: "array",
+            fields: [createdAtField],
+          } satisfies Field,
+        ]
+      : []),
     {
       name: "verificationTokens",
       type: "array",

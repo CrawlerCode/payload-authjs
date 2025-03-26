@@ -133,7 +133,6 @@ export interface User {
         provider: string;
         providerAccountId: string;
         type: string;
-        access_token?: string | null;
         additionalAccountDatabaseField: string;
         createdAt: string;
       }[]
@@ -254,7 +253,6 @@ export interface UsersSelect<T extends boolean = true> {
         provider?: T;
         providerAccountId?: T;
         type?: T;
-        access_token?: T;
         additionalAccountDatabaseField?: T;
         createdAt?: T;
       };

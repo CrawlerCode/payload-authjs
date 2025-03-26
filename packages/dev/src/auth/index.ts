@@ -1,11 +1,12 @@
 import payloadConfig from "@payload-config";
 import NextAuth from "next-auth";
+import { getPayload } from "payload";
 import { withPayload } from "payload-authjs";
-import { authConfig } from "./auth.config";
+import { nodeAuthConfig } from "./node.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth(
-  withPayload(authConfig, {
-    payloadConfig,
+  withPayload(nodeAuthConfig, {
+    payload: getPayload({ config: payloadConfig }),
     events: {
       /**
        * Update user on every sign in
