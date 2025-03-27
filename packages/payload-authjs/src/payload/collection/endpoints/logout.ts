@@ -7,6 +7,7 @@ import { withPayload } from "../../../authjs/withPayload";
 import { AUTHJS_STRATEGY_NAME } from "../../AuthjsAuthStrategy";
 import type { AuthjsPluginConfig } from "../../plugin";
 import { getRequestCollection } from "../../utils/getRequestCollection";
+import { revalidateTag } from "next/cache";
 
 /**
  * Override the default logout endpoint to destroy the authjs session
@@ -67,6 +68,9 @@ export const logoutEndpoint: (pluginOptions: AuthjsPluginConfig) => Endpoint = p
     // If the user is authenticated using authjs, we need to destroy the authjs session cookie
     if (req.user?._strategy === AUTHJS_STRATEGY_NAME) {
       await destroyAuthjsSessionCookie(req, response, pluginOptions);
+
+      // Revalidate the cache for the payload session
+      revalidateTag("payload-session");
     }
 
     return response;
