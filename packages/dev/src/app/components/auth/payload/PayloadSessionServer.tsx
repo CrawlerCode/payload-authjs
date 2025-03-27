@@ -1,6 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { getPayloadSession } from "payload-authjs";
 import Badge from "../../general/Badge";
+import { ExpiresBadge } from "../ExpiresBadge";
 
 export const PayloadSessionServer = async () => {
   const session = await getPayloadSession();
@@ -11,20 +12,22 @@ export const PayloadSessionServer = async () => {
         <Badge variant={session ? "green" : "red"}>
           Status: {session ? "authenticated" : "unauthenticated"}
         </Badge>
-        {session?.expires && (
-          <Badge
-            variant="yellow"
-            onClick={async () => {
-              "use server";
+        <ExpiresBadge
+          title="Session Expires"
+          expiresAt={session?.expires}
+          onClick={async () => {
+            "use server";
 
-              revalidateTag("payload-session");
+            revalidateTag("payload-session");
 
-              return Promise.resolve();
-            }}
-          >
-            Expires: {new Date(session.expires).toLocaleString()}
-          </Badge>
-        )}
+            return Promise.resolve();
+          }}
+        />
+        <ExpiresBadge title="Account Expires" expiresAt={session?.user.currentAccount?.expiresAt} />
+        <ExpiresBadge
+          title="Account Refresh Token Expires"
+          expiresAt={session?.user.currentAccount?.refreshExpiresAt}
+        />
         {session?.collection ? (
           <Badge variant="dark">Collection: {session.collection}</Badge>
         ) : null}

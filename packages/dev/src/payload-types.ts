@@ -140,9 +140,10 @@ export interface User {
   currentAccount?: {
     provider?: string | null;
     providerAccountId?: string | null;
-    access_token?: string | null;
-    refresh_token?: string | null;
-    expires_at?: string | null;
+    accessToken?: string | null;
+    refreshToken?: string | null;
+    expiresAt?: string | null;
+    refreshExpiresAt?: string | null;
   };
   verificationTokens?:
     | {
@@ -261,9 +262,10 @@ export interface UsersSelect<T extends boolean = true> {
     | {
         provider?: T;
         providerAccountId?: T;
-        access_token?: T;
-        refresh_token?: T;
-        expires_at?: T;
+        accessToken?: T;
+        refreshToken?: T;
+        expiresAt?: T;
+        refreshExpiresAt?: T;
       };
   verificationTokens?:
     | T

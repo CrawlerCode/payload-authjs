@@ -2,6 +2,7 @@
 
 import { usePayloadSession } from "payload-authjs/client";
 import Badge from "../../general/Badge";
+import { ExpiresBadge } from "../ExpiresBadge";
 
 export const PayloadSessionClientWithUsePayloadSession = () => {
   const { status, session, refresh } = usePayloadSession();
@@ -14,11 +15,12 @@ export const PayloadSessionClientWithUsePayloadSession = () => {
         >
           Status: {status}
         </Badge>
-        {session?.expires && (
-          <Badge variant="yellow" onClick={refresh}>
-            Expires: {new Date(session.expires).toLocaleString()}
-          </Badge>
-        )}
+        <ExpiresBadge title="Session Expires" expiresAt={session?.expires} onClick={refresh} />
+        <ExpiresBadge title="Account Expires" expiresAt={session?.user.currentAccount?.expiresAt} />
+        <ExpiresBadge
+          title="Account Refresh Token Expires"
+          expiresAt={session?.user.currentAccount?.refreshExpiresAt}
+        />
         {session?.collection ? (
           <Badge variant="dark">Collection: {session.collection}</Badge>
         ) : null}

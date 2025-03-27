@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig, Session } from "next-auth";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { JWT } from "next-auth/jwt";
 import type { PayloadAuthjsUser } from "payload-authjs";
@@ -36,7 +36,7 @@ export const authConfig: NextAuthConfig = {
     updateAge: 60, // 1 minute
   },
   callbacks: {
-    jwt: ({ token, user, account, trigger }) => {
+    jwt: async ({ token, user, account, trigger }) => {
       //console.log("callbacks.jwt", trigger, token, user, account);
 
       /**
@@ -77,12 +77,71 @@ export const authConfig: NextAuthConfig = {
         token.currentAccount = {
           provider: account.provider,
           providerAccountId: account.providerAccountId,
-          access_token: account.access_token,
-          refresh_token: account.refresh_token,
-          expires_at: account.expires_at
+          accessToken: account.access_token,
+          refreshToken: account.refresh_token,
+          expiresAt: account.expires_at
             ? new Date(account.expires_at * 1000).toISOString()
             : undefined,
+          refreshExpiresAt:
+            account.refresh_expires_in && typeof account.refresh_expires_in === "number"
+              ? new Date(new Date().getTime() + account.refresh_expires_in * 1000).toISOString()
+              : undefined,
         };
+      }
+
+      /**
+       * Refresh access token for keycloak provider
+       *
+       * @see https://authjs.dev/guides/refresh-token-rotation
+       */
+      if (
+        token.currentAccount?.provider === "keycloak" &&
+        // Access token is expired or will expire in 3 minutes
+        token.currentAccount.expiresAt &&
+        new Date() >=
+          new Date(new Date(token.currentAccount.expiresAt).getTime() - 3 * 60 * 1000) &&
+        // Refresh token is present and not expired
+        token.currentAccount.refreshToken &&
+        token.currentAccount.refreshExpiresAt &&
+        new Date() < new Date(token.currentAccount.refreshExpiresAt)
+      ) {
+        try {
+          const response = await fetch(
+            `${process.env.AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                grant_type: "refresh_token",
+                client_id: process.env.AUTH_KEYCLOAK_ID!,
+                client_secret: process.env.AUTH_KEYCLOAK_SECRET!,
+                refresh_token: token.currentAccount.refreshToken,
+              }),
+            },
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              `Request failed with status ${response.status}: ${response.statusText}`,
+            );
+          }
+
+          const refreshedTokens = await response.json();
+
+          token.currentAccount.accessToken = refreshedTokens.access_token;
+          token.currentAccount.refreshToken = refreshedTokens.refresh_token;
+          token.currentAccount.expiresAt = new Date(
+            new Date().getTime() + refreshedTokens.expires_in * 1000,
+          ).toISOString();
+          token.currentAccount.refreshExpiresAt = new Date(
+            new Date().getTime() + refreshedTokens.refresh_expires_in * 1000,
+          ).toISOString();
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error("Error refreshing access token", error);
+        }
       }
 
       return token;
@@ -104,6 +163,14 @@ export const authConfig: NextAuthConfig = {
         session.user.roles = token.roles;
 
         session.user.currentAccount = token.currentAccount;
+      }
+
+      /**
+       * If the current account has an expires date, sync the session expires date with it
+       */
+      const expiresAt = token?.currentAccount?.refreshExpiresAt || token?.currentAccount?.expiresAt;
+      if (expiresAt) {
+        (session as Session).expires = new Date(expiresAt).toISOString();
       }
 
       return session;

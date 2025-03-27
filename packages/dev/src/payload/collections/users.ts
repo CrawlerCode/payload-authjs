@@ -71,15 +71,19 @@ const Users: CollectionConfig = {
                   type: "row",
                   fields: [
                     {
-                      name: "access_token",
+                      name: "accessToken",
                       type: "text",
                     },
                     {
-                      name: "refresh_token",
+                      name: "refreshToken",
                       type: "text",
                     },
                     {
-                      name: "expires_at",
+                      name: "expiresAt",
+                      type: "date",
+                    },
+                    {
+                      name: "refreshExpiresAt",
                       type: "date",
                     },
                   ],
