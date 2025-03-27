@@ -66,8 +66,7 @@ export function PayloadAdapter({
 
       let payloadUser: User;
       if (
-        (await payload).collections[userCollectionSlug]?.config.custom.enableLocalStrategy ===
-          true &&
+        !(await payload).collections[userCollectionSlug]?.config.auth.disableLocalStrategy &&
         !(user as User).password
       ) {
         // If the local strategy is enabled and the user does not have a password, bypass the password check
@@ -406,10 +405,7 @@ export function PayloadAdapter({
           verificationTokens: [token],
         };
 
-        if (
-          (await payload).collections[userCollectionSlug]?.config.custom.enableLocalStrategy ===
-          true
-        ) {
+        if (!(await payload).collections[userCollectionSlug]?.config.auth.disableLocalStrategy) {
           // If the local strategy is enabled, bypass the password check
           payloadUser = (await createUserAndBypassPasswordCheck(payload, {
             collection: userCollectionSlug,

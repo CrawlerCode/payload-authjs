@@ -95,7 +95,7 @@ export const generateUsersCollection = (
     ...authOptions,
     strategies: [AuthjsAuthStrategy(collection, pluginOptions), ...(authStrategies ?? [])],
     // Disable local strategy if not explicitly enabled
-    ...(collection.custom?.enableLocalStrategy === true ? {} : { disableLocalStrategy: true }),
+    ...(pluginOptions.enableLocalStrategy === true ? {} : { disableLocalStrategy: true }),
   };
 
   // Add hooks to users collection

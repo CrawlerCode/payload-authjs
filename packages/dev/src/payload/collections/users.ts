@@ -15,9 +15,6 @@ const Users: CollectionConfig = {
   auth: {
     useAPIKey: true,
   },
-  custom: {
-    enableLocalStrategy: true,
-  },
   fields: [
     {
       name: "name",

@@ -29,6 +29,14 @@ export interface AuthjsPluginConfig {
   authjsConfig: NextAuthConfig;
 
   /**
+   * Enable the default local strategy from Payload CMS (experimental)
+   * @see https://payloadcms.com/docs/authentication/jwt
+   *
+   * @default false
+   */
+  enableLocalStrategy?: boolean;
+
+  /**
    * Customize the components that the plugin adds to the admin panel
    */
   components?: {
