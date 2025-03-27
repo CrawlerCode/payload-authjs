@@ -1,0 +1,6 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "examples/with-payload-local-strategy/src",
+  "projectType": "application",
+  "targets": {}
+}

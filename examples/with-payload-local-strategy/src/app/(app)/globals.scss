@@ -1,0 +1,27 @@
+html,
+body {
+  font-family: "Roboto", "Inter", sans-serif;
+}
+
+main {
+  max-width: 37.5rem;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button {
+  cursor: pointer;
+  background: #ededed;
+  padding: 10px 25px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+}
+
+pre {
+  background: #ededed;
+  padding: 15px;
+  border-radius: 10px;
+  overflow: auto;
+}
