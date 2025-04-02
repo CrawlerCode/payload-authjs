@@ -173,6 +173,7 @@ export interface User {
 export interface Example {
   id: number;
   someField?: string | null;
+  author?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -293,6 +294,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface ExamplesSelect<T extends boolean = true> {
   someField?: T;
+  author?: T;
   updatedAt?: T;
   createdAt?: T;
 }

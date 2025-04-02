@@ -2,7 +2,7 @@ import { SESSION_STRATEGY } from "@/auth/base.config";
 import type { CollectionConfig, Field } from "payload";
 import { createdAtField } from "../fields/createdAt";
 
-const Users: CollectionConfig = {
+const Users: CollectionConfig<"users"> = {
   slug: "users",
   admin: {
     useAsTitle: "name",
@@ -14,6 +14,7 @@ const Users: CollectionConfig = {
   },
   auth: {
     useAPIKey: true,
+    depth: 0,
   },
   fields: [
     {
@@ -164,6 +165,12 @@ const Users: CollectionConfig = {
         }),
       ],
     },
+    /* {
+      name: "examples",
+      type: "join",
+      collection: "examples",
+      on: "author",
+    }, */
   ],
   /* hooks: {
     afterLogout: [

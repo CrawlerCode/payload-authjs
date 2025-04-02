@@ -1,7 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { hasRole } from "../access/hasRole";
 
-const Examples: CollectionConfig = {
+const Examples: CollectionConfig<"examples"> = {
   slug: "examples",
   admin: {
     useAsTitle: "someField",
@@ -16,6 +16,12 @@ const Examples: CollectionConfig = {
     {
       name: "someField",
       type: "text",
+    },
+    {
+      name: "author",
+      type: "relationship",
+      relationTo: "users",
+      maxDepth: 0,
     },
   ],
 };

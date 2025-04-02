@@ -19,6 +19,7 @@
     "@payloadcms/ui": "3.31.0",
     "@tailwindcss/postcss": "^4.0.16",
     "clsx": "^2.1.1",
+    "graphql": "^16.10.0",
     "jsonwebtoken": "^9.0.2",
     "next": "15.2.4",
     "next-auth": "5.0.0-beta.25",
@@ -33,6 +34,7 @@
     "tailwindcss": "^4.0.16"
   },
   "devDependencies": {
+    "@payloadcms/graphql": "3.31.0",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/react": "19.0.12",
     "dotenv": "^16.4.7",

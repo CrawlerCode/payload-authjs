@@ -20,7 +20,7 @@ export function AuthjsAuthStrategy(
 
   return {
     name: AUTHJS_STRATEGY_NAME,
-    authenticate: async ({ payload }) => {
+    authenticate: async ({ payload, isGraphQL }) => {
       // Get session from authjs
       const { auth } = NextAuth(
         withPayload(pluginOptions.authjsConfig, {
@@ -36,6 +36,7 @@ export function AuthjsAuthStrategy(
       }
 
       // Find user in database
+      const sanitizedCollectionConfig = payload.collections[collection.slug].config;
       const payloadUser = (
         await payload.find({
           collection: collection.slug,
@@ -48,6 +49,8 @@ export function AuthjsAuthStrategy(
                   equals: session.user.email,
                 },
               },
+          depth: isGraphQL ? 0 : sanitizedCollectionConfig.auth.depth,
+          limit: 1,
         })
       ).docs.at(0);
 
