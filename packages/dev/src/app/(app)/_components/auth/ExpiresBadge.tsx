@@ -1,5 +1,5 @@
+import Badge from "@/components/general/Badge";
 import type { ComponentProps } from "react";
-import Badge from "../general/Badge";
 
 export const ExpiresBadge = ({
   expiresAt: expiresAtString,

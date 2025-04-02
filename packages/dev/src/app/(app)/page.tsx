@@ -1,15 +1,15 @@
+import { Tabs } from "@/components/general/Tabs";
+import { SessionProvider as AuthjsSessionProvider } from "next-auth/react";
 import { getPayloadSession } from "payload-authjs";
 import { PayloadSessionProvider } from "payload-authjs/client";
-import { AuthjsProviders } from "../components/auth/authjs/AuthjsProviders";
-import { AuthjsSessionClient } from "../components/auth/authjs/AuthjsSessionClient";
-import { AuthjsSessionServer } from "../components/auth/authjs/AuthjsSessionServer";
-import { PayloadAuthProvider } from "../components/auth/payload/PayloadAuthProvider";
-import { PayloadSessionClientWithUseAuth } from "../components/auth/payload/PayloadSessionClientWithUseAuth";
-import { PayloadSessionClientWithUsePayloadSession } from "../components/auth/payload/PayloadSessionClientWithUsePayloadSession";
-import { PayloadSessionServer } from "../components/auth/payload/PayloadSessionServer";
-import { SignInOrOutButtons } from "../components/auth/SignInOrOutButtons";
-import ExampleList from "../components/ExampleList";
-import { Tabs } from "../components/general/Tabs";
+import { AuthjsSessionClient } from "./_components/auth/authjs/AuthjsSessionClient";
+import { AuthjsSessionServer } from "./_components/auth/authjs/AuthjsSessionServer";
+import { PayloadAuthProvider } from "./_components/auth/payload/PayloadAuthProvider";
+import { PayloadSessionClient } from "./_components/auth/payload/PayloadSessionClient";
+import { PayloadSessionClientWithUseAuth } from "./_components/auth/payload/PayloadSessionClientWithUseAuth";
+import { PayloadSessionServer } from "./_components/auth/payload/PayloadSessionServer";
+import { SignInOrOutButtons } from "./_components/auth/SignInOrOutButtons";
+import ExampleList from "./_components/ExampleList";
 
 const Page = async () => {
   return (
@@ -26,16 +26,8 @@ const Page = async () => {
             label: "Payload [usePayloadSession] (client)",
             content: (
               <PayloadSessionProvider session={await getPayloadSession()}>
-                <PayloadSessionClientWithUsePayloadSession />
+                <PayloadSessionClient />
               </PayloadSessionProvider>
-            ),
-          },
-          {
-            label: "Payload [useAuth] (client)",
-            content: (
-              <PayloadAuthProvider>
-                <PayloadSessionClientWithUseAuth />
-              </PayloadAuthProvider>
             ),
           },
           {
@@ -45,9 +37,17 @@ const Page = async () => {
           {
             label: "Auth.js [useSession] (client)",
             content: (
-              <AuthjsProviders>
+              <AuthjsSessionProvider>
                 <AuthjsSessionClient />
-              </AuthjsProviders>
+              </AuthjsSessionProvider>
+            ),
+          },
+          {
+            label: "Payload [useAuth] (client)",
+            content: (
+              <PayloadAuthProvider>
+                <PayloadSessionClientWithUseAuth />
+              </PayloadAuthProvider>
             ),
           },
         ]}

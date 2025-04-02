@@ -1,28 +1,18 @@
-import { revalidateTag } from "next/cache";
-import { getPayloadSession } from "payload-authjs";
-import Badge from "../../general/Badge";
-import { ExpiresBadge } from "../ExpiresBadge";
+"use client";
 
-export const PayloadSessionServer = async () => {
-  const session = await getPayloadSession();
+import Badge from "@/components/general/Badge";
+import { usePayloadSession } from "payload-authjs/client";
+import { ExpiresBadge } from "../ExpiresBadge";
+import { StatusBadge } from "../StatusBadge";
+
+export const PayloadSessionClient = () => {
+  const { status, session, refresh } = usePayloadSession();
 
   return (
     <>
       <div className="mb-2 flex gap-1">
-        <Badge variant={session ? "green" : "red"}>
-          Status: {session ? "authenticated" : "unauthenticated"}
-        </Badge>
-        <ExpiresBadge
-          title="Session Expires"
-          expiresAt={session?.expires}
-          onClick={async () => {
-            "use server";
-
-            revalidateTag("payload-session");
-
-            return Promise.resolve();
-          }}
-        />
+        <StatusBadge status={status} />
+        <ExpiresBadge title="Session Expires" expiresAt={session?.expires} onClick={refresh} />
         <ExpiresBadge title="Account Expires" expiresAt={session?.user.currentAccount?.expiresAt} />
         <ExpiresBadge
           title="Account Refresh Token Expires"
