@@ -4,10 +4,9 @@ This basic example demonstrates how to use the `payload-authjs` plugin.
 
 ## Configuration
 
-- The authentication configuration is located in `src/auth.config.ts` and the NextAuth instance is created in `src/auth.ts`.
+- The Auth.js configuration is located in `src/auth.config.ts` and the NextAuth instance is created in `src/auth.ts`.
 - In the Payload CMS configuration (`src/payload.config.ts`), we added the `payload-authjs` plugin.
-
-The `middleware.example.ts` file demonstrates how to set up the middleware of Auth.js to be [edge-compatible](https://authjs.dev/guides/edge-compatibility). To use the middleware example, just rename the file to `middleware.ts`.
+- The middleware uses the authConfig from `src/auth.config.ts` to be [edge-compatible](https://authjs.dev/guides/edge-compatibility).
 
 ## Setup
 
