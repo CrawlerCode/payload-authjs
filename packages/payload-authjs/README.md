@@ -27,9 +27,13 @@ Install the plugin using any JavaScript package manager such as PNPM, NPM, or Ya
 pnpm i payload-authjs
 ```
 
-First of all, this plugin only integrates Auth.js into Payload CMS by getting the user session from Auth.js. It doesn't handle the Auth.js stuff. First, you need to setup Auth.js before you can use this plugin. You can follow the [Auth.js guide](https://authjs.dev/getting-started/installation?framework=Next.js).
+### 1. Setup Auth.js
 
-> ⚠ Make sure you define your config in a separate file (e.g. `auth.config.ts`) than where you create the NextAuth instance (e.g. `auth.ts`) to avoid circular dependencies. ⚠
+First of all, this plugin only integrates Auth.js into Payload CMS by getting the user session from Auth.js. It doesn't handle the Auth.js stuff. You need to setup Auth.js before you can use this plugin.
+
+#### 1.1. Create your Auth.js configuration
+
+Define your Auth.js configuration in a file (e.g. `auth.config.ts`):
 
 ```ts
 // auth.config.ts
@@ -43,9 +47,9 @@ export const authConfig: NextAuthConfig = {
 };
 ```
 
-Once you have configured Auth.js, you can integrate it with Payload CMS.
+#### 1.2. Create your Auth.js instance
 
-To do this, wrap your Auth.js configuration with the `withPayload` function before creating the NextAuth instance:
+Next, create your Auth.js instance in a file (e.g. `auth.ts`). But before creating the Auth.js instance, you need to wrap your Auth.js configuration with the `withPayload` function:
 
 ```ts
 // auth.ts
@@ -61,7 +65,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth(
 );
 ```
 
-And add the `authjsPlugin` to your Payload configuration file:
+> ⚠ Make sure you define your config in a separate file than where you create the NextAuth instance to avoid circular dependencies.
+
+#### 1.3. Add Auth.js route handler
+
+Add the Auth.js route handler under `/app/api/auth/[...nextauth]/route.ts`:
+
+```ts
+// app/api/auth/[...nextauth]/route.ts
+import { handlers } from "@/auth";
+
+export const { GET, POST } = handlers;
+```
+
+#### 1.4. Add Auth.js middleware (optional)
+
+Add optional `middleware.ts` to keep the session alive, this will update the session expiry each time it's called.
+
+> ⚠ Unlike what you would normally do in Auth.js, you cannot use the `middleware` of `@/auth` directly. You have to create a new Auth.js instance without the `withPayload` wrapper to be [edge-compatible](https://authjs.dev/guides/edge-compatibility).
+
+```ts
+// middleware.ts
+import NextAuth from "next-auth";
+import { authConfig } from "./auth.config";
+
+export const { auth: middleware } = NextAuth(authConfig);
+
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|admin/login).*)"],
+};
+```
+
+### 2. Add the payload-authjs plugin to Payload CMS
+
+And finally, add the `authjsPlugin` to your Payload configuration file:
 
 ```ts
 // payload.config.ts
