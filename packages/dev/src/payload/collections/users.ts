@@ -16,6 +16,10 @@ const Users: CollectionConfig<"users"> = {
     useAPIKey: true,
     depth: 0,
   },
+  defaultPopulate: {
+    id: true,
+    name: true,
+  },
   fields: [
     {
       name: "name",

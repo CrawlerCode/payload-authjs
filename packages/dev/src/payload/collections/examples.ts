@@ -21,7 +21,6 @@ const Examples: CollectionConfig<"examples"> = {
       name: "author",
       type: "relationship",
       relationTo: "users",
-      maxDepth: 0,
     },
   ],
 };
