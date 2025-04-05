@@ -1,3 +1,4 @@
+import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import path from "path";
 import { buildConfig } from "payload";
@@ -37,11 +38,23 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URI || "",
-    },
-  }),
+  db: (() => {
+    if (process.env.DATABASE_URI?.startsWith("postgres://")) {
+      return postgresAdapter({
+        pool: {
+          connectionString: process.env.DATABASE_URI,
+        },
+      });
+    }
+
+    if (process.env.DATABASE_URI?.startsWith("mongodb://")) {
+      return mongooseAdapter({
+        url: process.env.DATABASE_URI,
+      });
+    }
+
+    throw new Error("DATABASE_URI is not set");
+  })(),
   email: ({ payload }) => ({
     name: "logger",
     defaultFromName: "Payload Auth.js",
