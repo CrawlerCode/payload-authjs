@@ -93,6 +93,11 @@ export function PayloadAdapter({
       ).findByID({
         collection: userCollectionSlug,
         id: userId,
+        select: {
+          accounts: false,
+          sessions: false,
+          verificationTokens: false,
+        },
         disableErrors: true,
       })) as User | null;
 
@@ -111,6 +116,12 @@ export function PayloadAdapter({
               equals: email,
             },
           },
+          select: {
+            accounts: false,
+            sessions: false,
+            verificationTokens: false,
+          },
+          limit: 1,
         })
       ).docs.at(0) as User | undefined;
 
@@ -135,6 +146,12 @@ export function PayloadAdapter({
               equals: providerAccountId,
             },
           },
+          select: {
+            accounts: false,
+            sessions: false,
+            verificationTokens: false,
+          },
+          limit: 1,
         })
       ).docs.at(0) as User | undefined;
 
@@ -149,6 +166,11 @@ export function PayloadAdapter({
         collection: userCollectionSlug,
         id: user.id,
         data: user,
+        select: {
+          accounts: false,
+          sessions: false,
+          verificationTokens: false,
+        },
       })) as unknown as User | undefined;
 
       return payloadUser ? toAdapterUser(payloadUser) : (null as unknown as AdapterUser);
@@ -177,6 +199,10 @@ export function PayloadAdapter({
       ).findByID({
         collection: userCollectionSlug,
         id: account.userId,
+        select: {
+          id: true,
+          accounts: true,
+        },
         disableErrors: true,
       })) as User | null;
       if (!payloadUser) {
@@ -191,6 +217,10 @@ export function PayloadAdapter({
         data: {
           accounts: [...(payloadUser.accounts || []), account],
         } satisfies Partial<User>,
+        select: {
+          id: true,
+          accounts: true,
+        },
       })) as User;
 
       const createdAccount = payloadUser.accounts?.find(
@@ -221,6 +251,11 @@ export function PayloadAdapter({
               equals: providerAccountId,
             },
           },
+          select: {
+            id: true,
+            accounts: true,
+          },
+          limit: 1,
         })
       ).docs.at(0) as User | undefined;
       if (!payloadUser) {
@@ -240,6 +275,9 @@ export function PayloadAdapter({
               !(account.provider === provider && account.providerAccountId === providerAccountId),
           ),
         },
+        select: {
+          id: true,
+        },
       })) as User;
     },
     // #endregion
@@ -255,6 +293,10 @@ export function PayloadAdapter({
       ).findByID({
         collection: userCollectionSlug,
         id: session.userId,
+        select: {
+          id: true,
+          sessions: true,
+        },
         disableErrors: true,
       })) as User | null;
       if (!payloadUser) {
@@ -268,6 +310,10 @@ export function PayloadAdapter({
         id: payloadUser.id,
         data: {
           sessions: [...(payloadUser.sessions || []), session],
+        },
+        select: {
+          id: true,
+          sessions: true,
         },
       })) as User;
 
@@ -295,6 +341,11 @@ export function PayloadAdapter({
               equals: sessionToken,
             },
           },
+          select: {
+            accounts: false,
+            verificationTokens: false,
+          },
+          limit: 1,
         })
       ).docs.at(0) as User | undefined;
       if (!payloadUser) {
@@ -327,6 +378,11 @@ export function PayloadAdapter({
               equals: session.sessionToken,
             },
           },
+          select: {
+            id: true,
+            sessions: true,
+          },
+          limit: 1,
         })
       ).docs.at(0) as User | undefined;
       if (!payloadUser) {
@@ -342,6 +398,10 @@ export function PayloadAdapter({
           sessions: payloadUser.sessions?.map(s =>
             s.sessionToken === session.sessionToken ? session : s,
           ),
+        },
+        select: {
+          id: true,
+          sessions: true,
         },
       })) as User;
 
@@ -364,6 +424,11 @@ export function PayloadAdapter({
               equals: sessionToken,
             },
           },
+          select: {
+            id: true,
+            sessions: true,
+          },
+          limit: 1,
         })
       ).docs.at(0) as User | undefined;
       if (!payloadUser) {
@@ -377,6 +442,9 @@ export function PayloadAdapter({
         id: payloadUser.id,
         data: {
           sessions: payloadUser.sessions?.filter(session => session.sessionToken !== sessionToken),
+        },
+        select: {
+          id: true,
         },
       })) as User;
     },
@@ -395,6 +463,11 @@ export function PayloadAdapter({
               equals: email,
             },
           },
+          select: {
+            id: true,
+            verificationTokens: true,
+          },
+          limit: 1,
         })
       ).docs.at(0) as User | undefined;
 
@@ -417,6 +490,11 @@ export function PayloadAdapter({
           ).create({
             collection: userCollectionSlug,
             data: user,
+            select: {
+              id: true,
+              email: true,
+              verificationTokens: true,
+            },
           })) as User;
         }
       } else {
@@ -427,6 +505,11 @@ export function PayloadAdapter({
           id: payloadUser.id,
           data: {
             verificationTokens: [...(payloadUser.verificationTokens || []), token],
+          },
+          select: {
+            id: true,
+            email: true,
+            verificationTokens: true,
           },
         })) as User;
       }
@@ -456,6 +539,11 @@ export function PayloadAdapter({
               equals: token,
             },
           },
+          select: {
+            id: true,
+            verificationTokens: true,
+          },
+          limit: 1,
         })
       ).docs.at(0) as User | undefined;
       if (!payloadUser) {
@@ -471,6 +559,10 @@ export function PayloadAdapter({
         id: payloadUser.id,
         data: {
           verificationTokens: payloadUser.verificationTokens?.filter(t => t.token !== token),
+        },
+        select: {
+          id: true,
+          email: true,
         },
       })) as User;
 
