@@ -4,17 +4,23 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
-      "inputs": ["default", "^default"],
+      "executor": "@nx/js:swc",
       "options": {
         "main": "packages/payload-authjs/src/index.ts",
         "tsConfig": "packages/payload-authjs/tsconfig.lib.json",
         "outputPath": "packages/payload-authjs/dist",
         "rootDir": "packages/payload-authjs/src",
-        "generatePackageJson": false
+        "stripLeadingPaths": true
       },
-      "cache": true,
-      "dependsOn": ["^build"]
+      "cache": true
+    },
+    "yalc:publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/payload-authjs",
+        "command": "pnpx yalc publish"
+      },
+      "dependsOn": ["build"]
     }
   }
 }

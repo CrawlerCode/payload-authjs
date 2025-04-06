@@ -52,9 +52,7 @@ interface Props<TSlug extends CollectionSlug> {
 /**
  * PayloadSessionProvider that provides the session to the context provider
  */
-export const PayloadSessionProvider: React.FC<Props<CollectionSlug>> = <
-  TSlug extends CollectionSlug = "users",
->({
+export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
   userCollectionSlug = "users" as TSlug,
   session = null,
   children,

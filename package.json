@@ -13,6 +13,8 @@
     "@nx/next": "20.7.1",
     "@nx/react": "20.7.1",
     "@payloadcms/eslint-config": "3.28.0",
+    "@swc/cli": "^0.6.0",
+    "@swc/core": "^1.11.16",
     "eslint": "^9.24.0",
     "nx": "20.7.1",
     "prettier": "^3.5.3",
