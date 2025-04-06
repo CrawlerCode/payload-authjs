@@ -38,7 +38,7 @@
         "docs": {
           "changelog": true
         },
-        "examples": {
+        "example": {
           "changelog": {
             "title": "📓 Examples"
           }
