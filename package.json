@@ -8,22 +8,22 @@
     "dev": "nx run dev:dev"
   },
   "devDependencies": {
-    "@nx/eslint": "20.6.4",
-    "@nx/js": "20.6.4",
-    "@nx/next": "20.6.4",
-    "@nx/react": "20.6.4",
+    "@nx/eslint": "20.7.1",
+    "@nx/js": "20.7.1",
+    "@nx/next": "20.7.1",
+    "@nx/react": "20.7.1",
     "@payloadcms/eslint-config": "3.28.0",
-    "eslint": "^9.23.0",
-    "nx": "20.6.4",
+    "eslint": "^9.24.0",
+    "nx": "20.7.1",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "nx": {},
   "workspaces": [
     "packages/*",
     "examples/*"
   ],
-  "packageManager": "pnpm@10.6.5",
+  "packageManager": "pnpm@10.7.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",

@@ -2,5 +2,12 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "examples/basic/src",
   "projectType": "application",
-  "targets": {}
+  "targets": {
+    "dev": {
+      "dependsOn": ["^build"]
+    },
+    "dev:turbo": {
+      "dependsOn": ["^build"]
+    }
+  }
 }
