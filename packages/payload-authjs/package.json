@@ -1,6 +1,6 @@
 {
   "name": "payload-authjs",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "type": "module",
   "description": "A Payload CMS 3 plugin for Auth.js 5",
   "repository": "git@github.com:CrawlerCode/payload-authjs.git",

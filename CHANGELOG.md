@@ -1,3 +1,48 @@
+## 0.8.0 (2025-04-06)
+
+### 🚀 Features
+
+- Add custom account row label component ([89ce1a7](https://github.com/CrawlerCode/payload-authjs/commit/89ce1a7))
+- Add support for other auth strategies ([2c94c40](https://github.com/CrawlerCode/payload-authjs/commit/2c94c40))
+- **getPayloadSession:** Cache getPayloadSession function ([ff3b25b](https://github.com/CrawlerCode/payload-authjs/commit/ff3b25b))
+
+### 🩹 Fixes
+
+- Merge remaining properties for fields with subfield ([cfa143d](https://github.com/CrawlerCode/payload-authjs/commit/cfa143d))
+- Execute afterLogout hooks at logout endpoint ([#16](https://github.com/CrawlerCode/payload-authjs/pull/16))
+- Extend PayloadSession with collection and strategy ([4ca2cdf](https://github.com/CrawlerCode/payload-authjs/commit/4ca2cdf))
+- Fix mergeFields function for tabs fields ([bdb393c](https://github.com/CrawlerCode/payload-authjs/commit/bdb393c))
+- Refresh authjs session cookie at payload "refresh-token" endpoint ([66e50fc](https://github.com/CrawlerCode/payload-authjs/commit/66e50fc))
+- Revalidate payload-session tag on logout and refresh ([25d4b8d](https://github.com/CrawlerCode/payload-authjs/commit/25d4b8d))
+- Move from tsc to swc to be compatible with turbopack ([#18](https://github.com/CrawlerCode/payload-authjs/pull/18))
+- **AuthjsAuthStrategy:** Respect auth.depth option of users collection ([c06262b](https://github.com/CrawlerCode/payload-authjs/commit/c06262b))
+- **PayloadSessionProvider:** Abort fetch session on unmount ([0a5e859](https://github.com/CrawlerCode/payload-authjs/commit/0a5e859))
+- **getPayloadSession:** Preferably extract strategy from user._strategy & improved types ([4b66142](https://github.com/CrawlerCode/payload-authjs/commit/4b66142))
+
+### 🔥 Performance
+
+- **PayloadAdapter:** Only retrieve necessary fields ([6beebd2](https://github.com/CrawlerCode/payload-authjs/commit/6beebd2))
+
+### 📖 Documentation
+
+- Add missing import for example ([e3caebc](https://github.com/CrawlerCode/payload-authjs/commit/e3caebc))
+- Improve setup section ([4c54dfd](https://github.com/CrawlerCode/payload-authjs/commit/4c54dfd))
+
+### 🏡 Chore
+
+- **deps:** Update npm dependencies ([d269d92](https://github.com/CrawlerCode/payload-authjs/commit/d269d92))
+- **deps:** Update npm dependencies ([d98f3aa](https://github.com/CrawlerCode/payload-authjs/commit/d98f3aa))
+- **deps:** Update npm dependencies ([7e6a164](https://github.com/CrawlerCode/payload-authjs/commit/7e6a164))
+- **deps:** Set minimal required payload version to 3.16.0 (because export of headersWithCors) ([b76df1a](https://github.com/CrawlerCode/payload-authjs/commit/b76df1a))
+- **dev:** Improve edge compatibility and some other small changes ([d5e5d9e](https://github.com/CrawlerCode/payload-authjs/commit/d5e5d9e))
+- **dev:** Add token rotation for keycloak provider & sync account expires date with session expires ([27ee17b](https://github.com/CrawlerCode/payload-authjs/commit/27ee17b))
+- **dev:** Add mongoose adapter ([b6c4e23](https://github.com/CrawlerCode/payload-authjs/commit/b6c4e23))
+- **nx:** Add examples type to changelog ([5e9b181](https://github.com/CrawlerCode/payload-authjs/commit/5e9b181))
+
+### 📓 Examples
+
+- **multiple-auth-collections:** Add example for using multiple authentication collections ([b0ff26a](https://github.com/CrawlerCode/payload-authjs/commit/b0ff26a))
+
 ## 0.7.1 (2025-02-09)
 
 ### 🩹 Fixes
