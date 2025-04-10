@@ -5,14 +5,12 @@ export const githubProvider = github({
   /**
    * Add additional fields to the user on first sign in
    */
-  profile(profile) {
+  async profile(profile, tokens) {
     return {
-      // Default fields (@see https://github.com/nextauthjs/next-auth/blob/main/packages/core/src/providers/github.ts#L176)
-      id: profile.id.toString(),
-      name: profile.name ?? profile.login,
-      email: profile.email,
-      image: profile.avatar_url,
+      // Default fields from github provider
+      ...(await github({}).profile!(profile, tokens)),
       // Custom fields
+      username: profile.login,
       additionalUserDatabaseField: `Create by github provider profile callback at ${new Date().toISOString()}`,
     };
   },

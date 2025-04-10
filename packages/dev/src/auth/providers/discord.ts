@@ -10,6 +10,7 @@ export const discordProvider = discord({
       // Default fields from discord provider
       ...(await discord({}).profile!(profile, tokens)),
       // Custom fields
+      username: profile.username,
       additionalUserDatabaseField: `Create by discord provider profile callback at ${new Date().toISOString()}`,
     };
   },

@@ -13,6 +13,7 @@ export const keycloakProvider = keycloak({
       email: profile.email,
       image: profile.picture,
       // Custom fields
+      username: profile.preferred_username,
       locale: profile.locale,
       additionalUserDatabaseField: `Create by keycloak provider profile callback at ${new Date().toISOString()}`,
     };

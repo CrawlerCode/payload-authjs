@@ -492,7 +492,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth(
         }
         await adapter.updateUser!({
           id: user.id,
-          name: profile.name ?? (profile.login as string | undefined),
+          name:
+            (profile as unknown as GitHubProfile).name ??
+            (profile as unknown as GitHubProfile).login,
+          email: profile.email ?? undefined,
+          image: (profile as unknown as GitHubProfile).avatar_url,
         });
       },
     },

@@ -65,5 +65,10 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [authjsPlugin({ authjsConfig: nodeAuthConfig, enableLocalStrategy: true })],
+  plugins: [
+    authjsPlugin({
+      authjsConfig: nodeAuthConfig,
+      enableLocalStrategy: true,
+    }),
+  ],
 });

@@ -15,6 +15,11 @@ const Users: CollectionConfig<"users"> = {
   auth: {
     useAPIKey: true,
     depth: 0,
+    loginWithUsername: {
+      allowEmailLogin: true,
+      requireEmail: true,
+      requireUsername: false,
+    },
   },
   defaultPopulate: {
     id: true,
@@ -24,7 +29,7 @@ const Users: CollectionConfig<"users"> = {
     {
       name: "name",
       type: "text",
-      label: "Username", // Add label to name field
+      label: "Display-Name", // Add label to name field
     },
     {
       name: "id",
