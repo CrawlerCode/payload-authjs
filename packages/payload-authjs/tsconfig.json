@@ -3,8 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "moduleResolution": "bundler",
-    "jsx": "preserve",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "jsx": "preserve"
   },
   "files": [],
   "include": [],

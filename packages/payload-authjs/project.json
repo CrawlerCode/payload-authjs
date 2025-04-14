@@ -6,11 +6,18 @@
     "build": {
       "executor": "@nx/js:swc",
       "options": {
-        "main": "packages/payload-authjs/src/index.ts",
-        "tsConfig": "packages/payload-authjs/tsconfig.lib.json",
-        "outputPath": "packages/payload-authjs/dist",
         "rootDir": "packages/payload-authjs/src",
-        "stripLeadingPaths": true
+        "outputPath": "packages/payload-authjs/dist",
+        "tsConfig": "packages/payload-authjs/tsconfig.lib.json",
+        "stripLeadingPaths": true,
+        "main": "packages/payload-authjs/src/index.ts",
+        "assets": [
+          {
+            "input": "packages/payload-authjs/src",
+            "glob": "**/*.css",
+            "output": "."
+          }
+        ]
       },
       "cache": true
     },

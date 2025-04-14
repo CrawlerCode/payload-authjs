@@ -16,5 +16,5 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["${configDir}/dist", "${configDir}/tmp"]
 }

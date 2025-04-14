@@ -3,7 +3,8 @@
   "jsc": {
     "target": "esnext",
     "parser": {
-      "syntax": "typescript"
+      "syntax": "typescript",
+      "tsx": true
     },
     "transform": {
       "react": {

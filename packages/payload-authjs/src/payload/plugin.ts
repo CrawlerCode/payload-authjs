@@ -1,6 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 import type { CollectionSlug, Plugin } from "payload";
-import type { SignInWithAuthjsButtonProps } from "../components/SignInWithAuthjsButton";
+import { getProviderMetadata } from "../authjs/utils/config";
+import type { SignInButtonOptions, SignInButtonProps } from "../components/SignInButton";
 import { generateUsersCollection } from "./collection";
 
 export interface AuthjsPluginConfig {
@@ -44,7 +45,7 @@ export interface AuthjsPluginConfig {
      * Customize the SignInButton component
      * Or set to `false` to disable the SignInButton component
      */
-    SignInButton?: Omit<SignInWithAuthjsButtonProps, "authjsBasePath"> | false;
+    SignInButton?: SignInButtonOptions | false;
   };
 }
 
@@ -69,19 +70,33 @@ export const authjsPlugin =
         ...config.admin?.components,
         afterLogin: [
           ...(config.admin?.components?.afterLogin ?? []),
-          // Add the SignInWithAuthjsButton component to the admin login page (only if the user collection is the admin user collection)
-          ...(incomingConfig.admin?.user === (pluginOptions.userCollectionSlug ?? "users") &&
-          pluginOptions.components?.SignInButton !== false
-            ? [
-                {
-                  path: "payload-authjs/components#SignInWithAuthjsButton",
-                  serverProps: {
-                    ...pluginOptions.components?.SignInButton,
-                    authjsBasePath: pluginOptions.authjsConfig.basePath,
-                  },
-                },
-              ]
-            : []),
+          // Add the SignInButton component to the admin login page (only if the user collection is the admin user collection)
+          ...(() => {
+            if (incomingConfig.admin?.user !== (pluginOptions.userCollectionSlug ?? "users")) {
+              return [];
+            }
+            if (pluginOptions.components?.SignInButton === false) {
+              return [];
+            }
+            const signInButtonOptions = pluginOptions.components?.SignInButton;
+            return pluginOptions.authjsConfig.providers
+              .map(provider => getProviderMetadata(provider))
+              .filter(provider => ["oauth", "oidc"].includes(provider.type))
+              .map(provider => ({
+                path: "payload-authjs/components#SignInButton",
+                clientProps: {
+                  icon:
+                    typeof signInButtonOptions?.icon === "function"
+                      ? signInButtonOptions.icon(provider)
+                      : signInButtonOptions?.icon,
+                  text:
+                    typeof signInButtonOptions?.text === "function"
+                      ? signInButtonOptions.text(provider)
+                      : signInButtonOptions?.text,
+                  provider,
+                } satisfies SignInButtonProps,
+              }));
+          })(),
         ],
       },
     };

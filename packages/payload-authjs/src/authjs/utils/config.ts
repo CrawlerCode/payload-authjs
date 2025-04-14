@@ -1,4 +1,19 @@
 import type { NextAuthConfig } from "next-auth";
+import type { Provider } from "next-auth/providers";
+
+/**
+ * Get provider metadata
+ */
+export const getProviderMetadata = (provider: Provider) => {
+  const providerOptions = typeof provider === "function" ? provider() : provider;
+
+  return {
+    type: providerOptions.type,
+    id: (providerOptions.options?.id as string | undefined) ?? providerOptions.id,
+    name: (providerOptions.options?.name as string | undefined) ?? providerOptions.name,
+    icon: `https://authjs.dev/img/providers/${providerOptions.id}.svg`,
+  };
+};
 
 /**
  * Check if an email provider is available in the authjs config

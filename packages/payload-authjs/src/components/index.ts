@@ -1,2 +1,2 @@
 export { AccountRowLabel } from "./AccountRowLabel";
-export { SignInWithAuthjsButton } from "./SignInWithAuthjsButton";
+export { SignInButton, SignInButton as SignInWithAuthjsButton } from "./SignInButton";
