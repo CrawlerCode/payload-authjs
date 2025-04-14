@@ -1,3 +1,15 @@
+## 0.8.1 (2025-04-14)
+
+### 🩹 Fixes
+
+- Change the behavior of the SignIn button for login with provider ([#24](https://github.com/CrawlerCode/payload-authjs/pull/24))
+- Remove email field duplication if enableLocalStrategy ([#29](https://github.com/CrawlerCode/payload-authjs/pull/29))
+
+### 🏡 Chore
+
+- **dev:** Allow login with username for local strategy ([b8c24b5](https://github.com/CrawlerCode/payload-authjs/commit/b8c24b5))
+- **nx:** Rename examples to example ([a0d1ab9](https://github.com/CrawlerCode/payload-authjs/commit/a0d1ab9))
+
 ## 0.8.0 (2025-04-06)
 
 ### 🚀 Features
