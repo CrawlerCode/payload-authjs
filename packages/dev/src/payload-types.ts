@@ -131,7 +131,6 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
-  email: string;
   emailVerified?: string | null;
   name?: string | null;
   image?: string | null;
@@ -170,6 +169,7 @@ export interface User {
   enableAPIKey?: boolean | null;
   apiKey?: string | null;
   apiKeyIndex?: string | null;
+  email: string;
   username?: string | null;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -253,7 +253,6 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   id?: T;
-  email?: T;
   emailVerified?: T;
   name?: T;
   image?: T;
@@ -294,6 +293,7 @@ export interface UsersSelect<T extends boolean = true> {
   enableAPIKey?: T;
   apiKey?: T;
   apiKeyIndex?: T;
+  email?: T;
   username?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;

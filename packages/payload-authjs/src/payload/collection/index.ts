@@ -50,7 +50,7 @@ export const generateUsersCollection = (
         tabs: [
           {
             label: "General",
-            fields: generalFields,
+            fields: generalFields(pluginOptions),
           },
           {
             label: "Accounts",
