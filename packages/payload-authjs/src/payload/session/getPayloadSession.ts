@@ -39,8 +39,11 @@ export const getPayloadSession = cache(
     const serverUrl = await getServerUrl();
 
     // Fetch the session from the server
+    const requestHeaders = await headers();
     const response = await fetch(`${serverUrl}/api/${userCollectionSlug}/me`, {
-      headers: await headers(),
+      headers: new Headers({
+        cookie: requestHeaders.get("cookie") ?? "",
+      }),
       cache: "force-cache",
       next: {
         tags: ["payload-session"],
