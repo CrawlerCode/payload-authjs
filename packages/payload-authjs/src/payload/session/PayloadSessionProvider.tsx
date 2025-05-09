@@ -2,6 +2,7 @@
 
 import type { CollectionSlug, DataFromCollectionSlug } from "payload";
 import { createContext, type ReactNode, useCallback, useEffect, useState } from "react";
+import type { AUTHJS_STRATEGY_NAME } from "../AuthjsAuthStrategy";
 import type { PayloadSession } from "./getPayloadSession";
 
 export interface SessionContext<TSlug extends CollectionSlug> {
@@ -74,7 +75,12 @@ export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
         signal,
       });
       const result: {
-        user: DataFromCollectionSlug<TSlug> | null;
+        user:
+          | ({
+              collection?: CollectionSlug;
+              _strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
+            } & DataFromCollectionSlug<TSlug>)
+          | null;
         exp: number;
         collection?: CollectionSlug;
         /**
@@ -137,7 +143,12 @@ export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
       method: "POST",
     });
     const result: {
-      user: DataFromCollectionSlug<TSlug> | null;
+      user:
+        | ({
+            collection?: CollectionSlug;
+            _strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
+          } & DataFromCollectionSlug<TSlug>)
+        | null;
       exp: number /**
        * @deprecated Use user._strategy instead
        *

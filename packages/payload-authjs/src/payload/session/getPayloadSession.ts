@@ -50,7 +50,12 @@ export const getPayloadSession = cache(
       },
     });
     const result: {
-      user: DataFromCollectionSlug<TSlug> | null;
+      user:
+        | ({
+            collection?: CollectionSlug;
+            _strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
+          } & DataFromCollectionSlug<TSlug>)
+        | null;
       exp: number;
       collection?: CollectionSlug;
       /**
