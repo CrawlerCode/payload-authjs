@@ -1,3 +1,18 @@
+## 0.8.2 (2025-05-11)
+
+### 🩹 Fixes
+
+- **getPayloadSession:** Don't pass readonly headers object directly to fetch function ([#33](https://github.com/CrawlerCode/payload-authjs/pull/33))
+
+### 📖 Documentation
+
+- Add examples section to README ([507385e](https://github.com/CrawlerCode/payload-authjs/commit/507385e))
+
+### 🏡 Chore
+
+- Improve payload api types for /me and /refresh-token endpoints ([9bf9289](https://github.com/CrawlerCode/payload-authjs/commit/9bf9289))
+- **deps:** Update npm dependencies ([1f30898](https://github.com/CrawlerCode/payload-authjs/commit/1f30898))
+
 ## 0.8.1 (2025-04-14)
 
 ### 🩹 Fixes
