@@ -503,3 +503,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth(
   }),
 );
 ```
+
+# 📓 Examples
+
+- [Basic](https://github.com/CrawlerCode/payload-authjs/tree/main/examples/basic) - Basic example with GitHub provider
+- [With Payload local-strategy](https://github.com/CrawlerCode/payload-authjs/tree/main/examples/with-payload-local-strategy) - Example with GitHub provider and Payload [Local JWT Strategy](https://payloadcms.com/docs/authentication/jwt)
+- [Multiple Auth Collections](https://github.com/CrawlerCode/payload-authjs/tree/main/examples/multiple-auth-collections) - Example with multiple auth collections (`customers` for general users and `admins` for payload admin panel)
