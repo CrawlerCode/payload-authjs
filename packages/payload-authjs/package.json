@@ -3,8 +3,16 @@
   "version": "0.8.2",
   "type": "module",
   "description": "A Payload CMS 3 plugin for Auth.js 5",
-  "repository": "git@github.com:CrawlerCode/payload-authjs.git",
-  "author": "crawlercode@outlook.de",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CrawlerCode/payload-authjs.git",
+    "directory": "packages/payload-authjs"
+  },
+  "author": {
+    "name": "CrawlerCode",
+    "email": "crawlercode@outlook.de",
+    "url": "https://github.com/CrawlerCode"
+  },
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
