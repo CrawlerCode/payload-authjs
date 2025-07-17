@@ -8,16 +8,16 @@
     "dev": "nx run dev:dev"
   },
   "devDependencies": {
-    "@nx/eslint": "21.0.3",
-    "@nx/js": "21.0.3",
-    "@nx/next": "21.0.3",
-    "@nx/react": "21.0.3",
+    "@nx/eslint": "21.2.4",
+    "@nx/js": "21.2.4",
+    "@nx/next": "21.2.4",
+    "@nx/react": "21.2.4",
     "@payloadcms/eslint-config": "3.28.0",
-    "@swc/cli": "^0.7.5",
-    "@swc/core": "^1.11.24",
-    "eslint": "^9.26.0",
-    "nx": "21.0.3",
-    "prettier": "^3.5.3",
+    "@swc/cli": "^0.7.8",
+    "@swc/core": "^1.12.14",
+    "eslint": "^9.31.0",
+    "nx": "21.2.4",
+    "prettier": "^3.6.2",
     "typescript": "^5.8.3"
   },
   "nx": {},
@@ -25,15 +25,5 @@
     "packages/*",
     "examples/*"
   ],
-  "packageManager": "pnpm@10.10.0",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "@swc/core",
-      "@tailwindcss/oxide",
-      "esbuild",
-      "nx",
-      "sharp"
-    ]
-  }
+  "packageManager": "pnpm@10.13.1"
 }

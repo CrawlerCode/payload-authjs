@@ -1,3 +1,10 @@
 packages:
-  - "./packages/*"
-  - "./examples/*"
+  - ./packages/*
+  - ./examples/*
+
+onlyBuiltDependencies:
+  - '@swc/core'
+  - '@tailwindcss/oxide'
+  - esbuild
+  - nx
+  - sharp

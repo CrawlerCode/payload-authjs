@@ -20,6 +20,7 @@ const Users: CollectionConfig<"users"> = {
       requireEmail: true,
       requireUsername: false,
     },
+    useSessions: false, // TODO: Database sessions currently not working
   },
   defaultPopulate: {
     id: true,
