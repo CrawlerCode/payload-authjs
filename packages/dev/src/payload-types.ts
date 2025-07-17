@@ -140,12 +140,12 @@ export interface User {
   roles?: string[];
   accounts?:
     | {
-        id?: string | null;
         provider: string;
         providerAccountId: string;
         type: string;
         additionalAccountDatabaseField: string;
         createdAt: string;
+        id?: string | null;
       }[]
     | null;
   currentAccount?: {
@@ -263,12 +263,12 @@ export interface UsersSelect<T extends boolean = true> {
   accounts?:
     | T
     | {
-        id?: T;
         provider?: T;
         providerAccountId?: T;
         type?: T;
         additionalAccountDatabaseField?: T;
         createdAt?: T;
+        id?: T;
       };
   currentAccount?:
     | T

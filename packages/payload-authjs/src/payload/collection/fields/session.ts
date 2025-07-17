@@ -10,13 +10,6 @@ export const sessionsField: Field = {
   type: "array",
   fields: [
     {
-      name: "id",
-      type: "text",
-      admin: {
-        disabled: true,
-      },
-    },
-    {
       type: "row",
       fields: [
         { name: "sessionToken", type: "text", required: true, index: true },

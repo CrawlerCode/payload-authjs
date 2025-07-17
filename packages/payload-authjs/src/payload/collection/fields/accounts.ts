@@ -10,13 +10,6 @@ export const accountsField: Field = {
   type: "array",
   fields: [
     {
-      name: "id",
-      type: "text",
-      admin: {
-        disabled: true,
-      },
-    },
-    {
       type: "row",
       fields: [
         { name: "provider", type: "text", required: true },

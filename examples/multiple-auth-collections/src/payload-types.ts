@@ -149,10 +149,10 @@ export interface Customer {
   customerNumber: string;
   accounts?:
     | {
-        id?: string | null;
         provider: string;
         providerAccountId: string;
         type: string;
+        id?: string | null;
       }[]
     | null;
   updatedAt: string;
@@ -170,10 +170,10 @@ export interface Admin {
   image?: string | null;
   accounts?:
     | {
-        id?: string | null;
         provider: string;
         providerAccountId: string;
         type: string;
+        id?: string | null;
       }[]
     | null;
   updatedAt: string;
@@ -260,10 +260,10 @@ export interface CustomersSelect<T extends boolean = true> {
   accounts?:
     | T
     | {
-        id?: T;
         provider?: T;
         providerAccountId?: T;
         type?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -281,10 +281,10 @@ export interface AdminsSelect<T extends boolean = true> {
   accounts?:
     | T
     | {
-        id?: T;
         provider?: T;
         providerAccountId?: T;
         type?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

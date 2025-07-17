@@ -123,10 +123,10 @@ export interface User {
   image?: string | null;
   accounts?:
     | {
-        id?: string | null;
         provider: string;
         providerAccountId: string;
         type: string;
+        id?: string | null;
       }[]
     | null;
   updatedAt: string;
@@ -197,10 +197,10 @@ export interface UsersSelect<T extends boolean = true> {
   accounts?:
     | T
     | {
-        id?: T;
         provider?: T;
         providerAccountId?: T;
         type?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;
