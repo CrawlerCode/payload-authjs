@@ -1,3 +1,14 @@
+## 0.8.3 (2025-07-29)
+
+### 🩹 Fixes
+
+- Remove duplicate custom array id fields ([6f0ab0d](https://github.com/CrawlerCode/payload-authjs/commit/6f0ab0d))
+
+### 🏡 Chore
+
+- Refactor repository and author fields in package.json for better structure ([9b4d548](https://github.com/CrawlerCode/payload-authjs/commit/9b4d548))
+- **deps:** Update npm dependencies ([5d1d6a3](https://github.com/CrawlerCode/payload-authjs/commit/5d1d6a3))
+
 ## 0.8.2 (2025-05-11)
 
 ### 🩹 Fixes
