@@ -4,12 +4,12 @@ import { AuthjsAuthStrategy } from "../AuthjsAuthStrategy";
 import type { AuthjsPluginConfig } from "../plugin";
 import { mergeFields } from "../utils/mergeFields";
 import { defaultAccess } from "./access";
-import { logoutEndpoint } from "./endpoints/logout";
 import { refreshEndpoint } from "./endpoints/refresh";
 import { accountsField } from "./fields/accounts";
 import { generalFields } from "./fields/general";
 import { sessionsField } from "./fields/session";
 import { verificationTokensField } from "./fields/verificationTokens";
+import { logoutHook } from "./hooks/logout";
 import { meHook } from "./hooks/me";
 import { refreshHook } from "./hooks/refresh";
 
@@ -103,13 +103,12 @@ export const generateUsersCollection = (
     ...collection.hooks,
     me: [...(collection.hooks?.me || []), meHook(collection, pluginOptions)],
     refresh: [...(collection.hooks?.refresh || []), refreshHook(collection, pluginOptions)],
+    afterLogout: [...(collection.hooks?.afterLogout || []), logoutHook(pluginOptions)],
   };
 
   // Add custom endpoints to users collection
   collection.endpoints = [
     ...(collection.endpoints || []),
-    // Add the logout endpoint
-    logoutEndpoint(pluginOptions),
     // Add the refresh endpoint
     refreshEndpoint(pluginOptions),
   ];
