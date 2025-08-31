@@ -1,21 +1,15 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { ExpiresBadge } from "../ExpiresBadge";
-import { StatusBadge } from "../StatusBadge";
+import { SessionOverview } from "../SessionOverview";
 
+/**
+ * Get the Auth.js session using useSession hook on the client
+ *
+ * @see https://authjs.dev/getting-started/session-management/get-session?framework=Next.js%2520%28Client%29
+ */
 export const AuthjsSessionClient = () => {
   const { status, data: session } = useSession();
 
-  return (
-    <>
-      <div className="mb-2 flex gap-1">
-        <StatusBadge status={status} />
-        <ExpiresBadge title="Session Expires" expiresAt={session?.expires} />
-      </div>
-      <pre className="overflow-auto rounded-lg bg-gray-100 p-4">
-        {JSON.stringify(session?.user ?? null, null, 2)}
-      </pre>
-    </>
-  );
+  return <SessionOverview status={status} user={session?.user} expires={session?.expires} />;
 };

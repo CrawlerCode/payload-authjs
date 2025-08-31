@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --primary: oklch(0.546 0.245 262.881);
+  --primary-foreground: oklch(0.985 0 0);
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;

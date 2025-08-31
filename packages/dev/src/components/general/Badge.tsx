@@ -10,7 +10,7 @@ const Badge = ({ variant, children, className, ...props }: Props) => {
   return (
     <span
       className={clsx(
-        "me-2 rounded-sm px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow]",
         {
           "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300": variant === "dark",
           "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300": variant === "blue",

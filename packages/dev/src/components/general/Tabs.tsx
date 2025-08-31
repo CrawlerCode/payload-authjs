@@ -5,6 +5,7 @@ import { type ReactNode, useState } from "react";
 type Props = {
   tabs: {
     label: string;
+    icon?: ReactNode;
     content: ReactNode;
   }[];
 };
@@ -17,7 +18,7 @@ export const Tabs = ({ tabs }: Props) => {
       <div className="border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
         <ul className="-mb-px flex flex-wrap">
           {tabs.map((tab, index) => (
-            <li key={index} className="me-2">
+            <li key={index}>
               <button
                 type="button"
                 onClick={() => setActiveTab(index)}
@@ -28,7 +29,10 @@ export const Tabs = ({ tabs }: Props) => {
                 }`}
                 aria-current={activeTab === index ? "page" : undefined}
               >
-                {tab.label}
+                {!!tab.icon && (
+                  <span className="mr-2 inline-block size-4 align-middle">{tab.icon}</span>
+                )}
+                <span className="align-middle">{tab.label}</span>
               </button>
             </li>
           ))}

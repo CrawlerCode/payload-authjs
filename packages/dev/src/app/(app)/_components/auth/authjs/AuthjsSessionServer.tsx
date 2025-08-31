@@ -1,19 +1,13 @@
 import { auth } from "@/auth";
-import { ExpiresBadge } from "../ExpiresBadge";
-import { StatusBadge } from "../StatusBadge";
+import { SessionOverview } from "../SessionOverview";
 
+/**
+ * Get the Auth.js session using auth function on the server
+ *
+ * @see https://authjs.dev/getting-started/session-management/get-session?framework=Next.js
+ */
 export const AuthjsSessionServer = async () => {
   const session = await auth();
 
-  return (
-    <>
-      <div className="mb-2 flex gap-1">
-        <StatusBadge status={session ? "authenticated" : "unauthenticated"} />
-        <ExpiresBadge title="Session Expires" expiresAt={session?.expires} />
-      </div>
-      <pre className="overflow-auto rounded-lg bg-gray-100 p-4">
-        {JSON.stringify(session?.user ?? null, null, 2)}
-      </pre>
-    </>
-  );
+  return <SessionOverview user={session?.user} expires={session?.expires} />;
 };
