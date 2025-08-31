@@ -1,20 +1,14 @@
-"use client";
+import { signOut } from "@/auth.customers";
 
 export function SignOutButton() {
   return (
-    <button
-      type="button"
-      onClick={async () => {
-        await fetch(`/api/customers/logout`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        window.location.reload();
+    <form
+      action={async () => {
+        "use server";
+        await signOut();
       }}
     >
-      Sign Out (Customer)
-    </button>
+      <button type="submit">Sign Out (Customer)</button>
+    </form>
   );
 }
