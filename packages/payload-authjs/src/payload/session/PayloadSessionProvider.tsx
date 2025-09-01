@@ -94,22 +94,25 @@ export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
       // Set loading to false
       setIsLoading(false);
 
-      // If the response is not ok or the user is not present, return null
-      if (!response.ok || !result.user) {
+      // If the response is ok
+      if (response.ok && result.user) {
+        // Update the local session
+        const localSession = {
+          user: result.user,
+          expires: new Date(result.exp * 1000).toISOString(),
+          collection: result.collection,
+          strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
+        };
+        setLocalSession(localSession);
+
+        // Return the session
+        return localSession;
+      } else {
+        // Reset the session
+        setLocalSession(null);
+
         return null;
       }
-
-      // Update the local session
-      const localSession = {
-        user: result.user,
-        expires: new Date(result.exp * 1000).toISOString(),
-        collection: result.collection,
-        strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
-      };
-      setLocalSession(localSession);
-
-      // Return the session
-      return localSession;
     },
     [userCollectionSlug],
   );
@@ -157,22 +160,24 @@ export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
       strategy?: string;
     } = await response.json();
 
-    // If the response is not ok or the user is not present, return null
-    if (!response.ok || !result.user) {
+    if (response.ok && result.user) {
+      // Update the local session
+      const localSession = {
+        user: result.user,
+        expires: new Date(result.exp * 1000).toISOString(),
+        collection: result.user.collection ?? userCollectionSlug,
+        strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
+      };
+      setLocalSession(localSession);
+
+      // Return the session
+      return localSession;
+    } else {
+      // Reset the session
+      setLocalSession(null);
+
       return null;
     }
-
-    // Update the local session
-    const localSession = {
-      user: result.user,
-      expires: new Date(result.exp * 1000).toISOString(),
-      collection: result.user.collection ?? userCollectionSlug,
-      strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
-    };
-    setLocalSession(localSession);
-
-    // Return the session
-    return localSession;
   };
 
   return (
