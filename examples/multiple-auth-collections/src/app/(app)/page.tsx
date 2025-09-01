@@ -1,6 +1,6 @@
 import { auth } from "@/auth.customers";
 import { getPayloadSession } from "payload-authjs";
-import { SignInButton } from "./_components/SignInButton";
+import { SignInButtonClient } from "./_components/SignInButtonClient";
 import { SignOutButton } from "./_components/SignOutButton";
 
 const Page = async () => {
@@ -9,7 +9,7 @@ const Page = async () => {
 
   return (
     <main>
-      {payloadSession ? <SignOutButton /> : <SignInButton />}
+      {payloadSession ? <SignOutButton /> : <SignInButtonClient />}
       <br />
       <h3>Auth.js Session (Customer)</h3>
       <pre>{JSON.stringify(authjsSession, null, 2)}</pre>
