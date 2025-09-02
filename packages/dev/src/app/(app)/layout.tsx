@@ -1,7 +1,6 @@
-import React from "react";
 import "./globals.css";
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Layout = ({ children }: LayoutProps<"/">) => {
   return (
     <html lang="en">
       <body>{children}</body>
