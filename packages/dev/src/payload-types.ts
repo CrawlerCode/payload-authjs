@@ -158,10 +158,10 @@ export interface User {
   };
   verificationTokens?:
     | {
-        id?: string | null;
         token: string;
         expires: string;
         createdAt: string;
+        id?: string | null;
       }[]
     | null;
   updatedAt: string;
@@ -283,10 +283,10 @@ export interface UsersSelect<T extends boolean = true> {
   verificationTokens?:
     | T
     | {
-        id?: T;
         token?: T;
         expires?: T;
         createdAt?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

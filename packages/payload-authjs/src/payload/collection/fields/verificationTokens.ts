@@ -10,13 +10,6 @@ export const verificationTokensField: Field = {
   type: "array",
   fields: [
     {
-      name: "id",
-      type: "text",
-      admin: {
-        disabled: true,
-      },
-    },
-    {
       type: "row",
       fields: [
         { name: "token", type: "text", required: true, index: true },
