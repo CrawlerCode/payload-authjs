@@ -1,3 +1,21 @@
+## 0.8.4 (2025-09-02)
+
+### 🩹 Fixes
+
+- Destroy authjs session using payload logout hook instead of overriding logout endpoints ([#11900](https://github.com/CrawlerCode/payload-authjs/issues/11900))
+- Remove custom array id field for verificationTokens ([#41](https://github.com/CrawlerCode/payload-authjs/pull/41))
+- **PayloadSessionProvider:** Unset the local session then request failed ([ada1fdf](https://github.com/CrawlerCode/payload-authjs/commit/ada1fdf))
+- **SignInButton:** Mount authjs SessionProvider to the admin panel to provide custom base path ([#44](https://github.com/CrawlerCode/payload-authjs/pull/44))
+
+### 🏡 Chore
+
+- **deps:** Update npm dependencies ([3885fc4](https://github.com/CrawlerCode/payload-authjs/commit/3885fc4))
+- **dev:** Improve session overview and sign in/out buttons ([c2d6698](https://github.com/CrawlerCode/payload-authjs/commit/c2d6698))
+
+### 📓 Examples
+
+- Use authjs signOut server action ([#43](https://github.com/CrawlerCode/payload-authjs/pull/43))
+
 ## 0.8.3 (2025-07-29)
 
 ### 🩹 Fixes
