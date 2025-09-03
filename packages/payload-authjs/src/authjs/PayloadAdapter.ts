@@ -2,6 +2,7 @@ import crypto from "crypto";
 import type {
   Adapter,
   AdapterAccount,
+  AdapterAuthenticator,
   AdapterSession,
   AdapterUser,
   VerificationToken as AdapterVerificationToken,
@@ -13,7 +14,7 @@ import {
   type RequiredDataFromCollectionSlug,
   type SanitizedConfig,
 } from "payload";
-import type { Account, Session, User, VerificationToken } from "./types";
+import type { Account, Authenticator, Session, User, VerificationToken } from "./types";
 import { transformObject } from "./utils/transformObject";
 
 export interface PayloadAdapterOptions {
@@ -39,6 +40,7 @@ export interface PayloadAdapterOptions {
  * Auth.js Database Adapter for Payload CMS
  *
  * @see https://authjs.dev/guides/creating-a-database-adapter
+ * @see https://authjs.dev/reference/core/adapters#adapter
  */
 export function PayloadAdapter({
   payload,
@@ -60,9 +62,9 @@ export function PayloadAdapter({
     (await payload).logger.child({ name: "payload-authjs (PayloadAdapter)" }))();
 
   return {
-    // #region User management
+    // #region User & Account management
     async createUser(user) {
-      (await logger).debug({ userId: user.id, user }, `Creating user '${user.id}'`);
+      (await logger).debug({ userId: user.id, user }, `Creating user '${user.id ?? user.email}'`);
 
       let payloadUser: User;
       if (
@@ -101,7 +103,11 @@ export function PayloadAdapter({
         disableErrors: true,
       })) as User | null;
 
-      return payloadUser ? toAdapterUser(payloadUser) : null;
+      if (!payloadUser) {
+        return null; // Return null if user is not found
+      }
+
+      return toAdapterUser(payloadUser);
     },
     async getUserByEmail(email) {
       (await logger).debug({ email }, `Getting user by email '${email}'`);
@@ -125,7 +131,11 @@ export function PayloadAdapter({
         })
       ).docs.at(0) as User | undefined;
 
-      return payloadUser ? toAdapterUser(payloadUser) : null;
+      if (!payloadUser) {
+        return null; // Return null if user is not found
+      }
+
+      return toAdapterUser(payloadUser);
     },
     async getUserByAccount({ provider, providerAccountId }) {
       (await logger).debug(
@@ -155,7 +165,11 @@ export function PayloadAdapter({
         })
       ).docs.at(0) as User | undefined;
 
-      return payloadUser ? toAdapterUser(payloadUser) : null;
+      if (!payloadUser) {
+        return null; // Return null if user is not found
+      }
+
+      return toAdapterUser(payloadUser);
     },
     async updateUser(user) {
       (await logger).debug({ userId: user.id, user }, `Updating user '${user.id}'`);
@@ -173,7 +187,11 @@ export function PayloadAdapter({
         },
       })) as unknown as User | undefined;
 
-      return payloadUser ? toAdapterUser(payloadUser) : (null as unknown as AdapterUser);
+      if (!payloadUser) {
+        throw new Error(`Failed to update user: User '${user.id}' not found`);
+      }
+
+      return toAdapterUser(payloadUser);
     },
     async deleteUser(userId) {
       (await logger).debug({ userId }, `Deleting user '${userId}'`);
@@ -185,20 +203,20 @@ export function PayloadAdapter({
         id: userId,
       });
     },
-    async linkAccount(account) {
+    async linkAccount({ userId, ...account }) {
       (await logger).debug(
         {
-          userId: account.userId,
+          userId,
           account,
         },
-        `Linking account for user '${account.userId}'`,
+        `Linking account for user '${userId}'`,
       );
 
       let payloadUser = (await (
         await payload
       ).findByID({
         collection: userCollectionSlug,
-        id: account.userId,
+        id: userId,
         select: {
           id: true,
           accounts: true,
@@ -206,7 +224,7 @@ export function PayloadAdapter({
         disableErrors: true,
       })) as User | null;
       if (!payloadUser) {
-        throw new Error(`Failed to link account: User '${account.userId}' not found`);
+        throw new Error(`Failed to link account: User '${userId}' not found`);
       }
 
       payloadUser = (await (
@@ -226,8 +244,13 @@ export function PayloadAdapter({
       const createdAccount = payloadUser.accounts?.find(
         a => a.provider === account.provider && a.providerAccountId === account.providerAccountId,
       );
+      if (!createdAccount) {
+        throw new Error(
+          `Failed to link account: Account '${account.providerAccountId}' of provider '${account.provider}' not found`,
+        );
+      }
 
-      return createdAccount ? toAdapterAccount(createdAccount) : account;
+      return toAdapterAccount(payloadUser, createdAccount);
     },
     async unlinkAccount({ provider, providerAccountId }) {
       (await logger).debug(
@@ -280,19 +303,55 @@ export function PayloadAdapter({
         },
       })) as User;
     },
+    async getAccount(providerAccountId, provider) {
+      (await logger).debug(
+        { provider, providerAccountId },
+        `Getting account '${providerAccountId}' of provider '${provider}'`,
+      );
+
+      const payloadUser = (
+        await (
+          await payload
+        ).find({
+          collection: userCollectionSlug,
+          where: {
+            "accounts.provider": {
+              equals: provider,
+            },
+            "accounts.providerAccountId": {
+              equals: providerAccountId,
+            },
+          },
+          select: {
+            id: true,
+            accounts: true,
+          },
+          limit: 1,
+        })
+      ).docs.at(0) as User | undefined;
+      if (!payloadUser) {
+        return null;
+      }
+
+      const account = payloadUser.accounts?.find(
+        a => a.providerAccountId === providerAccountId && a.provider === provider,
+      );
+      if (!account) {
+        return null;
+      }
+
+      return toAdapterAccount(payloadUser, account);
+    },
     // #endregion
     // #region Database session management
-    async createSession(session) {
-      (await logger).debug(
-        { userId: session.userId, session },
-        `Creating session for user '${session.userId}'`,
-      );
+    async createSession({ userId, ...session }) {
+      (await logger).debug({ userId, session }, `Creating session for user '${userId}'`);
 
       let payloadUser = (await (
         await payload
       ).findByID({
         collection: userCollectionSlug,
-        id: session.userId,
+        id: userId,
         select: {
           id: true,
           sessions: true,
@@ -300,7 +359,7 @@ export function PayloadAdapter({
         disableErrors: true,
       })) as User | null;
       if (!payloadUser) {
-        throw new Error(`Failed to create session: User '${session.userId}' not found`);
+        throw new Error(`Failed to create session: User '${userId}' not found`);
       }
 
       payloadUser = (await (
@@ -320,8 +379,11 @@ export function PayloadAdapter({
       const createdSession = payloadUser.sessions?.find(
         s => s.sessionToken === session.sessionToken,
       );
+      if (!createdSession) {
+        throw new Error(`Failed to create session: Session '${session.sessionToken}' not found`);
+      }
 
-      return createdSession ? toAdapterSession(payloadUser, createdSession) : session;
+      return toAdapterSession(payloadUser, createdSession);
     },
     async getSessionAndUser(sessionToken) {
       (await logger).debug(
@@ -362,11 +424,8 @@ export function PayloadAdapter({
         session: toAdapterSession(payloadUser, session),
       };
     },
-    async updateSession(session) {
-      (await logger).debug(
-        { userId: session.userId, session },
-        `Updating session '${session.sessionToken}'`,
-      );
+    async updateSession({ userId, ...session }) {
+      (await logger).debug({ userId, session }, `Updating session '${session.sessionToken}'`);
 
       let payloadUser = (
         await (
@@ -396,7 +455,7 @@ export function PayloadAdapter({
         id: payloadUser.id,
         data: {
           sessions: payloadUser.sessions?.map(s =>
-            s.sessionToken === session.sessionToken ? session : s,
+            s.sessionToken === session.sessionToken ? { ...s, ...session } : s,
           ),
         },
         select: {
@@ -408,8 +467,11 @@ export function PayloadAdapter({
       const updatedSession = payloadUser.sessions?.find(
         s => s.sessionToken === session.sessionToken,
       );
+      if (!updatedSession) {
+        throw new Error(`Failed to update session: Session '${session.sessionToken}' not found`);
+      }
 
-      return updatedSession ? toAdapterSession(payloadUser, updatedSession) : null;
+      return toAdapterSession(payloadUser, updatedSession);
     },
     async deleteSession(sessionToken) {
       (await logger).debug({ sessionToken }, `Deleting session with token '${sessionToken}'`);
@@ -515,13 +577,11 @@ export function PayloadAdapter({
       }
 
       const createdToken = payloadUser.verificationTokens?.find(t => t.token === token.token);
+      if (!createdToken) {
+        throw new Error(`Failed to create verification token for email '${email}'`);
+      }
 
-      return createdToken
-        ? toAdapterVerificationToken(payloadUser.email, createdToken)
-        : {
-            identifier: email,
-            ...token,
-          };
+      return toAdapterVerificationToken(payloadUser.email, createdToken);
     },
     async useVerificationToken({ identifier: email, token }) {
       (await logger).debug({ email, token }, `Using verification token for email '${email}'`);
@@ -551,6 +611,9 @@ export function PayloadAdapter({
       }
 
       const verificationToken = payloadUser.verificationTokens?.find(t => t.token === token);
+      if (!verificationToken) {
+        return null;
+      }
 
       payloadUser = (await (
         await payload
@@ -566,9 +629,165 @@ export function PayloadAdapter({
         },
       })) as User;
 
-      return verificationToken
-        ? toAdapterVerificationToken(payloadUser.email, verificationToken)
-        : null;
+      return toAdapterVerificationToken(payloadUser.email, verificationToken);
+    },
+    // #endregion
+    // #region Authenticators
+    async createAuthenticator({ userId, ...authenticator }) {
+      (await logger).debug(
+        { userId, authenticator },
+        `Creating authenticator for user '${userId}'`,
+      );
+
+      let payloadUser = (await (
+        await payload
+      ).findByID({
+        collection: userCollectionSlug,
+        id: userId,
+        select: {
+          id: true,
+          authenticators: true,
+        },
+        disableErrors: true,
+      })) as User | null;
+      if (!payloadUser) {
+        throw new Error(`Failed to create authenticator: User '${userId}' not found`);
+      }
+
+      payloadUser = (await (
+        await payload
+      ).update({
+        collection: userCollectionSlug,
+        id: payloadUser.id,
+        data: {
+          authenticators: [...(payloadUser.authenticators || []), authenticator],
+        } satisfies Partial<User>,
+        select: {
+          id: true,
+          authenticators: true,
+        },
+      })) as User;
+
+      const createdAuthenticator = payloadUser.authenticators?.find(
+        a => a.credentialID === authenticator.credentialID,
+      );
+      if (!createdAuthenticator) {
+        throw new Error(`Failed to create authenticator for user '${userId}'`);
+      }
+
+      return toAdapterAuthenticator(payloadUser, createdAuthenticator);
+    },
+    async getAuthenticator(credentialID) {
+      (await logger).debug({ credentialID }, `Getting authenticator '${credentialID}'`);
+
+      const payloadUser = (
+        await (
+          await payload
+        ).find({
+          collection: userCollectionSlug,
+          where: {
+            "authenticators.credentialID": {
+              equals: credentialID,
+            },
+          },
+          select: {
+            id: true,
+            authenticators: true,
+          },
+          limit: 1,
+        })
+      ).docs.at(0) as User | undefined;
+      if (!payloadUser) {
+        return null;
+      }
+
+      const authenticator = payloadUser.authenticators?.find(a => a.credentialID === credentialID);
+      if (!authenticator) {
+        return null;
+      }
+
+      return toAdapterAuthenticator(payloadUser, authenticator);
+    },
+    async listAuthenticatorsByUserId(userId) {
+      (await logger).debug({ userId }, `Listing authenticators for user '${userId}'`);
+
+      const payloadUser = (await (
+        await payload
+      ).findByID({
+        collection: userCollectionSlug,
+        id: userId,
+        select: {
+          id: true,
+          authenticators: true,
+        },
+        disableErrors: true,
+      })) as User | null;
+      if (!payloadUser) {
+        return [];
+      }
+
+      return (payloadUser.authenticators || []).map(authenticator =>
+        toAdapterAuthenticator(payloadUser, authenticator),
+      );
+    },
+    async updateAuthenticatorCounter(credentialID, counter) {
+      (await logger).debug(
+        { credentialID, counter },
+        `Updating authenticator '${credentialID}' counter`,
+      );
+
+      let payloadUser = (
+        await (
+          await payload
+        ).find({
+          collection: userCollectionSlug,
+          where: {
+            "authenticators.credentialID": {
+              equals: credentialID,
+            },
+          },
+          select: {
+            id: true,
+            authenticators: true,
+          },
+          limit: 1,
+        })
+      ).docs.at(0) as User | undefined;
+      if (!payloadUser) {
+        throw new Error(
+          `Failed to update authenticator: Authenticator '${credentialID}' not found`,
+        );
+      }
+
+      payloadUser = (await (
+        await payload
+      ).update({
+        collection: userCollectionSlug,
+        id: payloadUser.id,
+        data: {
+          authenticators: payloadUser.authenticators?.map(a =>
+            a.credentialID === credentialID
+              ? {
+                  ...a,
+                  counter,
+                }
+              : a,
+          ),
+        } satisfies Partial<User>,
+        select: {
+          id: true,
+          authenticators: true,
+        },
+      })) as User;
+
+      const authenticator = payloadUser.authenticators?.find(a => a.credentialID === credentialID);
+      if (!authenticator) {
+        throw new Error(
+          `Failed to update authenticator: Authenticator '${credentialID}' not found`,
+        );
+      }
+
+      return toAdapterAuthenticator(payloadUser, authenticator);
     },
     // #endregion
   };
@@ -578,8 +797,11 @@ function toAdapterUser(user: User): AdapterUser {
   return transformObject(user, ["accounts", "sessions", "verificationTokens"]);
 }
 
-function toAdapterAccount(account: Account): AdapterAccount {
-  return transformObject(account);
+function toAdapterAccount(user: User, account: Account): AdapterAccount {
+  return {
+    ...transformObject(account),
+    userId: user.id,
+  };
 }
 
 function toAdapterSession(user: User, session: Session): AdapterSession {
@@ -596,6 +818,14 @@ function toAdapterVerificationToken(
   return {
     identifier: email,
     ...transformObject<VerificationToken, Omit<AdapterVerificationToken, "identifier">>(token),
+  };
+}
+
+function toAdapterAuthenticator(user: User, authenticator: Authenticator): AdapterAuthenticator {
+  return {
+    ...transformObject(authenticator),
+    userId: user.id,
+    providerAccountId: authenticator.credentialID,
   };
 }
 

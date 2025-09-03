@@ -1,6 +1,8 @@
 import { getPayloadSession } from "payload-authjs";
+import { AuthjsRegisterPasskeyButtonClient } from "./authjs/AuthjsRegisterPasskeyButtonClient";
 import { AuthjsSignInButtonClient } from "./authjs/AuthjsSignInButtonClient";
 import { AuthjsSignInButtonServerAction } from "./authjs/AuthjsSignInButtonServerAction";
+import { AuthjsSignInPasskeyButtonClient } from "./authjs/AuthjsSignInPasskeyButtonClient";
 import { AuthjsSignOutButtonClient } from "./authjs/AuthjsSignOutButtonClient";
 import { AuthjsSignOutButtonServerAction } from "./authjs/AuthjsSignOutButtonServerAction";
 import { PayloadSignInButtonClient } from "./payload/PayloadSignInButtonClient";
@@ -18,11 +20,13 @@ export const SignInOrOutButtons = async () => {
           <PayloadSignOutButtonClient />
           <AuthjsSignOutButtonServerAction />
           <AuthjsSignOutButtonClient />
+          <AuthjsRegisterPasskeyButtonClient />
         </>
       ) : (
         <>
           <AuthjsSignInButtonServerAction />
           <AuthjsSignInButtonClient />
+          <AuthjsSignInPasskeyButtonClient />
           <PayloadSignInButtonClient />
         </>
       )}

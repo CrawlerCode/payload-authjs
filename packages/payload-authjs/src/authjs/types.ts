@@ -7,6 +7,7 @@ export interface User {
   accounts?: Account[] | null;
   sessions?: Session[] | null;
   verificationTokens?: VerificationToken[] | null;
+  authenticators?: Authenticator[] | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
@@ -32,6 +33,18 @@ export interface VerificationToken {
   id?: string | null;
   token: string;
   expires: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}
+
+export interface Authenticator {
+  id?: string | null;
+  counter: number;
+  credentialBackedUp: boolean;
+  credentialID: string;
+  credentialPublicKey: string;
+  transports?: string | null;
+  credentialDeviceType: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
