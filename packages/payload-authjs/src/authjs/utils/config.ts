@@ -25,9 +25,9 @@ export const isEmailProviderAvailable = (authjsConfig: NextAuthConfig) => {
 };
 
 /**
- * Check if a webauth provider is available in the authjs config
+ * Check if a webauthn provider is available in the authjs config
  */
-export const isWebauthProviderAvailable = (authjsConfig: NextAuthConfig) => {
+export const isWebauthnProviderAvailable = (authjsConfig: NextAuthConfig) => {
   return authjsConfig.providers?.some(
     provider => (typeof provider === "function" ? provider().type : provider.type) === "webauthn",
   );

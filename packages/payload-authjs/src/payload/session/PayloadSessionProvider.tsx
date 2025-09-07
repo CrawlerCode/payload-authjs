@@ -2,7 +2,7 @@
 
 import type { CollectionSlug, DataFromCollectionSlug } from "payload";
 import { createContext, type ReactNode, useCallback, useEffect, useState } from "react";
-import type { AUTHJS_STRATEGY_NAME } from "../AuthjsAuthStrategy";
+import type { AUTHJS_STRATEGY_NAME } from "../../constants";
 import type { PayloadSession } from "./getPayloadSession";
 
 export interface SessionContext<TSlug extends CollectionSlug> {

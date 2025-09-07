@@ -91,7 +91,7 @@ export const authjsPlugin =
             ...(config.admin?.components?.afterLogin ?? []),
             ...pluginOptions.authjsConfig.providers
               .map(provider => getProviderMetadata(provider))
-              .filter(provider => ["oauth", "oidc"].includes(provider.type))
+              .filter(provider => ["oauth", "oidc", "webauthn"].includes(provider.type))
               .map(
                 provider =>
                   ({
