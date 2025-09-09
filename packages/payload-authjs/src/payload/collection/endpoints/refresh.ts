@@ -4,7 +4,7 @@ import { generatePayloadCookie, headersWithCors, refreshOperation } from "payloa
 
 import { revalidateTag } from "next/cache";
 import { withPayload } from "../../../authjs/withPayload";
-import { AUTHJS_STRATEGY_NAME } from "../../AuthjsAuthStrategy";
+import { AUTHJS_STRATEGY_NAME } from "../../../constants";
 import type { AuthjsPluginConfig } from "../../plugin";
 import { getRequestCollection } from "../../utils/getRequestCollection";
 

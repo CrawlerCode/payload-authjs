@@ -18,6 +18,8 @@
     "@payloadcms/next": "3.54.0",
     "@payloadcms/translations": "3.54.0",
     "@payloadcms/ui": "3.54.0",
+    "@simplewebauthn/browser": "^9.0.1",
+    "@simplewebauthn/server": "^9.0.3",
     "@tailwindcss/postcss": "^4.1.12",
     "clsx": "^2.1.1",
     "graphql": "^16.11.0",

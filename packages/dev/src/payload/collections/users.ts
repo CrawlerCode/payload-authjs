@@ -116,6 +116,7 @@ const Users: CollectionConfig<"users"> = {
           name: "additionalAccountDatabaseField",
           type: "text",
           required: true,
+          defaultValue: () => `Default value at ${new Date().toISOString()}`,
         },
         createdAtField,
       ],

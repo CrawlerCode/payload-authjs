@@ -25,6 +25,15 @@ export const isEmailProviderAvailable = (authjsConfig: NextAuthConfig) => {
 };
 
 /**
+ * Check if a webauthn provider is available in the authjs config
+ */
+export const isWebauthnProviderAvailable = (authjsConfig: NextAuthConfig) => {
+  return authjsConfig.providers?.some(
+    provider => (typeof provider === "function" ? provider().type : provider.type) === "webauthn",
+  );
+};
+
+/**
  * Check if the authjs session strategy is database
  */
 export const isSessionStrategyDatabase = (authjsConfig: NextAuthConfig) => {

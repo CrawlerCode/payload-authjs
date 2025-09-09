@@ -164,6 +164,17 @@ export interface User {
         id?: string | null;
       }[]
     | null;
+  authenticators?:
+    | {
+        credentialID: string;
+        credentialPublicKey: string;
+        credentialBackedUp: boolean;
+        counter: number;
+        transports?: string | null;
+        credentialDeviceType: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
   enableAPIKey?: boolean | null;
@@ -286,6 +297,17 @@ export interface UsersSelect<T extends boolean = true> {
         token?: T;
         expires?: T;
         createdAt?: T;
+        id?: T;
+      };
+  authenticators?:
+    | T
+    | {
+        credentialID?: T;
+        credentialPublicKey?: T;
+        credentialBackedUp?: T;
+        counter?: T;
+        transports?: T;
+        credentialDeviceType?: T;
         id?: T;
       };
   updatedAt?: T;

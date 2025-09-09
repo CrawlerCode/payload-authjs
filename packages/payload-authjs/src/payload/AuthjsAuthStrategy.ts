@@ -1,11 +1,10 @@
 import NextAuth from "next-auth";
-import type { AuthStrategy, CollectionConfig, User as PayloadUser } from "payload";
+import type { AuthStrategy, CollectionConfig, TypedUser as PayloadUser } from "payload";
 import { withPayload } from "../authjs/withPayload";
+import { AUTHJS_STRATEGY_NAME } from "../constants";
 import type { AuthjsPluginConfig } from "./plugin";
 import { getAllVirtualFields } from "./utils/getAllVirtualFields";
 import { getUserAttributes } from "./utils/getUserAttributes";
-
-export const AUTHJS_STRATEGY_NAME = "Auth.js";
 
 /**
  * Auth.js Authentication Strategy for Payload CMS

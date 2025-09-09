@@ -34,7 +34,7 @@ export type SignInButtonProps = {
 };
 
 /**
- * A button to sign in with a Auth.js provider
+ * A button on the sign in page to sign in with a Auth.js provider
  */
 export const SignInButton = ({
   provider,
@@ -52,7 +52,14 @@ export const SignInButton = ({
       buttonStyle="pill"
       icon={icon}
       iconPosition="left"
-      onClick={() => signIn(provider.id)}
+      onClick={async () => {
+        if (provider.type === "webauthn") {
+          const { signIn } = await import("next-auth/webauthn");
+          await signIn(provider.id);
+        } else {
+          await signIn(provider.id);
+        }
+      }}
     >
       {text}
     </Button>

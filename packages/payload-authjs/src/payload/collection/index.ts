@@ -1,11 +1,16 @@
 import type { CollectionConfig, TabsField } from "payload";
-import { isEmailProviderAvailable, isSessionStrategyDatabase } from "../../authjs/utils/config";
+import {
+  isEmailProviderAvailable,
+  isSessionStrategyDatabase,
+  isWebauthnProviderAvailable,
+} from "../../authjs/utils/config";
 import { AuthjsAuthStrategy } from "../AuthjsAuthStrategy";
 import type { AuthjsPluginConfig } from "../plugin";
 import { mergeFields } from "../utils/mergeFields";
 import { defaultAccess } from "./access";
 import { refreshEndpoint } from "./endpoints/refresh";
 import { accountsField } from "./fields/accounts";
+import { authenticatorsField } from "./fields/authenticators";
 import { generalFields } from "./fields/general";
 import { sessionsField } from "./fields/session";
 import { verificationTokensField } from "./fields/verificationTokens";
@@ -71,6 +76,15 @@ export const generateUsersCollection = (
                 {
                   label: "Verification Tokens",
                   fields: [verificationTokensField],
+                },
+              ]
+            : []),
+          // Add authenticators tab only if webauthn provider is available
+          ...(isWebauthnProviderAvailable(pluginOptions.authjsConfig)
+            ? [
+                {
+                  label: "Authenticators",
+                  fields: [authenticatorsField(pluginOptions)],
                 },
               ]
             : []),

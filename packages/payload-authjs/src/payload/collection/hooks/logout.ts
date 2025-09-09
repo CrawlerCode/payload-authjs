@@ -3,7 +3,7 @@ import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import type { CollectionAfterLogoutHook } from "payload";
 import { withPayload } from "../../../authjs/withPayload";
-import { AUTHJS_STRATEGY_NAME } from "../../AuthjsAuthStrategy";
+import { AUTHJS_STRATEGY_NAME } from "../../../constants";
 import type { AuthjsPluginConfig } from "../../plugin";
 
 /**
