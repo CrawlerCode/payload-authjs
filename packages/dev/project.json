@@ -3,9 +3,33 @@
   "sourceRoot": "packages/dev/src",
   "projectType": "application",
   "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/dev",
+        "commands": ["next dev -p 5000", "nx run watch-deps"],
+        "parallel": true
+      },
+      "dependsOn": ["^build"]
+    },
+    "dev:turbo": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/dev",
+        "commands": ["next dev -p 5000 --turbopack", "nx run watch-deps"],
+        "parallel": true
+      },
+      "dependsOn": ["^build"]
+    },
     "start": {
       "options": {
         "port": 5000
+      }
+    },
+    "watch-deps": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx watch --projects=dev --includeDependentProjects -- nx run-many -t build -p \\%NX_PROJECT_NAME% --exclude=dev"
       }
     }
   }

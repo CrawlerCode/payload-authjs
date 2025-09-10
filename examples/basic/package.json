@@ -1,5 +1,5 @@
 {
-  "name": "basic-example",
+  "name": "example-basic",
   "version": "1.0.0",
   "description": "A basic example of Payload CMS using payload-authjs plugin",
   "private": true,

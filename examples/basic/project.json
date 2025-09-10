@@ -8,6 +8,15 @@
     },
     "dev:turbo": {
       "dependsOn": ["^build"]
+    },
+    "build": {
+      "cache": true
+    },
+    "start": {
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "cache": true
     }
   }
 }

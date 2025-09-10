@@ -18,10 +18,7 @@
     ],
     "paths": {
       "@payload-config": ["./src/payload.config.ts"],
-      "@/*": ["./src/*"],
-      "payload-authjs": ["../payload-authjs/src/index.ts"],
-      "payload-authjs/components": ["../payload-authjs/src/components/index.ts"],
-      "payload-authjs/client": ["../payload-authjs/src/client.ts"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "postcss.config.mjs"],

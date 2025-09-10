@@ -1,5 +1,5 @@
 {
-  "name": "with-payload-local-strategy-example",
+  "name": "example-with-payload-local-strategy",
   "version": "1.0.0",
   "description": "An example of Payload CMS using payload-authjs plugin with the payload local strategy",
   "private": true,
@@ -7,6 +7,7 @@
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "dev:turbo": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbopack",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",

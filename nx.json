@@ -11,9 +11,9 @@
     {
       "plugin": "@nx/next/plugin",
       "options": {
-        "startTargetName": "start",
         "buildTargetName": "build",
         "devTargetName": "dev",
+        "startTargetName": "start",
         "serveStaticTargetName": "serve-static"
       }
     }

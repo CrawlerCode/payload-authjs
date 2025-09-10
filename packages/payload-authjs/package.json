@@ -55,7 +55,7 @@
   ],
   "scripts": {},
   "devDependencies": {
-    "@payloadcms/ui": "^3.54.0",
+    "@payloadcms/ui": "3.54.0",
     "@types/react": "19.1.12",
     "next": "15.5.2",
     "next-auth": "5.0.0-beta.28",
