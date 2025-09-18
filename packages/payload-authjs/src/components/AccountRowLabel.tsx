@@ -1,7 +1,10 @@
 "use client";
 
 import { useRowLabel } from "@payloadcms/ui";
-import type { Account } from "../authjs/types";
+import type { DataFromCollectionSlug } from "payload";
+import type { AuthCollectionSlug } from "../payload/plugin";
+
+type Account = NonNullable<DataFromCollectionSlug<AuthCollectionSlug>["accounts"]>[0];
 
 export const AccountRowLabel = () => {
   const { data: account } = useRowLabel<Account>();

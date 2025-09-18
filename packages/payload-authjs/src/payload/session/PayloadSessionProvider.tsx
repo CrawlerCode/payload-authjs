@@ -1,11 +1,12 @@
 "use client";
 
-import type { CollectionSlug, DataFromCollectionSlug } from "payload";
+import type { DataFromCollectionSlug } from "payload";
 import { createContext, type ReactNode, useCallback, useEffect, useState } from "react";
 import type { AUTHJS_STRATEGY_NAME } from "../../constants";
+import type { AuthCollectionSlug } from "../plugin";
 import type { PayloadSession } from "./getPayloadSession";
 
-export interface SessionContext<TSlug extends CollectionSlug> {
+export interface PayloadSessionContext<TSlug extends AuthCollectionSlug = AuthCollectionSlug> {
   /**
    * The status of the session
    */
@@ -24,14 +25,14 @@ export interface SessionContext<TSlug extends CollectionSlug> {
   refetch: () => Promise<PayloadSession<TSlug> | null>;
 }
 
-export const Context = createContext<SessionContext<never>>({
+export const Context = createContext<PayloadSessionContext>({
   status: "loading",
   session: null,
-  refresh: () => new Promise(resolve => resolve(null)),
-  refetch: () => new Promise(resolve => resolve(null)),
+  refresh: () => Promise.resolve(null),
+  refetch: () => Promise.resolve(null),
 });
 
-interface Props<TSlug extends CollectionSlug> {
+interface Props<TSlug extends AuthCollectionSlug> {
   /**
    * The slug of the collection that contains the users
    *
@@ -53,7 +54,7 @@ interface Props<TSlug extends CollectionSlug> {
 /**
  * PayloadSessionProvider that provides the session to the context provider
  */
-export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
+export const PayloadSessionProvider = <TSlug extends AuthCollectionSlug = "users">({
   userCollectionSlug = "users" as TSlug,
   session = null,
   children,
@@ -77,12 +78,12 @@ export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
       const result: {
         user:
           | ({
-              collection?: CollectionSlug;
+              collection?: TSlug;
               _strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
             } & DataFromCollectionSlug<TSlug>)
           | null;
-        exp: number;
-        collection?: CollectionSlug;
+        exp?: number;
+        collection?: TSlug;
         /**
          * @deprecated Use user._strategy instead
          *
@@ -99,8 +100,11 @@ export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
         // Update the local session
         const localSession = {
           user: result.user,
-          expires: new Date(result.exp * 1000).toISOString(),
-          collection: result.collection,
+          expires:
+            result.exp && typeof result.exp === "number"
+              ? new Date(result.exp * 1000).toISOString()
+              : undefined,
+          collection: result.collection ?? result.user.collection,
           strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
         };
         setLocalSession(localSession);
@@ -148,15 +152,16 @@ export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
     const result: {
       user:
         | ({
-            collection?: CollectionSlug;
+            collection?: TSlug;
             _strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
           } & DataFromCollectionSlug<TSlug>)
         | null;
-      exp: number /**
+      exp?: number;
+      /**
        * @deprecated Use user._strategy instead
        *
        * @see https://github.com/payloadcms/payload/pull/11701
-       */;
+       */
       strategy?: string;
     } = await response.json();
 
@@ -164,8 +169,11 @@ export const PayloadSessionProvider = <TSlug extends CollectionSlug = "users">({
       // Update the local session
       const localSession = {
         user: result.user,
-        expires: new Date(result.exp * 1000).toISOString(),
-        collection: result.user.collection ?? userCollectionSlug,
+        expires:
+          result.exp && typeof result.exp === "number"
+            ? new Date(result.exp * 1000).toISOString()
+            : undefined,
+        collection: result.user.collection,
         strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
       };
       setLocalSession(localSession);

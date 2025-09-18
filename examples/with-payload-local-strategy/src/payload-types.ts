@@ -124,7 +124,7 @@ export interface User {
     | {
         provider: string;
         providerAccountId: string;
-        type: string;
+        type: 'oidc' | 'oauth' | 'email' | 'webauthn';
         id?: string | null;
       }[]
     | null;

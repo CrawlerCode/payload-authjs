@@ -63,44 +63,44 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
-    customers: CustomerAuthOperations;
-    admins: AdminAuthOperations;
+    'users-with-local-strategy': UsersWithLocalStrategyAuthOperations;
+    users: UserAuthOperations;
   };
   blocks: {};
   collections: {
-    customers: Customer;
-    admins: Admin;
+    'users-with-local-strategy': UsersWithLocalStrategy;
+    users: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
-    customers: CustomersSelect<false> | CustomersSelect<true>;
-    admins: AdminsSelect<false> | AdminsSelect<true>;
+    'users-with-local-strategy': UsersWithLocalStrategySelect<false> | UsersWithLocalStrategySelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   globals: {};
   globalsSelect: {};
   locale: null;
   user:
-    | (Customer & {
-        collection: 'customers';
+    | (UsersWithLocalStrategy & {
+        collection: 'users-with-local-strategy';
       })
-    | (Admin & {
-        collection: 'admins';
+    | (User & {
+        collection: 'users';
       });
   jobs: {
     tasks: unknown;
     workflows: unknown;
   };
 }
-export interface CustomerAuthOperations {
+export interface UsersWithLocalStrategyAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -118,7 +118,7 @@ export interface CustomerAuthOperations {
     password: string;
   };
 }
-export interface AdminAuthOperations {
+export interface UserAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -138,15 +138,13 @@ export interface AdminAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "customers".
+ * via the `definition` "users-with-local-strategy".
  */
-export interface Customer {
+export interface UsersWithLocalStrategy {
   id: string;
-  email: string;
   emailVerified?: string | null;
   name?: string | null;
   image?: string | null;
-  customerNumber: string;
   accounts?:
     | {
         provider: string;
@@ -155,14 +153,47 @@ export interface Customer {
         id?: string | null;
       }[]
     | null;
+  sessions?:
+    | {
+        sessionToken: string;
+        expires: string;
+        id?: string | null;
+      }[]
+    | null;
+  verificationTokens?:
+    | {
+        token: string;
+        expires: string;
+        id?: string | null;
+      }[]
+    | null;
+  authenticators?:
+    | {
+        credentialID: string;
+        credentialPublicKey: string;
+        credentialBackedUp: boolean;
+        counter: number;
+        transports?: string | null;
+        credentialDeviceType: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admins".
+ * via the `definition` "users".
  */
-export interface Admin {
+export interface User {
   id: string;
   email: string;
   emailVerified?: string | null;
@@ -173,6 +204,31 @@ export interface Admin {
         provider: string;
         providerAccountId: string;
         type: 'oidc' | 'oauth' | 'email' | 'webauthn';
+        id?: string | null;
+      }[]
+    | null;
+  sessions?:
+    | {
+        sessionToken: string;
+        expires: string;
+        id?: string | null;
+      }[]
+    | null;
+  verificationTokens?:
+    | {
+        token: string;
+        expires: string;
+        id?: string | null;
+      }[]
+    | null;
+  authenticators?:
+    | {
+        credentialID: string;
+        credentialPublicKey: string;
+        credentialBackedUp: boolean;
+        counter: number;
+        transports?: string | null;
+        credentialDeviceType: string;
         id?: string | null;
       }[]
     | null;
@@ -184,25 +240,25 @@ export interface Admin {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
-        relationTo: 'customers';
-        value: string | Customer;
+        relationTo: 'users-with-local-strategy';
+        value: string | UsersWithLocalStrategy;
       } | null)
     | ({
-        relationTo: 'admins';
-        value: string | Admin;
+        relationTo: 'users';
+        value: string | User;
       } | null);
   globalSlug?: string | null;
   user:
     | {
-        relationTo: 'customers';
-        value: string | Customer;
+        relationTo: 'users-with-local-strategy';
+        value: string | UsersWithLocalStrategy;
       }
     | {
-        relationTo: 'admins';
-        value: string | Admin;
+        relationTo: 'users';
+        value: string | User;
       };
   updatedAt: string;
   createdAt: string;
@@ -212,15 +268,15 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user:
     | {
-        relationTo: 'customers';
-        value: string | Customer;
+        relationTo: 'users-with-local-strategy';
+        value: string | UsersWithLocalStrategy;
       }
     | {
-        relationTo: 'admins';
-        value: string | Admin;
+        relationTo: 'users';
+        value: string | User;
       };
   key?: string | null;
   value?:
@@ -240,7 +296,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -248,15 +304,13 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "customers_select".
+ * via the `definition` "users-with-local-strategy_select".
  */
-export interface CustomersSelect<T extends boolean = true> {
+export interface UsersWithLocalStrategySelect<T extends boolean = true> {
   id?: T;
-  email?: T;
   emailVerified?: T;
   name?: T;
   image?: T;
-  customerNumber?: T;
   accounts?:
     | T
     | {
@@ -265,14 +319,46 @@ export interface CustomersSelect<T extends boolean = true> {
         type?: T;
         id?: T;
       };
+  sessions?:
+    | T
+    | {
+        sessionToken?: T;
+        expires?: T;
+        id?: T;
+      };
+  verificationTokens?:
+    | T
+    | {
+        token?: T;
+        expires?: T;
+        id?: T;
+      };
+  authenticators?:
+    | T
+    | {
+        credentialID?: T;
+        credentialPublicKey?: T;
+        credentialBackedUp?: T;
+        counter?: T;
+        transports?: T;
+        credentialDeviceType?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admins_select".
+ * via the `definition` "users_select".
  */
-export interface AdminsSelect<T extends boolean = true> {
+export interface UsersSelect<T extends boolean = true> {
   id?: T;
   email?: T;
   emailVerified?: T;
@@ -284,6 +370,31 @@ export interface AdminsSelect<T extends boolean = true> {
         provider?: T;
         providerAccountId?: T;
         type?: T;
+        id?: T;
+      };
+  sessions?:
+    | T
+    | {
+        sessionToken?: T;
+        expires?: T;
+        id?: T;
+      };
+  verificationTokens?:
+    | T
+    | {
+        token?: T;
+        expires?: T;
+        id?: T;
+      };
+  authenticators?:
+    | T
+    | {
+        credentialID?: T;
+        credentialPublicKey?: T;
+        credentialBackedUp?: T;
+        counter?: T;
+        transports?: T;
+        credentialDeviceType?: T;
         id?: T;
       };
   updatedAt?: T;

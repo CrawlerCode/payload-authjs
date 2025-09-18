@@ -1,21 +1,9 @@
 import crypto from "crypto";
-import type {
-  Adapter,
-  AdapterAccount,
-  AdapterAuthenticator,
-  AdapterSession,
-  AdapterUser,
-  VerificationToken as AdapterVerificationToken,
-} from "next-auth/adapters";
-import {
-  type CollectionSlug,
-  getPayload,
-  type Payload,
-  type RequiredDataFromCollectionSlug,
-  type SanitizedConfig,
-} from "payload";
-import type { Account, Authenticator, Session, User, VerificationToken } from "./types";
-import { transformObject } from "./utils/transformObject";
+import type { Adapter } from "next-auth/adapters";
+import { getPayload, type Payload, type SanitizedConfig } from "payload";
+import type { AuthCollectionSlug } from "../payload/plugin";
+import { createUserAndBypassPasswordCheck } from "./utils/createUserAndBypassPasswordCheck";
+import { transform } from "./utils/transform";
 
 export interface PayloadAdapterOptions {
   /**
@@ -34,7 +22,7 @@ export interface PayloadAdapterOptions {
    *
    * @default "users"
    */
-  userCollectionSlug?: CollectionSlug;
+  userCollectionSlug?: AuthCollectionSlug;
 }
 /**
  * Auth.js Database Adapter for Payload CMS
@@ -63,34 +51,37 @@ export function PayloadAdapter({
 
   return {
     // #region User & Account management
-    async createUser(user) {
-      (await logger).debug({ userId: user.id, user }, `Creating user '${user.id ?? user.email}'`);
+    async createUser(adapterUser) {
+      (await logger).debug(
+        { userId: adapterUser.id, user: adapterUser },
+        `Creating user '${adapterUser.id ?? adapterUser.email}'`,
+      );
 
-      let payloadUser: User;
+      let payloadUser;
       if (
         !(await payload).collections[userCollectionSlug]?.config.auth.disableLocalStrategy &&
-        !(user as User).password
+        !(adapterUser as { password?: string }).password
       ) {
         // If the local strategy is enabled and the user does not have a password, bypass the password check
-        payloadUser = (await createUserAndBypassPasswordCheck(payload, {
-          collection: userCollectionSlug,
-          data: user,
-        })) as User;
+        payloadUser = await createUserAndBypassPasswordCheck(await payload, {
+          collection: userCollectionSlug as "users-with-local-strategy",
+          data: transform.user.fromAdapter(adapterUser),
+        });
       } else {
-        payloadUser = (await (
+        payloadUser = await (
           await payload
         ).create({
           collection: userCollectionSlug,
-          data: user,
-        })) as User;
+          data: transform.user.fromAdapter(adapterUser),
+        });
       }
 
-      return toAdapterUser(payloadUser);
+      return transform.user.toAdapter(payloadUser);
     },
     async getUser(userId) {
       (await logger).debug({ userId }, `Getting user by id '${userId}'`);
 
-      const payloadUser = (await (
+      const payloadUser = await (
         await payload
       ).findByID({
         collection: userCollectionSlug,
@@ -101,13 +92,13 @@ export function PayloadAdapter({
           verificationTokens: false,
         },
         disableErrors: true,
-      })) as User | null;
+      });
 
       if (!payloadUser) {
         return null; // Return null if user is not found
       }
 
-      return toAdapterUser(payloadUser);
+      return transform.user.toAdapter(payloadUser);
     },
     async getUserByEmail(email) {
       (await logger).debug({ email }, `Getting user by email '${email}'`);
@@ -129,13 +120,13 @@ export function PayloadAdapter({
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
 
       if (!payloadUser) {
         return null; // Return null if user is not found
       }
 
-      return toAdapterUser(payloadUser);
+      return transform.user.toAdapter(payloadUser);
     },
     async getUserByAccount({ provider, providerAccountId }) {
       (await logger).debug(
@@ -163,35 +154,38 @@ export function PayloadAdapter({
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
 
       if (!payloadUser) {
         return null; // Return null if user is not found
       }
 
-      return toAdapterUser(payloadUser);
+      return transform.user.toAdapter(payloadUser);
     },
-    async updateUser(user) {
-      (await logger).debug({ userId: user.id, user }, `Updating user '${user.id}'`);
+    async updateUser(partialUpdateUser) {
+      (await logger).debug(
+        { userId: partialUpdateUser.id, user: partialUpdateUser },
+        `Updating user '${partialUpdateUser.id}'`,
+      );
 
-      const payloadUser = (await (
+      const payloadUser = await (
         await payload
       ).update({
         collection: userCollectionSlug,
-        id: user.id,
-        data: user,
+        id: partialUpdateUser.id,
+        data: transform.user.fromPartialAdapter(partialUpdateUser),
         select: {
           accounts: false,
           sessions: false,
           verificationTokens: false,
         },
-      })) as unknown as User | undefined;
+      });
 
       if (!payloadUser) {
-        throw new Error(`Failed to update user: User '${user.id}' not found`);
+        throw new Error(`Failed to update user: User '${partialUpdateUser.id}' not found`);
       }
 
-      return toAdapterUser(payloadUser);
+      return transform.user.toAdapter(payloadUser);
     },
     async deleteUser(userId) {
       (await logger).debug({ userId }, `Deleting user '${userId}'`);
@@ -203,16 +197,18 @@ export function PayloadAdapter({
         id: userId,
       });
     },
-    async linkAccount({ userId, ...account }) {
+    async linkAccount(adapterAccount) {
+      const userId = adapterAccount.userId;
+
       (await logger).debug(
         {
           userId,
-          account,
+          account: adapterAccount,
         },
         `Linking account for user '${userId}'`,
       );
 
-      let payloadUser = (await (
+      let payloadUser = await (
         await payload
       ).findByID({
         collection: userCollectionSlug,
@@ -222,35 +218,40 @@ export function PayloadAdapter({
           accounts: true,
         },
         disableErrors: true,
-      })) as User | null;
+      });
       if (!payloadUser) {
         throw new Error(`Failed to link account: User '${userId}' not found`);
       }
 
-      payloadUser = (await (
+      payloadUser = await (
         await payload
       ).update({
         collection: userCollectionSlug,
         id: payloadUser.id,
         data: {
-          accounts: [...(payloadUser.accounts || []), account],
-        } satisfies Partial<User>,
+          accounts: [
+            ...(payloadUser.accounts || []),
+            transform.account.fromAdapter(adapterAccount),
+          ],
+        },
         select: {
           id: true,
           accounts: true,
         },
-      })) as User;
+      });
 
       const createdAccount = payloadUser.accounts?.find(
-        a => a.provider === account.provider && a.providerAccountId === account.providerAccountId,
+        a =>
+          a.provider === adapterAccount.provider &&
+          a.providerAccountId === adapterAccount.providerAccountId,
       );
       if (!createdAccount) {
         throw new Error(
-          `Failed to link account: Account '${account.providerAccountId}' of provider '${account.provider}' not found`,
+          `Failed to link account: Account '${adapterAccount.providerAccountId}' of provider '${adapterAccount.provider}' not found`,
         );
       }
 
-      return toAdapterAccount(payloadUser, createdAccount);
+      return transform.account.toAdapter(payloadUser, createdAccount);
     },
     async unlinkAccount({ provider, providerAccountId }) {
       (await logger).debug(
@@ -280,14 +281,14 @@ export function PayloadAdapter({
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
       if (!payloadUser) {
         throw new Error(
           `Failed to unlink account: Account '${providerAccountId}' of provider '${provider}' not found`,
         );
       }
 
-      payloadUser = (await (
+      payloadUser = await (
         await payload
       ).update({
         collection: userCollectionSlug,
@@ -301,7 +302,7 @@ export function PayloadAdapter({
         select: {
           id: true,
         },
-      })) as User;
+      });
     },
     async getAccount(providerAccountId, provider) {
       (await logger).debug(
@@ -328,7 +329,7 @@ export function PayloadAdapter({
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
       if (!payloadUser) {
         return null;
       }
@@ -340,14 +341,18 @@ export function PayloadAdapter({
         return null;
       }
 
-      return toAdapterAccount(payloadUser, account);
+      return transform.account.toAdapter(payloadUser, account);
     },
     // #endregion
     // #region Database session management
-    async createSession({ userId, ...session }) {
-      (await logger).debug({ userId, session }, `Creating session for user '${userId}'`);
+    async createSession(adapterSession) {
+      const userId = adapterSession.userId;
+      (await logger).debug(
+        { userId, session: adapterSession },
+        `Creating session for user '${userId}'`,
+      );
 
-      let payloadUser = (await (
+      let payloadUser = await (
         await payload
       ).findByID({
         collection: userCollectionSlug,
@@ -357,33 +362,38 @@ export function PayloadAdapter({
           sessions: true,
         },
         disableErrors: true,
-      })) as User | null;
+      });
       if (!payloadUser) {
         throw new Error(`Failed to create session: User '${userId}' not found`);
       }
 
-      payloadUser = (await (
+      payloadUser = await (
         await payload
       ).update({
         collection: userCollectionSlug,
         id: payloadUser.id,
         data: {
-          sessions: [...(payloadUser.sessions || []), session],
+          sessions: [
+            ...(payloadUser.sessions || []),
+            transform.session.fromAdapter(adapterSession),
+          ],
         },
         select: {
           id: true,
           sessions: true,
         },
-      })) as User;
+      });
 
       const createdSession = payloadUser.sessions?.find(
-        s => s.sessionToken === session.sessionToken,
+        s => s.sessionToken === adapterSession.sessionToken,
       );
       if (!createdSession) {
-        throw new Error(`Failed to create session: Session '${session.sessionToken}' not found`);
+        throw new Error(
+          `Failed to create session: Session '${adapterSession.sessionToken}' not found`,
+        );
       }
 
-      return toAdapterSession(payloadUser, createdSession);
+      return transform.session.toAdapter(payloadUser, createdSession);
     },
     async getSessionAndUser(sessionToken) {
       (await logger).debug(
@@ -409,7 +419,7 @@ export function PayloadAdapter({
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
       if (!payloadUser) {
         return null;
       }
@@ -420,12 +430,16 @@ export function PayloadAdapter({
       }
 
       return {
-        user: toAdapterUser(payloadUser),
-        session: toAdapterSession(payloadUser, session),
+        user: transform.user.toAdapter(payloadUser),
+        session: transform.session.toAdapter(payloadUser, session),
       };
     },
-    async updateSession({ userId, ...session }) {
-      (await logger).debug({ userId, session }, `Updating session '${session.sessionToken}'`);
+    async updateSession(partialAdapterSession) {
+      const userId = partialAdapterSession.userId;
+      (await logger).debug(
+        { userId, session: partialAdapterSession },
+        `Updating session '${partialAdapterSession.sessionToken}'`,
+      );
 
       let payloadUser = (
         await (
@@ -434,7 +448,7 @@ export function PayloadAdapter({
           collection: userCollectionSlug,
           where: {
             "sessions.sessionToken": {
-              equals: session.sessionToken,
+              equals: partialAdapterSession.sessionToken,
             },
           },
           select: {
@@ -443,40 +457,46 @@ export function PayloadAdapter({
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
       if (!payloadUser) {
-        throw new Error(`Failed to update session: Session '${session.sessionToken}' not found`);
+        throw new Error(
+          `Failed to update session: Session '${partialAdapterSession.sessionToken}' not found`,
+        );
       }
 
-      payloadUser = (await (
+      payloadUser = await (
         await payload
       ).update({
         collection: userCollectionSlug,
         id: payloadUser.id,
         data: {
           sessions: payloadUser.sessions?.map(s =>
-            s.sessionToken === session.sessionToken ? { ...s, ...session } : s,
+            s.sessionToken === partialAdapterSession.sessionToken
+              ? { ...s, ...transform.session.fromPartialAdapter(partialAdapterSession) }
+              : s,
           ),
         },
         select: {
           id: true,
           sessions: true,
         },
-      })) as User;
+      });
 
       const updatedSession = payloadUser.sessions?.find(
-        s => s.sessionToken === session.sessionToken,
+        s => s.sessionToken === partialAdapterSession.sessionToken,
       );
       if (!updatedSession) {
-        throw new Error(`Failed to update session: Session '${session.sessionToken}' not found`);
+        throw new Error(
+          `Failed to update session: Session '${partialAdapterSession.sessionToken}' not found`,
+        );
       }
 
-      return toAdapterSession(payloadUser, updatedSession);
+      return transform.session.toAdapter(payloadUser, updatedSession);
     },
     async deleteSession(sessionToken) {
       (await logger).debug({ sessionToken }, `Deleting session with token '${sessionToken}'`);
 
-      let payloadUser = (
+      const payloadUser = (
         await (
           await payload
         ).find({
@@ -492,12 +512,12 @@ export function PayloadAdapter({
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
       if (!payloadUser) {
         throw new Error(`Failed to delete session: Session '${sessionToken}' not found`);
       }
 
-      payloadUser = (await (
+      await (
         await payload
       ).update({
         collection: userCollectionSlug,
@@ -508,12 +528,17 @@ export function PayloadAdapter({
         select: {
           id: true,
         },
-      })) as User;
+      });
     },
     // #endregion
     // #region Verification tokens
-    async createVerificationToken({ identifier: email, ...token }) {
-      (await logger).debug({ email, token }, `Creating verification token for email '${email}'`);
+    async createVerificationToken(adapterVerificationToken) {
+      const email = adapterVerificationToken.identifier;
+
+      (await logger).debug(
+        { email, token: adapterVerificationToken },
+        `Creating verification token for email '${email}'`,
+      );
 
       let payloadUser = (
         await (
@@ -527,61 +552,67 @@ export function PayloadAdapter({
           },
           select: {
             id: true,
+            email: true,
             verificationTokens: true,
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
 
       if (!payloadUser) {
-        const user = {
+        const newUser = {
           id: crypto.randomUUID(),
           email,
-          verificationTokens: [token],
+          verificationTokens: [transform.verificationToken.fromAdapter(adapterVerificationToken)],
         };
 
         if (!(await payload).collections[userCollectionSlug]?.config.auth.disableLocalStrategy) {
           // If the local strategy is enabled, bypass the password check
-          payloadUser = (await createUserAndBypassPasswordCheck(payload, {
-            collection: userCollectionSlug,
-            data: user,
-          })) as User;
+          payloadUser = await createUserAndBypassPasswordCheck(await payload, {
+            collection: userCollectionSlug as "users-with-local-strategy",
+            data: newUser,
+          });
         } else {
-          payloadUser = (await (
+          payloadUser = await (
             await payload
           ).create({
             collection: userCollectionSlug,
-            data: user,
+            data: newUser,
             select: {
               id: true,
               email: true,
               verificationTokens: true,
             },
-          })) as User;
+          });
         }
       } else {
-        payloadUser = (await (
+        payloadUser = await (
           await payload
         ).update({
           collection: userCollectionSlug,
           id: payloadUser.id,
           data: {
-            verificationTokens: [...(payloadUser.verificationTokens || []), token],
+            verificationTokens: [
+              ...(payloadUser.verificationTokens || []),
+              transform.verificationToken.fromAdapter(adapterVerificationToken),
+            ],
           },
           select: {
             id: true,
             email: true,
             verificationTokens: true,
           },
-        })) as User;
+        });
       }
 
-      const createdToken = payloadUser.verificationTokens?.find(t => t.token === token.token);
+      const createdToken = payloadUser.verificationTokens?.find(
+        t => t.token === adapterVerificationToken.token,
+      );
       if (!createdToken) {
         throw new Error(`Failed to create verification token for email '${email}'`);
       }
 
-      return toAdapterVerificationToken(payloadUser.email, createdToken);
+      return transform.verificationToken.toAdapter(payloadUser, createdToken);
     },
     async useVerificationToken({ identifier: email, token }) {
       (await logger).debug({ email, token }, `Using verification token for email '${email}'`);
@@ -601,11 +632,12 @@ export function PayloadAdapter({
           },
           select: {
             id: true,
+            email: true,
             verificationTokens: true,
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
       if (!payloadUser) {
         return null;
       }
@@ -615,7 +647,7 @@ export function PayloadAdapter({
         return null;
       }
 
-      payloadUser = (await (
+      payloadUser = await (
         await payload
       ).update({
         collection: userCollectionSlug,
@@ -627,19 +659,20 @@ export function PayloadAdapter({
           id: true,
           email: true,
         },
-      })) as User;
+      });
 
-      return toAdapterVerificationToken(payloadUser.email, verificationToken);
+      return transform.verificationToken.toAdapter(payloadUser, verificationToken);
     },
     // #endregion
     // #region Authenticators
-    async createAuthenticator({ userId, ...authenticator }) {
+    async createAuthenticator(adapterAuthenticator) {
+      const userId = adapterAuthenticator.userId;
       (await logger).debug(
-        { userId, authenticator },
+        { userId, authenticator: adapterAuthenticator },
         `Creating authenticator for user '${userId}'`,
       );
 
-      let payloadUser = (await (
+      let payloadUser = await (
         await payload
       ).findByID({
         collection: userCollectionSlug,
@@ -649,33 +682,36 @@ export function PayloadAdapter({
           authenticators: true,
         },
         disableErrors: true,
-      })) as User | null;
+      });
       if (!payloadUser) {
         throw new Error(`Failed to create authenticator: User '${userId}' not found`);
       }
 
-      payloadUser = (await (
+      payloadUser = await (
         await payload
       ).update({
         collection: userCollectionSlug,
         id: payloadUser.id,
         data: {
-          authenticators: [...(payloadUser.authenticators || []), authenticator],
-        } satisfies Partial<User>,
+          authenticators: [
+            ...(payloadUser.authenticators || []),
+            transform.authenticator.fromAdapter(adapterAuthenticator),
+          ],
+        },
         select: {
           id: true,
           authenticators: true,
         },
-      })) as User;
+      });
 
       const createdAuthenticator = payloadUser.authenticators?.find(
-        a => a.credentialID === authenticator.credentialID,
+        a => a.credentialID === adapterAuthenticator.credentialID,
       );
       if (!createdAuthenticator) {
         throw new Error(`Failed to create authenticator for user '${userId}'`);
       }
 
-      return toAdapterAuthenticator(payloadUser, createdAuthenticator);
+      return transform.authenticator.toAdapter(payloadUser, createdAuthenticator);
     },
     async getAuthenticator(credentialID) {
       (await logger).debug({ credentialID }, `Getting authenticator '${credentialID}'`);
@@ -696,7 +732,7 @@ export function PayloadAdapter({
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
       if (!payloadUser) {
         return null;
       }
@@ -706,12 +742,12 @@ export function PayloadAdapter({
         return null;
       }
 
-      return toAdapterAuthenticator(payloadUser, authenticator);
+      return transform.authenticator.toAdapter(payloadUser, authenticator);
     },
     async listAuthenticatorsByUserId(userId) {
       (await logger).debug({ userId }, `Listing authenticators for user '${userId}'`);
 
-      const payloadUser = (await (
+      const payloadUser = await (
         await payload
       ).findByID({
         collection: userCollectionSlug,
@@ -721,13 +757,13 @@ export function PayloadAdapter({
           authenticators: true,
         },
         disableErrors: true,
-      })) as User | null;
+      });
       if (!payloadUser) {
         return [];
       }
 
       return (payloadUser.authenticators || []).map(authenticator =>
-        toAdapterAuthenticator(payloadUser, authenticator),
+        transform.authenticator.toAdapter(payloadUser, authenticator),
       );
     },
     async updateAuthenticatorCounter(credentialID, counter) {
@@ -752,14 +788,14 @@ export function PayloadAdapter({
           },
           limit: 1,
         })
-      ).docs.at(0) as User | undefined;
+      ).docs.at(0);
       if (!payloadUser) {
         throw new Error(
           `Failed to update authenticator: Authenticator '${credentialID}' not found`,
         );
       }
 
-      payloadUser = (await (
+      payloadUser = await (
         await payload
       ).update({
         collection: userCollectionSlug,
@@ -773,12 +809,12 @@ export function PayloadAdapter({
                 }
               : a,
           ),
-        } satisfies Partial<User>,
+        },
         select: {
           id: true,
           authenticators: true,
         },
-      })) as User;
+      });
 
       const authenticator = payloadUser.authenticators?.find(a => a.credentialID === credentialID);
       if (!authenticator) {
@@ -787,87 +823,8 @@ export function PayloadAdapter({
         );
       }
 
-      return toAdapterAuthenticator(payloadUser, authenticator);
+      return transform.authenticator.toAdapter(payloadUser, authenticator);
     },
     // #endregion
   };
 }
-
-function toAdapterUser(user: User): AdapterUser {
-  return transformObject(user, ["accounts", "sessions", "verificationTokens"]);
-}
-
-function toAdapterAccount(user: User, account: Account): AdapterAccount {
-  return {
-    ...transformObject(account),
-    userId: user.id,
-  };
-}
-
-function toAdapterSession(user: User, session: Session): AdapterSession {
-  return {
-    ...transformObject<Session, Omit<AdapterSession, "userId">>(session),
-    userId: user.id,
-  };
-}
-
-function toAdapterVerificationToken(
-  email: string,
-  token: VerificationToken,
-): AdapterVerificationToken {
-  return {
-    identifier: email,
-    ...transformObject<VerificationToken, Omit<AdapterVerificationToken, "identifier">>(token),
-  };
-}
-
-function toAdapterAuthenticator(user: User, authenticator: Authenticator): AdapterAuthenticator {
-  return {
-    ...transformObject(authenticator),
-    userId: user.id,
-    providerAccountId: authenticator.credentialID,
-  };
-}
-
-/**
- * Create a user and bypass the password check
- * This is because payload requires a password to be set when creating a user
- *
- * @see https://github.com/payloadcms/payload/blob/main/packages/payload/src/collections/operations/create.ts#L254
- * @see https://github.com/payloadcms/payload/blob/main/packages/payload/src/auth/strategies/local/generatePasswordSaltHash.ts
- */
-const createUserAndBypassPasswordCheck = async (
-  payload: Payload | Promise<Payload>,
-  {
-    collection,
-    data,
-  }: {
-    collection: CollectionSlug;
-    data: RequiredDataFromCollectionSlug<CollectionSlug>;
-  },
-) => {
-  // Generate a random password
-  data.password = crypto.randomBytes(32).toString("hex");
-
-  // Create the user
-  const user = await (
-    await payload
-  ).create({
-    collection,
-    data,
-  });
-
-  // Remove the salt and hash after the user was created
-  await (
-    await payload
-  ).update({
-    collection,
-    id: user.id,
-    data: {
-      salt: null,
-      hash: null,
-    },
-  });
-
-  return user;
-};

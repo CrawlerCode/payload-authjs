@@ -1,9 +1,10 @@
 import { headers } from "next/headers";
-import type { CollectionSlug, DataFromCollectionSlug } from "payload";
+import type { DataFromCollectionSlug } from "payload";
 import { cache } from "react";
 import type { AUTHJS_STRATEGY_NAME } from "../../constants";
+import type { AuthCollectionSlug } from "../plugin";
 
-interface Options<TSlug extends CollectionSlug> {
+interface Options<TSlug extends AuthCollectionSlug> {
   /**
    * The slug of the collection that contains the users
    *
@@ -12,13 +13,13 @@ interface Options<TSlug extends CollectionSlug> {
   userCollectionSlug?: TSlug;
 }
 
-export interface PayloadSession<TSlug extends CollectionSlug> {
+export interface PayloadSession<TSlug extends AuthCollectionSlug> {
   user: {
-    collection?: CollectionSlug;
+    collection?: TSlug;
     _strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
   } & DataFromCollectionSlug<TSlug>;
-  expires: string;
-  collection?: CollectionSlug;
+  expires?: string;
+  collection?: TSlug;
   strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
 }
 
@@ -32,7 +33,7 @@ export interface PayloadSession<TSlug extends CollectionSlug> {
  * You can manually invalidate the cache by calling `revalidateTag("payload-session")`
  */
 export const getPayloadSession = cache(
-  async <TSlug extends CollectionSlug = "users">({
+  async <TSlug extends AuthCollectionSlug = "users">({
     userCollectionSlug = "users" as TSlug,
   }: Options<TSlug> = {}): Promise<PayloadSession<TSlug> | null> => {
     // Get the server URL
@@ -52,12 +53,12 @@ export const getPayloadSession = cache(
     const result: {
       user:
         | ({
-            collection?: CollectionSlug;
+            collection?: TSlug;
             _strategy?: typeof AUTHJS_STRATEGY_NAME | "local-jwt" | "api-key" | ({} & string);
           } & DataFromCollectionSlug<TSlug>)
         | null;
-      exp: number;
-      collection?: CollectionSlug;
+      exp?: number;
+      collection?: TSlug;
       /**
        * @deprecated Use user._strategy instead
        *
@@ -74,8 +75,11 @@ export const getPayloadSession = cache(
     // Return the session
     return {
       user: result.user,
-      expires: new Date(result.exp * 1000).toISOString(),
-      collection: result.collection,
+      expires:
+        result.exp && typeof result.exp === "number"
+          ? new Date(result.exp * 1000).toISOString()
+          : undefined,
+      collection: result.collection ?? result.user.collection,
       strategy: result.user._strategy ?? result.strategy, // Extract the strategy from user._strategy or for legacy support directly from the result
     };
   },

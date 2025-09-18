@@ -18,7 +18,7 @@ export const logoutHook: (
   // Return the logout hook
   return async ({ req }) => {
     // Check if user is authenticated using the authjs strategy
-    if (req.user?._strategy !== AUTHJS_STRATEGY_NAME) {
+    if ((req.user as { _strategy?: string } | null)?._strategy !== AUTHJS_STRATEGY_NAME) {
       return;
     }
 

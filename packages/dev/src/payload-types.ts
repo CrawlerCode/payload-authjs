@@ -142,7 +142,7 @@ export interface User {
     | {
         provider: string;
         providerAccountId: string;
-        type: string;
+        type: 'oidc' | 'oauth' | 'email' | 'webauthn';
         additionalAccountDatabaseField: string;
         createdAt: string;
         id?: string | null;

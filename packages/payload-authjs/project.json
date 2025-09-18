@@ -16,11 +16,17 @@
             "input": "packages/payload-authjs/src",
             "glob": "**/*.css",
             "output": "."
+          },
+          {
+            "input": "packages/payload-authjs/src",
+            "glob": "**/.npmignore",
+            "output": "."
           }
         ],
         "clean": false
       },
-      "cache": true
+      "cache": true,
+      "dependsOn": ["generate:types"]
     },
     "yalc:publish": {
       "executor": "nx:run-commands",
@@ -29,6 +35,16 @@
         "command": "pnpx yalc publish"
       },
       "dependsOn": ["build"]
+    },
+    "generate:types": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/payload-authjs",
+        "command": "payload generate:types",
+        "env": {
+          "PAYLOAD_CONFIG_PATH": "src/types/payload.config.ts"
+        }
+      }
     }
   }
 }

@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
-import type { AuthStrategy, CollectionConfig, TypedUser as PayloadUser } from "payload";
+import type { AuthStrategy, CollectionConfig } from "payload";
 import { withPayload } from "../authjs/withPayload";
 import { AUTHJS_STRATEGY_NAME } from "../constants";
-import type { AuthjsPluginConfig } from "./plugin";
+import type { AuthCollectionSlug, AuthjsPluginConfig } from "./plugin";
 import { getAllVirtualFields } from "./utils/getAllVirtualFields";
 import { getUserAttributes } from "./utils/getUserAttributes";
 
@@ -24,7 +24,7 @@ export function AuthjsAuthStrategy(
       const { auth } = NextAuth(
         withPayload(pluginOptions.authjsConfig, {
           payload,
-          userCollectionSlug: collection.slug,
+          userCollectionSlug: collection.slug as AuthCollectionSlug,
         }),
       );
       const session = await auth();
@@ -35,10 +35,11 @@ export function AuthjsAuthStrategy(
       }
 
       // Find user in database
-      const sanitizedCollectionConfig = payload.collections[collection.slug].config;
+      const sanitizedCollectionConfig =
+        payload.collections[collection.slug as AuthCollectionSlug].config;
       const payloadUser = (
         await payload.find({
-          collection: collection.slug,
+          collection: collection.slug as AuthCollectionSlug,
           where: session.user.id
             ? // Find user by id if it exists
               { id: { equals: session.user.id } }
@@ -63,16 +64,16 @@ export function AuthjsAuthStrategy(
       }
 
       // Get user virtual fields
-      const virtualSessionFields = getUserAttributes(
+      const virtualSessionFields = getUserAttributes<AuthCollectionSlug>(
         session.user,
         virtualFields,
-      ) as Partial<PayloadUser>;
+      );
 
       // Return user to payload cms
       return {
         user: {
           _strategy: AUTHJS_STRATEGY_NAME,
-          collection: collection.slug,
+          collection: collection.slug as AuthCollectionSlug,
           ...payloadUser,
           ...virtualSessionFields,
         },

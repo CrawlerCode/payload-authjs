@@ -1,6 +1,6 @@
-import type { Access, CollectionConfig, User } from "payload";
+import type { Access, CollectionConfig, TypedUser } from "payload";
 
-const myselfAccess: Access<User> = ({ req: { user } }) => {
+const myselfAccess: Access<TypedUser> = ({ req: { user } }) => {
   // User is required
   if (!user) {
     return false;

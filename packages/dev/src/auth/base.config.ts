@@ -1,28 +1,5 @@
 import jwt from "jsonwebtoken";
 import type { NextAuthConfig, Session } from "next-auth";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { JWT } from "next-auth/jwt";
-import type { PayloadAuthjsUser } from "payload-authjs";
-import type { User as PayloadUser } from "../payload-types";
-
-declare module "next-auth" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface User extends PayloadAuthjsUser<PayloadUser> {}
-}
-declare module "next-auth/jwt" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface JWT
-    extends Partial<
-      Pick<
-        PayloadUser,
-        | "id"
-        | "additionalUserDatabaseField"
-        | "additionalUserVirtualField"
-        | "roles"
-        | "currentAccount"
-      >
-    > {}
-}
 
 export const SESSION_STRATEGY: NonNullable<NonNullable<NextAuthConfig["session"]>["strategy"]> =
   "jwt";
@@ -46,7 +23,6 @@ export const authConfig: NextAuthConfig = {
         if (user.id) {
           token.id = user.id;
         }
-        token.additionalUserDatabaseField = user.additionalUserDatabaseField;
       }
 
       // Add virtual field to the token
@@ -157,7 +133,6 @@ export const authConfig: NextAuthConfig = {
           session.user.id = token.id;
         }
 
-        session.user.additionalUserDatabaseField = token.additionalUserDatabaseField;
         session.user.additionalUserVirtualField = token.additionalUserVirtualField;
 
         session.user.roles = token.roles;

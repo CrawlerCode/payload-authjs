@@ -1,3 +1,4 @@
+import type { AdapterAccountType } from "next-auth/adapters";
 import type { Field } from "payload";
 
 /**
@@ -14,7 +15,17 @@ export const accountsField: Field = {
       fields: [
         { name: "provider", type: "text", required: true },
         { name: "providerAccountId", type: "text", required: true, index: true },
-        { name: "type", type: "text", required: true },
+        {
+          name: "type",
+          type: "text",
+          required: true,
+          typescriptSchema: [
+            () => ({
+              type: "string",
+              enum: ["oidc", "oauth", "email", "webauthn"] satisfies AdapterAccountType[],
+            }),
+          ],
+        },
       ],
     },
   ],

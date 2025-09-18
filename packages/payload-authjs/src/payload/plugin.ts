@@ -1,8 +1,12 @@
 import type { NextAuthConfig } from "next-auth";
-import type { CollectionSlug, CustomComponent, Plugin } from "payload";
+import type { CustomComponent, GeneratedTypes, Plugin } from "payload";
 import { getProviderMetadata } from "../authjs/utils/config";
 import type { SignInButtonOptions, SignInButtonProps } from "../components/SignInButton";
 import { generateUsersCollection } from "./collection";
+
+export type AuthCollectionSlug<T = GeneratedTypes> = "auth" extends keyof T
+  ? keyof T["auth"]
+  : string;
 
 export interface AuthjsPluginConfig {
   /**
@@ -17,7 +21,7 @@ export interface AuthjsPluginConfig {
    *
    * @default "users"
    */
-  userCollectionSlug?: CollectionSlug;
+  userCollectionSlug?: AuthCollectionSlug;
 
   /**
    * Auth.js configuration
@@ -49,6 +53,9 @@ export interface AuthjsPluginConfig {
   };
 }
 
+/**
+ * The Auth.js plugin for Payload CMS
+ */
 export const authjsPlugin =
   (pluginOptions: AuthjsPluginConfig): Plugin =>
   incomingConfig => {
