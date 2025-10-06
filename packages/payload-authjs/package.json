@@ -55,13 +55,13 @@
   ],
   "scripts": {},
   "devDependencies": {
-    "@payloadcms/ui": "3.54.0",
-    "@types/react": "19.1.12",
-    "next": "15.5.2",
-    "next-auth": "5.0.0-beta.28",
-    "payload": "3.54.0",
-    "react": "19.1.1",
-    "typescript": "^5.9.2"
+    "@payloadcms/ui": "3.58.0",
+    "@types/react": "19.2.0",
+    "next": "15.5.4",
+    "next-auth": "5.0.0-beta.29",
+    "payload": "3.58.0",
+    "react": "19.2.0",
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "@payloadcms/ui": "^3.16.0",

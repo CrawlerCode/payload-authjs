@@ -17,6 +17,7 @@ export const PayloadAuthProvider = async ({ children }: { children: ReactNode })
           language: "en",
         }),
         importMap,
+        user: true,
       })}
     >
       <AuthProvider>{children}</AuthProvider>
