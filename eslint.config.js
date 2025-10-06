@@ -30,6 +30,7 @@ export default [
       "perfectionist/sort-object-types": "off",
       "perfectionist/sort-imports": "off",
       "perfectionist/sort-jsx-props": "off",
+      "perfectionist/sort-named-exports": "off",
     },
   },
   {

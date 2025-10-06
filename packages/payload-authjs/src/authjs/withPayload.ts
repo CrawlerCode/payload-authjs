@@ -63,6 +63,8 @@ export interface WithPayloadOptions extends PayloadAdapterOptions {
 /**
  * Wraps the Auth.js configuration
  *
+ * @deprecated The `withPayload` function is deprecated and will be removed in the future. See the [migration guide](https://github.com/CrawlerCode/payload-authjs/releases/tag/v0.9.0) for details on how to migrate.
+ *
  * @example
  * import { config } from "./auth.config";
  *

@@ -21,7 +21,7 @@ import { refreshHook } from "./hooks/refresh";
 export const generateUsersCollection = (
   collections: CollectionConfig[],
   pluginOptions: AuthjsPluginConfig,
-): void => {
+): CollectionConfig => {
   // Get or create users collection
   const userCollectionSlug = pluginOptions.userCollectionSlug || "users";
   let collection = collections?.find(c => c.slug === userCollectionSlug);
@@ -107,7 +107,7 @@ export const generateUsersCollection = (
     typeof collection.auth === "object" ? collection.auth : {};
   collection.auth = {
     ...authOptions,
-    strategies: [AuthjsAuthStrategy(collection, pluginOptions), ...(authStrategies ?? [])],
+    strategies: [AuthjsAuthStrategy(collection), ...(authStrategies ?? [])],
     // Disable local strategy if not explicitly enabled
     ...(pluginOptions.enableLocalStrategy === true ? {} : { disableLocalStrategy: true }),
   };
@@ -115,15 +115,17 @@ export const generateUsersCollection = (
   // Add hooks to users collection
   collection.hooks = {
     ...collection.hooks,
-    me: [...(collection.hooks?.me || []), meHook(collection, pluginOptions)],
-    refresh: [...(collection.hooks?.refresh || []), refreshHook(collection, pluginOptions)],
-    afterLogout: [...(collection.hooks?.afterLogout || []), logoutHook(pluginOptions)],
+    me: [...(collection.hooks?.me || []), meHook(collection)],
+    refresh: [...(collection.hooks?.refresh || []), refreshHook(collection)],
+    afterLogout: [...(collection.hooks?.afterLogout || []), logoutHook],
   };
 
   // Add custom endpoints to users collection
   collection.endpoints = [
     ...(collection.endpoints || []),
     // Add the refresh endpoint
-    refreshEndpoint(pluginOptions),
+    refreshEndpoint,
   ];
+
+  return collection;
 };

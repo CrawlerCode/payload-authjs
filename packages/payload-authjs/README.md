@@ -29,7 +29,7 @@ pnpm i payload-authjs
 
 ### 1. Setup Auth.js
 
-First of all, this plugin only integrates Auth.js into Payload CMS by getting the user session from Auth.js. It doesn't handle the Auth.js stuff. You need to setup Auth.js before you can use this plugin.
+This plugin integrates Auth.js into Payload CMS by getting the user session from Auth.js. You need to setup Auth.js before you can use this plugin.
 
 #### 1.1. Create your Auth.js configuration
 
@@ -49,23 +49,19 @@ export const authConfig: NextAuthConfig = {
 
 #### 1.2. Create your Auth.js instance
 
-Next, create your Auth.js instance in a file (e.g. `auth.ts`). But before creating the Auth.js instance, you need to wrap your Auth.js configuration with the `withPayload` function:
+Next, create your Auth.js instance in a file (e.g. `auth.ts`).
+
+> ⚠ But unlike what you would normally do in Auth.js, you need to create the Payload instance first and using the `getAuthjsInstance` function to retrieve the Auth.js instance.
 
 ```ts
 // auth.ts
 import payloadConfig from "@payload-config";
-import NextAuth from "next-auth";
-import { withPayload } from "payload-authjs";
-import { authConfig } from "./auth.config"; // ⚠ Import the config from a separate file
+import { getPayload } from "payload";
+import { getAuthjsInstance } from "payload-authjs";
 
-export const { handlers, signIn, signOut, auth } = NextAuth(
-  withPayload(authConfig, {
-    payloadConfig,
-  }),
-);
+const payload = await getPayload({ config: payloadConfig });
+export const { handlers, signIn, signOut, auth } = getAuthjsInstance(payload);
 ```
-
-> ⚠ Make sure you define your config in a separate file than where you create the NextAuth instance to avoid circular dependencies.
 
 #### 1.3. Add Auth.js route handler
 
@@ -82,7 +78,7 @@ export const { GET, POST } = handlers;
 
 Add optional `middleware.ts` to keep the session alive, this will update the session expiry each time it's called.
 
-> ⚠ Unlike what you would normally do in Auth.js, you cannot use the `middleware` of `@/auth` directly. You have to create a new Auth.js instance without the `withPayload` wrapper to be [edge-compatible](https://authjs.dev/guides/edge-compatibility).
+> ⚠ Unlike what you would normally do in Auth.js, you cannot use the `middleware` of `@/auth` directly. You have to create a new Auth.js instance to be [edge-compatible](https://authjs.dev/guides/edge-compatibility).
 
 ```ts
 // middleware.ts
@@ -460,48 +456,38 @@ _More information about typescript can be found in the [Auth.js documentation](h
 
 ## 🎉 Events
 
-Auth.js emits some [events](https://authjs.dev/reference/nextjs#events) that you can listen to. This plugin extends the events with additional parameters such as the `adapter` and `payload` instance.
+Auth.js emits some [events](https://authjs.dev/reference/nextjs#events) that you can listen to. This plugin extends the events with additional parameters such as the database `adapter` and the `payload` instance.
 
 _More information about the events can be found in the [Auth.js documentation](https://authjs.dev/reference/nextjs#events)._
 
-The following events are available:
-
-- signIn
-- signOut
-- createUser
-- updateUser
-- linkAccount
-- session
-
-### `signIn` Event
+### Example: `signIn` Event
 
 The `signIn` event is fired when a user successfully signs in. For example, you could use this event to update the user's name on every sign-in:
 
 ```ts
-// auth.ts
-export const { handlers, signIn, signOut, auth } = NextAuth(
-  withPayload(authConfig, {
-    payloadConfig,
-    events: {
-      /**
-       * Update user 'name' on every sign in
-       */
-      signIn: async ({ adapter, user, profile }) => {
-        if (!user.id || !profile) {
-          return;
-        }
-        await adapter.updateUser!({
-          id: user.id,
-          name:
-            (profile as unknown as GitHubProfile).name ??
-            (profile as unknown as GitHubProfile).login,
-          email: profile.email ?? undefined,
-          image: (profile as unknown as GitHubProfile).avatar_url,
-        });
-      },
+// auth.config.ts
+import { EnrichedAuthConfig } from "payload-authjs";
+
+export const authConfig: EnrichedAuthConfig = {
+  providers: [github],
+  events: {
+    /**
+     * Update user 'name', 'email' and 'image' on every sign in
+     */
+    signIn: async ({ adapter, user, profile }) => {
+      if (!user.id || !profile) {
+        return;
+      }
+      await adapter?.updateUser?.({
+        id: user.id,
+        name:
+          (profile as unknown as GitHubProfile).name ?? (profile as unknown as GitHubProfile).login,
+        email: profile.email ?? undefined,
+        image: (profile as unknown as GitHubProfile).avatar_url,
+      });
     },
-  }),
-);
+  },
+};
 ```
 
 # 📓 Examples

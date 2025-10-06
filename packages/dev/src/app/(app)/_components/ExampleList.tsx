@@ -2,9 +2,8 @@ import config from "@payload-config";
 import { getPayload } from "payload";
 import { getPayloadSession } from "payload-authjs";
 
-const payload = await getPayload({ config });
-
 const ExampleList = async () => {
+  const payload = await getPayload({ config });
   const session = await getPayloadSession();
 
   if (!session) {

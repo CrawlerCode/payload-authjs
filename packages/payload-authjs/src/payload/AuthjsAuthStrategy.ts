@@ -1,8 +1,7 @@
-import NextAuth from "next-auth";
 import type { AuthStrategy, CollectionConfig } from "payload";
-import { withPayload } from "../authjs/withPayload";
+import { getAuthjsInstance } from "../authjs/getAuthjsInstance";
 import { AUTHJS_STRATEGY_NAME } from "../constants";
-import type { AuthCollectionSlug, AuthjsPluginConfig } from "./plugin";
+import type { AuthCollectionSlug } from "./plugin";
 import { getAllVirtualFields } from "./utils/getAllVirtualFields";
 import { getUserAttributes } from "./utils/getUserAttributes";
 
@@ -10,10 +9,7 @@ import { getUserAttributes } from "./utils/getUserAttributes";
  * Auth.js Authentication Strategy for Payload CMS
  * @see https://payloadcms.com/docs/authentication/custom-strategies
  */
-export function AuthjsAuthStrategy(
-  collection: CollectionConfig,
-  pluginOptions: AuthjsPluginConfig,
-): AuthStrategy {
+export function AuthjsAuthStrategy(collection: CollectionConfig): AuthStrategy {
   // Get all virtual fields
   const virtualFields = getAllVirtualFields(collection.fields);
 
@@ -21,12 +17,7 @@ export function AuthjsAuthStrategy(
     name: AUTHJS_STRATEGY_NAME,
     authenticate: async ({ payload, isGraphQL }) => {
       // Get session from authjs
-      const { auth } = NextAuth(
-        withPayload(pluginOptions.authjsConfig, {
-          payload,
-          userCollectionSlug: collection.slug as AuthCollectionSlug,
-        }),
-      );
+      const { auth } = getAuthjsInstance(payload, collection.slug as AuthCollectionSlug);
       const session = await auth();
 
       // If no session, return null user

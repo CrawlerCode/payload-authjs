@@ -1,10 +1,6 @@
 import payloadConfig from "@payload-config";
-import NextAuth from "next-auth";
-import { withPayload } from "payload-authjs";
-import { authConfig } from "./auth.config";
+import { getPayload } from "payload";
+import { getAuthjsInstance } from "payload-authjs";
 
-export const { handlers, signIn, signOut, auth } = NextAuth(
-  withPayload(authConfig, {
-    payloadConfig,
-  }),
-);
+const payload = await getPayload({ config: payloadConfig });
+export const { handlers, signIn, signOut, auth } = getAuthjsInstance(payload);

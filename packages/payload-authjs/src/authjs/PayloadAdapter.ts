@@ -13,6 +13,8 @@ export interface PayloadAdapterOptions {
   /**
    * The Payload configuration
    *
+   * @deprecated Use the `payload` option instead
+   *
    * @example
    * import payloadConfig from "@payload-config";
    */

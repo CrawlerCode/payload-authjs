@@ -1,6 +1,9 @@
 import type { NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
 import type { CustomComponent, GeneratedTypes, Plugin } from "payload";
+import { setAuthjsInstance } from "../authjs/getAuthjsInstance";
 import { getProviderMetadata } from "../authjs/utils/config";
+import { type EnrichedAuthConfig, withPayloadAuthjs } from "../authjs/withPayloadAuthjs";
 import type { SignInButtonOptions, SignInButtonProps } from "../components/SignInButton";
 import { generateUsersCollection } from "./collection";
 
@@ -31,7 +34,7 @@ export interface AuthjsPluginConfig {
    *
    * authjsPlugin({ authjsConfig: config })
    */
-  authjsConfig: NextAuthConfig;
+  authjsConfig: EnrichedAuthConfig<NextAuthConfig>;
 
   /**
    * Enable the default local strategy from Payload CMS (experimental)
@@ -68,11 +71,11 @@ export const authjsPlugin =
 
     // Generate users collection
     config.collections = config.collections ?? [];
-    generateUsersCollection(config.collections, pluginOptions);
+    const collection = generateUsersCollection(config.collections, pluginOptions);
 
     // Add the SignInButton component to the admin login page (only if the user collection is the admin user collection)
     if (
-      incomingConfig.admin?.user === (pluginOptions.userCollectionSlug ?? "users") &&
+      incomingConfig.admin?.user === collection.slug &&
       pluginOptions.components?.SignInButton !== false
     ) {
       const signInButtonOptions = pluginOptions.components?.SignInButton;
@@ -120,6 +123,25 @@ export const authjsPlugin =
         },
       };
     }
+
+    config.onInit = async payload => {
+      payload.logger.debug(`Initializing Auth.js instance for collection '${collection.slug}'`);
+
+      // Initialize Auth.js instance
+      const authjs = NextAuth(
+        withPayloadAuthjs({
+          payload,
+          config: pluginOptions.authjsConfig,
+          collectionSlug: collection.slug as AuthCollectionSlug,
+        }),
+      );
+
+      // Expose Auth.js instance to the payload instance
+      setAuthjsInstance(payload, collection.slug as AuthCollectionSlug, authjs);
+
+      // Execute the incoming onInit hook
+      await incomingConfig.onInit?.(payload);
+    };
 
     return config;
   };

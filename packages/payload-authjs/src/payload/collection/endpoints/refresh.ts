@@ -1,11 +1,10 @@
-import NextAuth from "next-auth";
 import type { Endpoint, PayloadRequest } from "payload";
 import { generatePayloadCookie, headersWithCors, refreshOperation } from "payload";
 
 import { revalidateTag } from "next/cache";
-import { withPayload } from "../../../authjs/withPayload";
+import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance";
 import { AUTHJS_STRATEGY_NAME } from "../../../constants";
-import type { AuthjsPluginConfig } from "../../plugin";
+import type { AuthCollectionSlug } from "../../plugin";
 import { getRequestCollection } from "../../utils/getRequestCollection";
 
 /**
@@ -15,7 +14,7 @@ import { getRequestCollection } from "../../utils/getRequestCollection";
  * @see https://github.com/payloadcms/payload/blob/main/packages/payload/src/auth/endpoints/refresh.ts
  * @see https://github.com/payloadcms/payload/blob/main/packages/payload/src/auth/operations/refresh.ts
  */
-export const refreshEndpoint: (pluginOptions: AuthjsPluginConfig) => Endpoint = pluginOptions => ({
+export const refreshEndpoint: Endpoint = {
   method: "post",
   path: "/refresh-token",
   handler: async req => {
@@ -64,7 +63,7 @@ export const refreshEndpoint: (pluginOptions: AuthjsPluginConfig) => Endpoint = 
 
     // If the user is authenticated using authjs, we need to refresh the authjs session cookie
     if (result.user?._strategy === AUTHJS_STRATEGY_NAME) {
-      await refreshAuthjsSessionCookie(req, response, pluginOptions);
+      await refreshAuthjsSessionCookie(req, response, collection.config.slug as AuthCollectionSlug);
 
       // Revalidate the cache for the payload session
       revalidateTag("payload-session");
@@ -72,7 +71,7 @@ export const refreshEndpoint: (pluginOptions: AuthjsPluginConfig) => Endpoint = 
 
     return response;
   },
-});
+};
 
 /**
  * Refresh the authjs session cookie
@@ -80,15 +79,9 @@ export const refreshEndpoint: (pluginOptions: AuthjsPluginConfig) => Endpoint = 
 const refreshAuthjsSessionCookie = async (
   req: PayloadRequest,
   response: Response,
-  pluginOptions: AuthjsPluginConfig,
+  collectionSlug: AuthCollectionSlug,
 ) => {
-  // Create authjs instance
-  const { auth } = NextAuth(
-    withPayload(pluginOptions.authjsConfig, {
-      payload: req.payload,
-      userCollectionSlug: pluginOptions.userCollectionSlug,
-    }),
-  );
+  const { auth } = getAuthjsInstance(req.payload, collectionSlug);
 
   // Execute authjs "auth" function to refresh the session and generate cookies
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
