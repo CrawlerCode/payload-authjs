@@ -1,5 +1,6 @@
 import { type CollectionConfig, type CollectionRefreshHook, Forbidden } from "payload";
 import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance";
+import { AUTHJS_STRATEGY_NAME } from "../../../constants";
 import type { AuthCollectionSlug } from "../../plugin";
 import { getAllVirtualFields } from "../../utils/getAllVirtualFields";
 import { getUserAttributes } from "../../utils/getUserAttributes";
@@ -16,6 +17,11 @@ export const refreshHook: (collection: CollectionConfig) => CollectionRefreshHoo
 
   // Return the refresh hook
   return async ({ args: { req, collection }, user }) => {
+    // Check if user is authenticated using the authjs strategy
+    if ((user as { _strategy?: string } | null)?._strategy !== AUTHJS_STRATEGY_NAME) {
+      return;
+    }
+
     // Get session from authjs
     const { auth } = getAuthjsInstance(req.payload, collection.config.slug as AuthCollectionSlug);
     const session = await auth();
