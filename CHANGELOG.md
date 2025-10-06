@@ -1,3 +1,21 @@
+## 0.9.0 (2025-10-06)
+
+### 🚀 Features
+
+- Add support for Auth.js passkey provider ([#45](https://github.com/CrawlerCode/payload-authjs/pull/45))
+- Receive the auth.js instance from the payload using getAuthjsInstance ([8230215](https://github.com/CrawlerCode/payload-authjs/commit/8230215))
+
+### 🩹 Fixes
+
+- Enforce stricter types ([50aa494](https://github.com/CrawlerCode/payload-authjs/commit/50aa494))
+- Check user strategy in refresh hook ([#47](https://github.com/CrawlerCode/payload-authjs/pull/47))
+
+### 🏡 Chore
+
+- Add bundle size badge to README ([c8bdcd1](https://github.com/CrawlerCode/payload-authjs/commit/c8bdcd1))
+- **deps:** Update npm dependencies ([dbd0141](https://github.com/CrawlerCode/payload-authjs/commit/dbd0141))
+- **nx:** Use payload-authjs as workspace package for dev project ([22021c4](https://github.com/CrawlerCode/payload-authjs/commit/22021c4))
+
 ## 0.8.4 (2025-09-02)
 
 ### 🩹 Fixes
