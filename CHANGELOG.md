@@ -1,3 +1,9 @@
+## 0.9.1 (2025-10-13)
+
+### 🩹 Fixes
+
+- Move webauthn components to dedicated export ([#48](https://github.com/CrawlerCode/payload-authjs/pull/48))
+
 ## 0.9.0 (2025-10-06)
 
 ### 🚀 Features
