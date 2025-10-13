@@ -1,6 +1,6 @@
 import type { Field } from "payload";
 import { getProviderMetadata } from "../../../authjs/utils/config";
-import type { AddAuthenticatorButtonProps } from "../../../components/AddAuthenticatorButton";
+import type { AddAuthenticatorButtonProps } from "../../components/AddAuthenticatorButton";
 import type { AuthjsPluginConfig } from "../../plugin";
 
 /**
@@ -29,7 +29,7 @@ export const authenticatorsField = (pluginOptions: AuthjsPluginConfig): Field =>
       initCollapsed: true,
       components: {
         afterInput: providers.map(provider => ({
-          path: "payload-authjs/components#AddAuthenticatorButton",
+          path: "payload-authjs/components/webauthn#AddAuthenticatorButton",
           clientProps: {
             provider,
           } satisfies AddAuthenticatorButtonProps,

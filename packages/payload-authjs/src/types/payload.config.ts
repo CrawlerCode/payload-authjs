@@ -1,7 +1,7 @@
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
-import { authjsPlugin } from "..";
+import { authjsPlugin } from "../payload/plugin";
 import { authConfig } from "./auth.config";
 
 const filename = fileURLToPath(import.meta.url);

@@ -3,8 +3,8 @@
 import { Button, useAuth, useDocumentInfo } from "@payloadcms/ui";
 import { signIn } from "next-auth/webauthn";
 import type { TypedUser } from "payload";
-import type { getProviderMetadata } from "../authjs/utils/config";
-import { AUTHJS_STRATEGY_NAME } from "../constants";
+import type { getProviderMetadata } from "../../authjs/utils/config";
+import { AUTHJS_STRATEGY_NAME } from "../../constants";
 
 export type AddAuthenticatorButtonProps = {
   provider: ReturnType<typeof getProviderMetadata>;

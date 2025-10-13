@@ -4,8 +4,8 @@ import type { CustomComponent, GeneratedTypes, Plugin } from "payload";
 import { setAuthjsInstance } from "../authjs/getAuthjsInstance";
 import { getProviderMetadata } from "../authjs/utils/config";
 import { type EnrichedAuthConfig, withPayloadAuthjs } from "../authjs/withPayloadAuthjs";
-import type { SignInButtonOptions, SignInButtonProps } from "../components/SignInButton";
 import { generateUsersCollection } from "./collection";
+import type { SignInButtonOptions, SignInButtonProps } from "./components/SignInButton";
 
 export type AuthCollectionSlug<T = GeneratedTypes> = "auth" extends keyof T
   ? keyof T["auth"]
@@ -105,7 +105,10 @@ export const authjsPlugin =
               .map(
                 provider =>
                   ({
-                    path: "payload-authjs/components#SignInButton",
+                    path:
+                      provider.type === "webauthn"
+                        ? "payload-authjs/components/webauthn#SignInButtonWebauthn"
+                        : "payload-authjs/components#SignInButton",
                     clientProps: {
                       icon:
                         typeof signInButtonOptions?.icon === "function"

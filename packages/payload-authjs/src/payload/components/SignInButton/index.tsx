@@ -3,7 +3,7 @@
 import { Button } from "@payloadcms/ui";
 import { signIn } from "next-auth/react";
 import type { ReactNode } from "react";
-import type { getProviderMetadata } from "../../authjs/utils/config";
+import type { getProviderMetadata } from "../../../authjs/utils/config";
 import "./index.css";
 
 export type SignInButtonOptions = {
@@ -31,6 +31,7 @@ export type SignInButtonProps = {
   provider: ReturnType<typeof getProviderMetadata>;
   icon?: ReactNode;
   text?: ReactNode;
+  signInFn?: typeof signIn;
 };
 
 /**
@@ -44,6 +45,7 @@ export const SignInButton = ({
       Sign in with <strong>{provider.name}</strong>
     </>
   ),
+  signInFn = signIn,
 }: SignInButtonProps) => {
   return (
     <Button
@@ -53,12 +55,7 @@ export const SignInButton = ({
       icon={icon}
       iconPosition="left"
       onClick={async () => {
-        if (provider.type === "webauthn") {
-          const { signIn } = await import("next-auth/webauthn");
-          await signIn(provider.id);
-        } else {
-          await signIn(provider.id);
-        }
+        await signInFn(provider.id);
       }}
     >
       {text}

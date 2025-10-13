@@ -14,19 +14,19 @@
     "url": "https://github.com/CrawlerCode"
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.js",
+  "main": "dist/exports/server.js",
+  "types": "dist/exports/server.d.ts",
+  "module": "dist/exports/server.js",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./dist/exports/server.d.ts",
+      "import": "./dist/exports/server.js",
+      "default": "./dist/exports/server.js"
     },
     "./client": {
-      "types": "./dist/client.d.ts",
-      "import": "./dist/client.js",
-      "default": "./dist/client.js"
+      "types": "./dist/exports/client.d.ts",
+      "import": "./dist/exports/client.js",
+      "default": "./dist/exports/client.js"
     },
     "./middleware": {
       "types": "./dist/payload/middleware.d.ts",
@@ -34,9 +34,14 @@
       "default": "./dist/payload/middleware.js"
     },
     "./components": {
-      "types": "./dist/components/index.d.ts",
-      "import": "./dist/components/index.js",
-      "default": "./dist/components/index.js"
+      "types": "./dist/exports/components/index.d.ts",
+      "import": "./dist/exports/components/index.js",
+      "default": "./dist/exports/components/index.js"
+    },
+    "./components/webauthn": {
+      "types": "./dist/exports/components/webauthn.d.ts",
+      "import": "./dist/exports/components/webauthn.js",
+      "default": "./dist/exports/components/webauthn.js"
     }
   },
   "files": [
