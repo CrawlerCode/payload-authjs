@@ -38,6 +38,9 @@
         "docs": {
           "changelog": true
         },
+        "ci": {
+          "changelog": true
+        },
         "example": {
           "changelog": {
             "title": "📓 Examples"
