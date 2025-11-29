@@ -20,11 +20,10 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           registry-url: https://registry.npmjs.org/
-          cache: "pnpm"
 
       - run: pnpm install --frozen-lockfile
 
@@ -35,6 +34,3 @@ jobs:
 
       - run: pnpm exec nx release publish
         shell: bash
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
