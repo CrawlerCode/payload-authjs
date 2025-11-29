@@ -1,3 +1,17 @@
+## 0.10.0 (2025-11-29)
+
+### 🚀 Features
+
+- Migrate to next js v16 ([2fce597](https://github.com/CrawlerCode/payload-authjs/commit/2fce597))
+
+### 🏡 Chore
+
+- **nx:** Add ci scope to changelog ([1237ecd](https://github.com/CrawlerCode/payload-authjs/commit/1237ecd))
+
+### 🤖 CI
+
+- **publish:** Use npm trusted publishing ([4bd2898](https://github.com/CrawlerCode/payload-authjs/commit/4bd2898))
+
 ## 0.9.1 (2025-10-13)
 
 ### 🩹 Fixes
