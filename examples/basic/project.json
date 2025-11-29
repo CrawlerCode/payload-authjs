@@ -6,9 +6,6 @@
     "dev": {
       "dependsOn": ["^build"]
     },
-    "dev:turbo": {
-      "dependsOn": ["^build"]
-    },
     "build": {
       "cache": true
     },

@@ -35,5 +35,5 @@ export const logoutHook: CollectionAfterLogoutHook = async ({ req, collection })
   }
 
   // Revalidate the cache for the payload session
-  revalidateTag("payload-session");
+  revalidateTag("payload-session", "minutes");
 };

@@ -66,7 +66,7 @@ export const refreshEndpoint: Endpoint = {
       await refreshAuthjsSessionCookie(req, response, collection.config.slug as AuthCollectionSlug);
 
       // Revalidate the cache for the payload session
-      revalidateTag("payload-session");
+      revalidateTag("payload-session", "minutes");
     }
 
     return response;

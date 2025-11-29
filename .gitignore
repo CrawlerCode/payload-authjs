@@ -5,11 +5,10 @@ node_modules
 # dotenv environment variables file
 .env
 
-# Ignore dist
+# Output directories
 dist
-
-# Next.js
 .next
+tmp
 
 # Nx
 .nx/cache

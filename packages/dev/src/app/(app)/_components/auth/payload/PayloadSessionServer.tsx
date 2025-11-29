@@ -11,7 +11,7 @@ export const PayloadSessionServer = async () => {
   const refreshSession = async () => {
     "use server";
 
-    revalidateTag("payload-session");
+    revalidateTag("payload-session", "minutes");
 
     return Promise.resolve();
   };

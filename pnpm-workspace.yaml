@@ -1,11 +1,30 @@
-packages:
-  - ./packages/*
-  - ./examples/*
-
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@swc/core'
-  - '@tailwindcss/oxide'
-  - esbuild
-  - nx
-  - sharp
+{
+  "packages": [
+    "./packages/*",
+    "./examples/*"
+  ],
+  "catalog": {
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "next": "16.0.5",
+    "next-auth": "5.0.0-beta.29",
+    "payload": "3.65.0",
+    "@payloadcms/ui": "3.65.0",
+    "@payloadcms/translations": "3.65.0",
+    "@payloadcms/next": "3.65.0",
+    "@payloadcms/db-postgres": "3.65.0",
+    "@payloadcms/db-mongodb": "3.65.0",
+    "@payloadcms/graphql": "3.65.0",
+    "@payloadcms/richtext-lexical": "3.65.0"
+  },
+  "onlyBuiltDependencies": [
+    "@parcel/watcher",
+    "@swc/core",
+    "@tailwindcss/oxide",
+    "esbuild",
+    "nx",
+    "sharp"
+  ]
+}

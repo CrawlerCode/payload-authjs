@@ -75,9 +75,24 @@ import { handlers } from "@/auth";
 export const { GET, POST } = handlers;
 ```
 
-#### 1.4. Add Auth.js middleware (optional)
+#### 1.4. Add Auth.js proxy / middleware (optional)
 
-Add optional `middleware.ts` to keep the session alive, this will update the session expiry each time it's called.
+Add optional `proxy.ts`/`middleware.ts` to keep the session alive, this will update the session expiry each time it's called.
+
+> Since Next.js 16, the `middleware` has been replaced with the `proxy` and uses the nodejs runtime. See the [Next.js docs](https://nextjs.org/docs/app/guides/upgrading/version-16#middleware-to-proxy).
+
+##### Next.js 16 or above
+
+```ts
+// proxy.ts
+export { auth as proxy } from "./auth";
+
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|admin).*)"],
+};
+```
+
+##### Next.js 15
 
 > ⚠ Unlike what you would normally do in Auth.js, you cannot use the `middleware` of `@/auth` directly. You have to create a new Auth.js instance to be [edge-compatible](https://authjs.dev/guides/edge-compatibility).
 
