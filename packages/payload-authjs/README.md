@@ -2,7 +2,7 @@
 
 # Payload CMS plugin for Auth.js/NextAuth
 
-<a href="https://github.com/CrawlerCode/payload-authjs/actions/workflows/ci.yml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/CrawlerCode/payload-authjs/ci.yml?style=flat-square&logo=github"></a>
+<a href="https://github.com/CrawlerCode/payload-authjs/actions/workflows/publish.yml"><img alt="GitHub Publish Workflow Status" src="https://img.shields.io/github/actions/workflow/status/CrawlerCode/payload-authjs/publish.yml?style=flat-square&logo=github&label=publish"></a>
 <a href="https://www.npmjs.com/package/payload-authjs?activeTab=versions"><img alt="NPM Version" src="https://img.shields.io/npm/v/payload-authjs?style=flat-square"></a>
 <a href="https://github.com/CrawlerCode/payload-authjs/blob/main/LICENSE"><img alt="NPM License" src="https://img.shields.io/npm/l/payload-authjs?style=flat-square"></a>
 <a href="https://npm.chart.dev/payload-authjs?blackAsPrimary=false&primary=orange&gray=neutral&theme=dark"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/payload-authjs?style=flat-square"></a>
