@@ -178,6 +178,7 @@ export interface User {
         id?: string | null;
       }[]
     | null;
+  sidebarField?: string | null;
   updatedAt: string;
   createdAt: string;
   enableAPIKey?: boolean | null;
@@ -330,6 +331,7 @@ export interface UsersSelect<T extends boolean = true> {
         credentialDeviceType?: T;
         id?: T;
       };
+  sidebarField?: T;
   updatedAt?: T;
   createdAt?: T;
   enableAPIKey?: T;

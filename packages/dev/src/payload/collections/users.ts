@@ -176,6 +176,13 @@ const Users: CollectionConfig<"users"> = {
         }),
       ],
     },
+    {
+      name: "sidebarField",
+      type: "text",
+      admin: {
+        position: "sidebar",
+      },
+    },
     /* {
       name: "examples",
       type: "join",

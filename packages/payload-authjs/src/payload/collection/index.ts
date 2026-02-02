@@ -1,4 +1,4 @@
-import type { CollectionConfig, TabsField } from "payload";
+import type { CollectionConfig, Field, TabsField } from "payload";
 import {
   isEmailProviderAvailable,
   isSessionStrategyDatabase,
@@ -93,8 +93,21 @@ export const generateUsersCollection = (
     ],
     patchFields: collection.fields, // User defined fields
   });
+  const { topLevelFields, restTabFields } = restFields.reduce(
+    (acc, field) => {
+      // Sidebar fields must put at the top level
+      if (field.admin?.position === "sidebar") {
+        acc.topLevelFields.push(field);
+      } else {
+        acc.restTabFields.push(field);
+      }
+      return acc;
+    },
+    { topLevelFields: [] as Field[], restTabFields: [] as Field[] },
+  );
   collection.fields = mergedFields;
-  (collection.fields[1] as TabsField).tabs[0].fields.push(...restFields); // Add the rest fields to the general tab
+  collection.fields.push(...topLevelFields); // Add top-level fields
+  (collection.fields[1] as TabsField).tabs[0].fields.push(...restTabFields); // Add the rest fields to the general tab
 
   // Override the access control
   collection.access = {
