@@ -17,9 +17,6 @@ export default buildConfig({
   collections: [
     {
       slug: "users-with-local-strategy",
-      auth: {
-        useSessions: false,
-      },
       fields: [],
     },
   ],

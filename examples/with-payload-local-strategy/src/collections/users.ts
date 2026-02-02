@@ -12,7 +12,6 @@ const Users: CollectionConfig = {
      * @see https://payloadcms.com/docs/authentication/api-keys
      */
     useAPIKey: true,
-    useSessions: false, // TODO: Database sessions currently not working
   },
   fields: [],
 };

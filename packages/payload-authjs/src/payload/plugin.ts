@@ -40,6 +40,8 @@ export interface AuthjsPluginConfig {
    * Enable the default local strategy from Payload CMS (experimental)
    * @see https://payloadcms.com/docs/authentication/jwt
    *
+   * ! This does not work with database sessions (auth.useSessions: true)
+   *
    * @default false
    */
   enableLocalStrategy?: boolean;
