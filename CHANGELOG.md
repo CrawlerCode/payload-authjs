@@ -1,3 +1,19 @@
+## 0.10.1 (2026-02-02)
+
+### 🩹 Fixes
+
+- Move sidebar field to the top-level ([#50](https://github.com/CrawlerCode/payload-authjs/pull/50))
+- Disable payload database session when local strategy is enabled ([#49](https://github.com/CrawlerCode/payload-authjs/pull/49))
+
+### 📖 Documentation
+
+- Fix publish workflow badge ([a80a016](https://github.com/CrawlerCode/payload-authjs/commit/a80a016))
+- Add alert about authjs and better auth ([970d660](https://github.com/CrawlerCode/payload-authjs/commit/970d660))
+
+### 🏡 Chore
+
+- **deps:** Update npm dependencies ([a7c2f0a](https://github.com/CrawlerCode/payload-authjs/commit/a7c2f0a))
+
 ## 0.10.0 (2025-11-29)
 
 ### 🚀 Features
