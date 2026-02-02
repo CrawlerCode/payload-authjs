@@ -4,20 +4,20 @@
     "./examples/*"
   ],
   "catalog": {
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "@types/react": "19.2.7",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "@types/react": "19.2.10",
     "@types/react-dom": "19.2.3",
-    "next": "16.0.5",
+    "next": "16.1.6",
     "next-auth": "5.0.0-beta.29",
-    "payload": "3.65.0",
-    "@payloadcms/ui": "3.65.0",
-    "@payloadcms/translations": "3.65.0",
-    "@payloadcms/next": "3.65.0",
-    "@payloadcms/db-postgres": "3.65.0",
-    "@payloadcms/db-mongodb": "3.65.0",
-    "@payloadcms/graphql": "3.65.0",
-    "@payloadcms/richtext-lexical": "3.65.0"
+    "payload": "3.74.0",
+    "@payloadcms/ui": "3.74.0",
+    "@payloadcms/translations": "3.74.0",
+    "@payloadcms/next": "3.74.0",
+    "@payloadcms/db-postgres": "3.74.0",
+    "@payloadcms/db-mongodb": "3.74.0",
+    "@payloadcms/graphql": "3.74.0",
+    "@payloadcms/richtext-lexical": "3.74.0"
   },
   "onlyBuiltDependencies": [
     "@parcel/watcher",

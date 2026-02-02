@@ -8,18 +8,18 @@
     "dev": "nx run dev:dev"
   },
   "devDependencies": {
-    "@nx/eslint": "22.1.3",
-    "@nx/js": "22.1.3",
-    "@nx/next": "22.1.3",
-    "@nx/react": "22.1.3",
+    "@nx/eslint": "22.4.4",
+    "@nx/js": "22.4.4",
+    "@nx/next": "22.4.4",
+    "@nx/react": "22.4.4",
     "@payloadcms/eslint-config": "3.28.0",
-    "@swc/cli": "^0.7.9",
-    "@swc/core": "^1.15.3",
-    "eslint": "^9.39.1",
-    "nx": "22.1.3",
-    "prettier": "^3.7.2",
+    "@swc/cli": "^0.7.10",
+    "@swc/core": "^1.15.11",
+    "eslint": "^9.39.2",
+    "nx": "22.4.4",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3"
   },
   "nx": {},
-  "packageManager": "pnpm@10.24.0"
+  "packageManager": "pnpm@10.28.2"
 }
