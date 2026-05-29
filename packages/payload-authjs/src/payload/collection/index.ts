@@ -3,20 +3,20 @@ import {
   isEmailProviderAvailable,
   isSessionStrategyDatabase,
   isWebauthnProviderAvailable,
-} from "../../authjs/utils/config";
-import { AuthjsAuthStrategy } from "../AuthjsAuthStrategy";
-import type { AuthjsPluginConfig } from "../plugin";
-import { mergeFields } from "../utils/mergeFields";
-import { defaultAccess } from "./access";
-import { refreshEndpoint } from "./endpoints/refresh";
-import { accountsField } from "./fields/accounts";
-import { authenticatorsField } from "./fields/authenticators";
-import { generalFields } from "./fields/general";
-import { sessionsField } from "./fields/session";
-import { verificationTokensField } from "./fields/verificationTokens";
-import { logoutHook } from "./hooks/logout";
-import { meHook } from "./hooks/me";
-import { refreshHook } from "./hooks/refresh";
+} from "../../authjs/utils/config.js";
+import { AuthjsAuthStrategy } from "../AuthjsAuthStrategy.js";
+import type { AuthjsPluginConfig } from "../plugin.js";
+import { mergeFields } from "../utils/mergeFields.js";
+import { defaultAccess } from "./access.js";
+import { refreshEndpoint } from "./endpoints/refresh.js";
+import { accountsField } from "./fields/accounts.js";
+import { authenticatorsField } from "./fields/authenticators.js";
+import { generalFields } from "./fields/general.js";
+import { sessionsField } from "./fields/session.js";
+import { verificationTokensField } from "./fields/verificationTokens.js";
+import { logoutHook } from "./hooks/logout.js";
+import { meHook } from "./hooks/me.js";
+import { refreshHook } from "./hooks/refresh.js";
 
 export const generateUsersCollection = (
   collections: CollectionConfig[],

@@ -6,7 +6,7 @@ import {
   type VerificationToken as AdapterVerificationToken,
 } from "next-auth/adapters";
 import type { DataFromCollectionSlug } from "payload";
-import type { AuthCollectionSlug } from "../../payload/plugin";
+import type { AuthCollectionSlug } from "../../payload/plugin.js";
 
 type User = Omit<
   DataFromCollectionSlug<AuthCollectionSlug>,

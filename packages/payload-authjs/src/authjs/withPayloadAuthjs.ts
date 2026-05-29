@@ -1,8 +1,8 @@
 import type { NextAuthConfig } from "next-auth";
 import type { Adapter } from "next-auth/adapters";
 import type { Payload } from "payload";
-import type { AuthCollectionSlug } from "../payload/plugin";
-import { PayloadAdapter } from "./PayloadAdapter";
+import type { AuthCollectionSlug } from "../payload/plugin.js";
+import { PayloadAdapter } from "./PayloadAdapter.js";
 
 /**
  * An enriched version of the NextAuthConfig that includes the payload instance and database adapter in event callbacks

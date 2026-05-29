@@ -1,6 +1,6 @@
 import type { NextAuthResult } from "next-auth";
 import type { Payload } from "payload";
-import type { AuthCollectionSlug } from "../payload/plugin";
+import type { AuthCollectionSlug } from "../payload/plugin.js";
 
 type PayloadWithAuthjsInstances = {
   __authjs_instances__?: Partial<Record<AuthCollectionSlug, NextAuthResult>>;

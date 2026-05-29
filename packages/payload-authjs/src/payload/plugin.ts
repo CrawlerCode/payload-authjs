@@ -1,11 +1,11 @@
 import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import type { CustomComponent, GeneratedTypes, Plugin } from "payload";
-import { setAuthjsInstance } from "../authjs/getAuthjsInstance";
-import { getProviderMetadata } from "../authjs/utils/config";
-import { type EnrichedAuthConfig, withPayloadAuthjs } from "../authjs/withPayloadAuthjs";
-import { generateUsersCollection } from "./collection";
-import type { SignInButtonOptions, SignInButtonProps } from "./components/SignInButton";
+import { setAuthjsInstance } from "../authjs/getAuthjsInstance.js";
+import { getProviderMetadata } from "../authjs/utils/config.js";
+import { type EnrichedAuthConfig, withPayloadAuthjs } from "../authjs/withPayloadAuthjs.js";
+import { generateUsersCollection } from "./collection/index.js";
+import type { SignInButtonOptions, SignInButtonProps } from "./components/SignInButton/index.js";
 
 export type AuthCollectionSlug<T = GeneratedTypes> = "auth" extends keyof T
   ? keyof T["auth"]

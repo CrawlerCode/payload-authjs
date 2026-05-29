@@ -2,7 +2,7 @@ import type { NextAuthConfig } from "next-auth";
 import type { Adapter } from "next-auth/adapters";
 import type { Payload } from "payload";
 import { deepCopyObjectSimple, getPayload } from "payload";
-import { PayloadAdapter, type PayloadAdapterOptions } from "./PayloadAdapter";
+import { PayloadAdapter, type PayloadAdapterOptions } from "./PayloadAdapter.js";
 
 type CustomEvent<T extends keyof NonNullable<NextAuthConfig["events"]>> = (
   message: {

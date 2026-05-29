@@ -3,7 +3,7 @@
 import { Button } from "@payloadcms/ui";
 import { signIn } from "next-auth/react";
 import type { ReactNode } from "react";
-import type { getProviderMetadata } from "../../../authjs/utils/config";
+import type { getProviderMetadata } from "../../../authjs/utils/config.js";
 import "./index.css";
 
 export type SignInButtonOptions = {

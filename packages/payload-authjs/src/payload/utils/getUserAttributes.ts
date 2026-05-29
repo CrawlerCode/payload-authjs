@@ -1,6 +1,6 @@
 import type { User as AuthjsUser } from "next-auth";
 import type { DataFromCollectionSlug, Field } from "payload";
-import type { AuthCollectionSlug } from "../plugin";
+import type { AuthCollectionSlug } from "../plugin.js";
 
 /**
  * Get user attributes from a user object based on the fields

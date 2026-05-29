@@ -2,7 +2,7 @@
 
 import { useRowLabel } from "@payloadcms/ui";
 import type { DataFromCollectionSlug } from "payload";
-import type { AuthCollectionSlug } from "../../payload/plugin";
+import type { AuthCollectionSlug } from "../../payload/plugin.js";
 
 type Account = NonNullable<DataFromCollectionSlug<AuthCollectionSlug>["accounts"]>[0];
 

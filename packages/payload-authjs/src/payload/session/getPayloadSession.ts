@@ -1,8 +1,8 @@
-import { headers } from "next/headers";
+import { headers } from "next/headers.js";
 import type { DataFromCollectionSlug } from "payload";
 import { cache } from "react";
-import type { AUTHJS_STRATEGY_NAME } from "../../constants";
-import type { AuthCollectionSlug } from "../plugin";
+import type { AUTHJS_STRATEGY_NAME } from "../../constants.js";
+import type { AuthCollectionSlug } from "../plugin.js";
 
 interface Options<TSlug extends AuthCollectionSlug> {
   /**

@@ -1,8 +1,8 @@
 "use client";
 
 import { signIn } from "next-auth/webauthn";
-import type { SignInButtonProps } from "./SignInButton";
-import { SignInButton } from "./SignInButton";
+import type { SignInButtonProps } from "./SignInButton/index.js";
+import { SignInButton } from "./SignInButton/index.js";
 
 /**
  * Wrapper around the SignInButton component to use the webauthn signIn function

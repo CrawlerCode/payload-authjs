@@ -1,7 +1,7 @@
 import type { Field } from "payload";
-import { getProviderMetadata } from "../../../authjs/utils/config";
-import type { AddAuthenticatorButtonProps } from "../../components/AddAuthenticatorButton";
-import type { AuthjsPluginConfig } from "../../plugin";
+import { getProviderMetadata } from "../../../authjs/utils/config.js";
+import type { AddAuthenticatorButtonProps } from "../../components/AddAuthenticatorButton.js";
+import type { AuthjsPluginConfig } from "../../plugin.js";
 
 /**
  * Authenticators field for a user

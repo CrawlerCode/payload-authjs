@@ -1,11 +1,11 @@
 import type { Endpoint, PayloadRequest } from "payload";
 import { generatePayloadCookie, headersWithCors, refreshOperation } from "payload";
 
-import { revalidateTag } from "next/cache";
-import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance";
-import { AUTHJS_STRATEGY_NAME } from "../../../constants";
-import type { AuthCollectionSlug } from "../../plugin";
-import { getRequestCollection } from "../../utils/getRequestCollection";
+import { revalidateTag } from "next/cache.js";
+import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance.js";
+import { AUTHJS_STRATEGY_NAME } from "../../../constants.js";
+import type { AuthCollectionSlug } from "../../plugin.js";
+import { getRequestCollection } from "../../utils/getRequestCollection.js";
 
 /**
  * Override the default refresh endpoint to refresh the authjs session cookie

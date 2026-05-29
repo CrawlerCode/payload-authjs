@@ -1,8 +1,8 @@
-export { getAuthjsInstance } from "../authjs/getAuthjsInstance";
-export { PayloadAdapter } from "../authjs/PayloadAdapter";
-export { type PayloadAuthjsUser } from "../authjs/types";
-export { withPayload } from "../authjs/withPayload";
-export { withPayloadAuthjs, type EnrichedAuthConfig } from "../authjs/withPayloadAuthjs";
-export { getPayloadUser } from "../payload/getPayloadUser";
-export { authjsPlugin, type AuthjsPluginConfig } from "../payload/plugin";
-export { getPayloadSession, type PayloadSession } from "../payload/session/getPayloadSession";
+export { getAuthjsInstance } from "../authjs/getAuthjsInstance.js";
+export { PayloadAdapter } from "../authjs/PayloadAdapter.js";
+export { type PayloadAuthjsUser } from "../authjs/types.js";
+export { withPayload } from "../authjs/withPayload.js";
+export { withPayloadAuthjs, type EnrichedAuthConfig } from "../authjs/withPayloadAuthjs.js";
+export { getPayloadUser } from "../payload/getPayloadUser.js";
+export { authjsPlugin, type AuthjsPluginConfig } from "../payload/plugin.js";
+export { getPayloadSession, type PayloadSession } from "../payload/session/getPayloadSession.js";

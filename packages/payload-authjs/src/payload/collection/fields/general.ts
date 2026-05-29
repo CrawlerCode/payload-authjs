@@ -1,5 +1,5 @@
 import type { Field } from "payload";
-import type { AuthjsPluginConfig } from "../../plugin";
+import type { AuthjsPluginConfig } from "../../plugin.js";
 
 /**
  * General fields for a user

@@ -1,9 +1,9 @@
 import crypto from "crypto";
 import type { Adapter } from "next-auth/adapters";
 import { getPayload, type Payload, type SanitizedConfig } from "payload";
-import type { AuthCollectionSlug } from "../payload/plugin";
-import { createUserAndBypassPasswordCheck } from "./utils/createUserAndBypassPasswordCheck";
-import { transform } from "./utils/transform";
+import type { AuthCollectionSlug } from "../payload/plugin.js";
+import { createUserAndBypassPasswordCheck } from "./utils/createUserAndBypassPasswordCheck.js";
+import { transform } from "./utils/transform.js";
 
 export interface PayloadAdapterOptions {
   /**

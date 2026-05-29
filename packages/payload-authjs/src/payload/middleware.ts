@@ -1,5 +1,5 @@
 import type { NextAuthResult } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server.js";
 
 type Middleware = (req: NextRequest) => NextResponse;
 type AuthjsMiddleware = NextAuthResult["auth"] | ReturnType<NextAuthResult["auth"]>;

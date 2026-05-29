@@ -1,2 +1,2 @@
-export { PayloadSessionProvider } from "../payload/session/PayloadSessionProvider";
-export { usePayloadSession } from "../payload/session/usePayloadSession";
+export { PayloadSessionProvider } from "../payload/session/PayloadSessionProvider.js";
+export { usePayloadSession } from "../payload/session/usePayloadSession.js";

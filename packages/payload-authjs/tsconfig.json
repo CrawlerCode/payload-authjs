@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "preserve"
   },

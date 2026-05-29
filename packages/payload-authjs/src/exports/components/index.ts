@@ -1,2 +1,2 @@
-export { AccountRowLabel } from "../../payload/components/AccountRowLabel";
-export { SignInButton } from "../../payload/components/SignInButton";
+export { AccountRowLabel } from "../../payload/components/AccountRowLabel.js";
+export { SignInButton } from "../../payload/components/SignInButton/index.js";

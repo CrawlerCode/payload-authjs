@@ -1,9 +1,9 @@
 import { type CollectionConfig, type CollectionRefreshHook, Forbidden } from "payload";
-import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance";
-import { AUTHJS_STRATEGY_NAME } from "../../../constants";
-import type { AuthCollectionSlug } from "../../plugin";
-import { getAllVirtualFields } from "../../utils/getAllVirtualFields";
-import { getUserAttributes } from "../../utils/getUserAttributes";
+import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance.js";
+import { AUTHJS_STRATEGY_NAME } from "../../../constants.js";
+import type { AuthCollectionSlug } from "../../plugin.js";
+import { getAllVirtualFields } from "../../utils/getAllVirtualFields.js";
+import { getUserAttributes } from "../../utils/getUserAttributes.js";
 
 /**
  * Add refresh hook to override the refresh endpoint to refresh the session with authjs

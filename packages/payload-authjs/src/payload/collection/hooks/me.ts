@@ -1,8 +1,8 @@
 import type { CollectionConfig, CollectionMeHook } from "payload";
-import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance";
-import type { AuthCollectionSlug } from "../../plugin";
-import { getAllVirtualFields } from "../../utils/getAllVirtualFields";
-import { getUserAttributes } from "../../utils/getUserAttributes";
+import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance.js";
+import type { AuthCollectionSlug } from "../../plugin.js";
+import { getAllVirtualFields } from "../../utils/getAllVirtualFields.js";
+import { getUserAttributes } from "../../utils/getUserAttributes.js";
 
 /**
  * Add me hook to override the me endpoint to include 'exp' and virtual fields

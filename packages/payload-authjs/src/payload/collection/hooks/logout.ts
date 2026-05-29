@@ -1,9 +1,9 @@
-import { revalidateTag } from "next/cache";
-import { cookies } from "next/headers";
+import { revalidateTag } from "next/cache.js";
+import { cookies } from "next/headers.js";
 import type { CollectionAfterLogoutHook } from "payload";
-import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance";
-import { AUTHJS_STRATEGY_NAME } from "../../../constants";
-import type { AuthCollectionSlug } from "../../plugin";
+import { getAuthjsInstance } from "../../../authjs/getAuthjsInstance.js";
+import { AUTHJS_STRATEGY_NAME } from "../../../constants.js";
+import type { AuthCollectionSlug } from "../../plugin.js";
 
 /**
  * Add logout hook to destroy the authjs session
