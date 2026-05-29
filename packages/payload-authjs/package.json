@@ -66,7 +66,7 @@
     "next-auth": "catalog:",
     "payload": "catalog:",
     "react": "catalog:",
-    "typescript": "^5.9.3"
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "@payloadcms/ui": "^3.16.0",

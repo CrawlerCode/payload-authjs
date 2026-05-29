@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import type { Payload, RequiredDataFromCollectionSlug } from "payload";
+import type { DataFromCollectionSlug, Payload, RequiredDataFromCollectionSlug } from "payload";
 
 /**
  * Create a user and bypass the password check
@@ -17,7 +17,7 @@ export const createUserAndBypassPasswordCheck = async <TSlug extends "users-with
     collection: TSlug;
     data: RequiredDataFromCollectionSlug<TSlug>;
   },
-) => {
+): Promise<DataFromCollectionSlug<TSlug>> => {
   // Generate a random password
   data.password = crypto.randomBytes(32).toString("hex");
 

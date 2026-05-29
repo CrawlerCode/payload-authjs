@@ -36,7 +36,7 @@
     "eslint": "^9.39.1",
     "eslint-config-next": "16.0.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "typescript": "5.9.3"
+    "typescript": "catalog:"
   },
   "engines": {
     "node": "^18.20.2 || >=20.9.0"
