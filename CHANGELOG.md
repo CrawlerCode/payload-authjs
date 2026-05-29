@@ -1,3 +1,18 @@
+## 0.10.2 (2026-05-29)
+
+### 🩹 Fixes
+
+- Use explicit file extension for imports ([#52](https://github.com/CrawlerCode/payload-authjs/pull/52))
+
+### 🏡 Chore
+
+- Remove legacy middleware (deprecated in v0.3.4) ([3f8c203](https://github.com/CrawlerCode/payload-authjs/commit/3f8c203))
+- Remove legacy `getPayloadUser` (deprecated in v0.7.0) ([29fe7bd](https://github.com/CrawlerCode/payload-authjs/commit/29fe7bd))
+- **deps:** Upgrade pnpm and nx ([b9ab6dd](https://github.com/CrawlerCode/payload-authjs/commit/b9ab6dd))
+- **deps:** Upgrade payload and next dependencies ([80abe4b](https://github.com/CrawlerCode/payload-authjs/commit/80abe4b))
+- **deps:** Upgrade typescript to v6 ([f001813](https://github.com/CrawlerCode/payload-authjs/commit/f001813))
+- **deps:** Upgrade dependencies ([bd0d56e](https://github.com/CrawlerCode/payload-authjs/commit/bd0d56e))
+
 ## 0.10.1 (2026-02-02)
 
 ### 🩹 Fixes
