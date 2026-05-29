@@ -63,10 +63,10 @@ export function AuthjsAuthStrategy(collection: CollectionConfig): AuthStrategy {
       // Return user to payload cms
       return {
         user: {
-          _strategy: AUTHJS_STRATEGY_NAME,
-          collection: collection.slug as AuthCollectionSlug,
           ...payloadUser,
           ...virtualSessionFields,
+          _strategy: AUTHJS_STRATEGY_NAME,
+          collection: payloadUser.collection ?? (collection.slug as AuthCollectionSlug),
         },
       };
     },

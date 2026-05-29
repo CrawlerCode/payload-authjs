@@ -91,13 +91,10 @@ export interface Config {
   globals: {};
   globalsSelect: {};
   locale: null;
-  user:
-    | (UsersWithLocalStrategy & {
-        collection: 'users-with-local-strategy';
-      })
-    | (User & {
-        collection: 'users';
-      });
+  widgets: {
+    collections: CollectionsWidget;
+  };
+  user: UsersWithLocalStrategy | User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -191,6 +188,7 @@ export interface UsersWithLocalStrategy {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+  collection: 'users-with-local-strategy';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -237,6 +235,7 @@ export interface User {
     | null;
   updatedAt: string;
   createdAt: string;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -459,6 +458,16 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

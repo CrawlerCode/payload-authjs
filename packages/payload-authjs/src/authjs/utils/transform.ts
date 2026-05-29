@@ -8,7 +8,10 @@ import {
 import type { DataFromCollectionSlug } from "payload";
 import type { AuthCollectionSlug } from "../../payload/plugin";
 
-type User = Omit<DataFromCollectionSlug<AuthCollectionSlug>, "createdAt" | "updatedAt">;
+type User = Omit<
+  DataFromCollectionSlug<AuthCollectionSlug>,
+  "collection" | "createdAt" | "updatedAt"
+>;
 type Account = NonNullable<User["accounts"]>[0];
 type Session = NonNullable<User["sessions"]>[0];
 type VerificationToken = NonNullable<User["verificationTokens"]>[0];

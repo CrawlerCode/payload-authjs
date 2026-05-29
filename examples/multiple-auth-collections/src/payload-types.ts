@@ -91,13 +91,10 @@ export interface Config {
   globals: {};
   globalsSelect: {};
   locale: null;
-  user:
-    | (Customer & {
-        collection: 'customers';
-      })
-    | (Admin & {
-        collection: 'admins';
-      });
+  widgets: {
+    collections: CollectionsWidget;
+  };
+  user: Customer | Admin;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -160,6 +157,7 @@ export interface Customer {
     | null;
   updatedAt: string;
   createdAt: string;
+  collection: 'customers';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -181,6 +179,7 @@ export interface Admin {
     | null;
   updatedAt: string;
   createdAt: string;
+  collection: 'admins';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -348,6 +347,16 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
