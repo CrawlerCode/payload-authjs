@@ -6,8 +6,10 @@ allowBuilds:
   "@parcel/watcher": true
   "@swc/core": true
   esbuild: true
+  less: true
   nx: true
   sharp: true
+  unrs-resolver: true
 
 catalog:
   typescript: ^6.0.3
