@@ -13,7 +13,9 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
   },
   "exclude": ["${configDir}/dist", "${configDir}/tmp"]
 }

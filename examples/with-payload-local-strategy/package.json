@@ -19,22 +19,22 @@
     "@payloadcms/next": "catalog:",
     "@payloadcms/richtext-lexical": "catalog:",
     "cross-env": "^10.1.0",
-    "graphql": "^16.14.0",
+    "graphql": "^16.15.0",
     "next": "catalog:",
     "next-auth": "catalog:",
     "payload": "catalog:",
     "payload-authjs": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "sharp": "^0.34.5"
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^16.2.6",
-    "@types/node": "^24.12.4",
+    "@next/eslint-plugin-next": "^16.4.6",
+    "@types/node": "^24.19.2",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.6",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.6",
     "eslint-plugin-react-hooks": "^7.1.1",
     "typescript": "catalog:"
   },

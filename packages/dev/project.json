@@ -36,7 +36,7 @@
     "watch-deps": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "nx watch --projects=dev --includeDependentProjects -- nx run-many -t build -p \\%NX_PROJECT_NAME% --exclude=dev"
+        "command": "nx watch --projects=dev --includeDependencies -- nx run-many -t build -p \\%NX_PROJECT_NAME% --exclude=dev"
       }
     }
   }

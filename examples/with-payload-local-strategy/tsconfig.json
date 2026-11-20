@@ -21,7 +21,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "@payload-config": ["./src/payload.config.ts"]
-    }
+    },
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
   },
   "include": [
     "next-env.d.ts",
