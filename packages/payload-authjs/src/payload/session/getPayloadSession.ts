@@ -87,19 +87,51 @@ export const getPayloadSession = cache(
 
 /**
  * Get the server URL from the environment variables or the request headers
+ *
+ * The request headers (`Host` / `X-Forwarded-Host` / `X-Forwarded-Proto`) are client-controlled
+ * and are therefore only used if the host is explicitly trusted (same semantics as Auth.js `trustHost`).
+ *
+ * @see https://github.com/nextauthjs/next-auth/blob/main/packages/core/src/lib/utils/env.ts
  */
 const getServerUrl = async () => {
-  let serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-
-  if (!serverUrl) {
-    const requestHeaders = await headers();
-
-    const detectedHost = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
-    const detectedProtocol = requestHeaders.get("x-forwarded-proto") ?? "https";
-    const protocol = detectedProtocol.endsWith(":") ? detectedProtocol : detectedProtocol + ":";
-
-    serverUrl = `${protocol}//${detectedHost}`;
+  // Use the server URL from the environment variables
+  const envUrl =
+    process.env.NEXT_PUBLIC_SERVER_URL ?? process.env.AUTH_URL ?? process.env.NEXTAUTH_URL;
+  if (envUrl) {
+    return new URL(envUrl).origin;
   }
 
-  return serverUrl;
+  // Only derive the server URL from the request headers if the host is trusted
+  if (!isHostTrusted()) {
+    throw new Error(
+      "payload-authjs: Unable to determine the server URL for getPayloadSession(). " +
+        "Set the NEXT_PUBLIC_SERVER_URL or AUTH_URL environment variable, " +
+        "or set AUTH_TRUST_HOST=true if your deployment sets the Host / X-Forwarded-Host headers securely.",
+    );
+  }
+
+  const requestHeaders = await headers();
+  const detectedHost = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+  if (!detectedHost) {
+    throw new Error("payload-authjs: Unable to determine the server URL (missing Host header).");
+  }
+  const detectedProtocol = (requestHeaders.get("x-forwarded-proto") ?? "https").replace(/:$/, "");
+
+  return new URL(`${detectedProtocol}://${detectedHost}`).origin;
+};
+
+/**
+ * Check if the host from the request headers can be trusted
+ *
+ * - `AUTH_TRUST_HOST` is set: trusted if it is "true" or "1"
+ * - Otherwise: trusted on Vercel, Cloudflare Pages or in non-production environments
+ */
+const isHostTrusted = () => {
+  const { AUTH_TRUST_HOST, VERCEL, CF_PAGES, NODE_ENV } = process.env;
+
+  if (AUTH_TRUST_HOST !== undefined) {
+    return AUTH_TRUST_HOST === "true" || AUTH_TRUST_HOST === "1";
+  }
+
+  return !!VERCEL || !!CF_PAGES || NODE_ENV !== "production";
 };

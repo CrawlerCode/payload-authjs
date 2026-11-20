@@ -159,6 +159,10 @@ const ServerComponentExample = async () => {
 };
 ```
 
+> [!NOTE]
+> `getPayloadSession` fetches the session from your server's `/api/<collection>/me` endpoint. The server URL is resolved from the `NEXT_PUBLIC_SERVER_URL`, `AUTH_URL` or `NEXTAUTH_URL` environment variable.
+> If none of them is set, the URL is derived from the request headers (`Host` / `X-Forwarded-Host`), but only if the host is trusted ([`AUTH_TRUST_HOST`](https://authjs.dev/getting-started/deployment#auth_trust_host), Vercel, Cloudflare Pages or a non-production environment). Otherwise an error is thrown.
+
 ## Client side (`usePayloadSession`)
 
 Instead of using the [`useSession`](https://authjs.dev/getting-started/session-management/get-session?framework=next-js-client) hook of Auth.js, you can use the `usePayloadSession` hook to get the current session in the client-side code:
