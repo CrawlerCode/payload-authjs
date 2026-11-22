@@ -1,3 +1,13 @@
+## 0.10.3 (2026-11-22)
+
+### 🩹 Fixes
+
+- **getPayloadSession:** Don't derive server URL from untrusted request headers ([#54](https://github.com/CrawlerCode/payload-authjs/pull/54))
+
+### 🏡 Chore
+
+- **deps:** Upgrade dependencies ([ed7362e](https://github.com/CrawlerCode/payload-authjs/commit/ed7362e))
+
 ## 0.10.2 (2026-05-29)
 
 ### 🩹 Fixes
