@@ -1,3 +1,13 @@
+## 0.10.4 (2026-11-23)
+
+### 🩹 Fixes
+
+- **getPayloadSession:** Don't break static generation when server URL env vars are missing ([7a93a3b](https://github.com/CrawlerCode/payload-authjs/commit/7a93a3b))
+
+### 📖 Documentation
+
+- Remove beta warning in readme ([aa86bd4](https://github.com/CrawlerCode/payload-authjs/commit/aa86bd4))
+
 ## 0.10.3 (2026-11-22)
 
 ### 🩹 Fixes
