@@ -36,11 +36,9 @@ export const getPayloadSession = cache(
   async <TSlug extends AuthCollectionSlug = "users">({
     userCollectionSlug = "users" as TSlug,
   }: Options<TSlug> = {}): Promise<PayloadSession<TSlug> | null> => {
-    // Get the server URL
-    const serverUrl = await getServerUrl();
-
     // Fetch the session from the server
     const requestHeaders = await headers();
+    const serverUrl = await getServerUrl(requestHeaders);
     const response = await fetch(`${serverUrl}/api/${userCollectionSlug}/me`, {
       headers: new Headers({
         cookie: requestHeaders.get("cookie") ?? "",
@@ -93,7 +91,7 @@ export const getPayloadSession = cache(
  *
  * @see https://github.com/nextauthjs/next-auth/blob/main/packages/core/src/lib/utils/env.ts
  */
-const getServerUrl = async () => {
+const getServerUrl = async (requestHeaders: Awaited<ReturnType<typeof headers>>) => {
   // Use the server URL from the environment variables
   const envUrl =
     process.env.NEXT_PUBLIC_SERVER_URL ?? process.env.AUTH_URL ?? process.env.NEXTAUTH_URL;
@@ -110,7 +108,6 @@ const getServerUrl = async () => {
     );
   }
 
-  const requestHeaders = await headers();
   const detectedHost = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
   if (!detectedHost) {
     throw new Error("payload-authjs: Unable to determine the server URL (missing Host header).");
