@@ -10,8 +10,6 @@
 
 A [Payload CMS 3](https://payloadcms.com) plugin for integrating [Auth.js 5 (beta)](https://authjs.dev).
 
-> ⚠ This plugin and Auth.js 5 is in beta and may have some bugs. Please report any issues you find.
-
 > [!CAUTION]
 > ⚠ [Auth.js is now part of Better Auth](https://github.com/nextauthjs/next-auth/discussions/13252): It is unknown whether Auth.js 5 will ever be released as a stable version. Please consider this before using this plugin.
 
